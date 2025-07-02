@@ -1,0 +1,121 @@
+[
+    {
+        "id": 1,
+        "image": ["BellaVita.png"],
+        "title": "BellaVita",
+        "content": "Bella Vita Luxury Long Lasting Unisex Perfume Gift Set | 4x20ml Perfume for Man & Woman | Gift for Father's Day | Woody, Aquatic, Sweet, Premium Fragrance Scent | SKAI, FRESH, WHITEOUD, HONEY OUD | Gifts for Men and Women",
+        "categories": "Accessories",
+        "price": [
+            300.99,
+            500.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 2,
+        "image": ["Shoes.png"],
+        "title": "Nike",
+        "content": "Carve out a new lane for yourself in the Zoom Vomero 5 | A richly layered design pairs airy textiles with synthetic leather and plastic accents to create a complex upper that's easy to style | And check out the insole, which celebrates iconic running coach and Nike co-founder Bill",
+        "categories": "Shoes",
+        "price": [
+            2500.99,
+            3000.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 3,
+        "image": ["Camera.png"],
+        "title": "Sony",
+        "categories": "Electronics",
+        "content": "With Creative Picture Control | you can customise colours | tonality and clarity to your exact vision | infusing every shot with your desired feelings and temperature | Explore a wide array of presets like the stunning new Flat Monochrome and Deep Tone Monochrome and the captivating",
+        "price": [
+            70000.99,
+            85000.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 7,
+        "image": ["Shirt.png"],
+        "title": "Shirt",
+        "categories": "Cloth",
+        "content": "Men Check out all the freshest styles your closet needs in our men's|",
+        "price": [
+            1500.99,
+            1800.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 10,
+        "image": ["Galaxy.png", "Galaxy2.png", "Galaxy3.png", "Galaxy4.png", "Galaxy5.png"],
+        "title": "Galaxy Buds",
+        "categories": "Electronics",
+        "content": "With Creative Picture Control | you can customise colours | tonality | and clarity to your exact vision | infusing every shot with your desired feelings and temperature | Explore a wide array of presets like the stunning new Flat Monochrome and Deep Tone Monochrome and the captivating",
+        "price": [
+            19900.99,
+            30000.81
+        ],
+        "quantity": 1
+    },{
+        "id": 11,
+        "image": ["BellaVita.png"],
+        "title": "BellaVita",
+        "content": "Bella Vita Luxury Long Lasting Unisex Perfume Gift Set | 4x20ml Perfume for Man & Woman | Gift for Father's Day | Woody, Aquatic, Sweet, Premium Fragrance Scent | SKAI, FRESH, WHITEOUD, HONEY OUD | Gifts for Men and Women",
+        "categories": "Accessories",
+        "price": [
+            300.99,
+            500.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 12,
+        "image": ["Shoes.png"],
+        "title": "Nike",
+        "content": "Carve out a new lane for yourself in the Zoom Vomero 5 | A richly layered design pairs airy textiles with synthetic leather and plastic accents to create a complex upper that's easy to style | And check out the insole, which celebrates iconic running coach and Nike co-founder Bill",
+        "categories": "Shoes",
+        "price": [
+            2500.99,
+            3000.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 13,
+        "image": ["Camera.png"],
+        "title": "Sony",
+        "categories": "Electronics",
+        "content": "With Creative Picture Control | you can customise colours | tonality, and clarity to your exact vision | infusing every shot with your desired feelings and temperature | Explore a wide array of presets like the stunning new Flat Monochrome and Deep Tone Monochrome and the captivating",
+        "price": [
+            70000.99,
+            85000.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 14,
+        "image": ["Shirt.png"],
+        "title": "Shirt",
+        "categories": "Cloth",
+        "content": "Men Check out all the freshest styles your closet needs in our men's.",
+        "price": [
+            1500.99,
+            1800.81
+        ],
+        "quantity":1
+    },
+    {
+        "id": 15,
+        "image": ["Galaxy.png", "Galaxy2.png", "Galaxy3.png", "Galaxy4.png", "Galaxy5.png"],
+        "title": "Galaxy Buds",
+        "categories": "Electronics",
+        "content": "With Creative Picture Control | you can customise colours | tonality | and clarity to your exact vision | infusing every shot with your desired feelings and temperature | Explore a wide array of presets like the stunning new Flat Monochrome and Deep Tone Monochrome and the captivating",
+        "price": [
+            19900.99,
+            30000.81
+        ],
+        "quantity": 1
+    }
+]
