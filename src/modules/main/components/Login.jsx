@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// import { toast, ToastContainer } from "react-toastify";
-
+import validator from 'validator';
+import { ToastContainer, toast } from 'react-toastify';
 function Login() {
     const navigate = useNavigate();
 
@@ -19,7 +19,38 @@ function Login() {
 
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!validator.isEmail(loginData.email)) {
+            toast.error("Email must have @ with domain and .");
+            return false;
+        }
+        else if (!validator.isStrongPassword(loginData.password)) {  // check letter only
+            toast.error("Password must be minimum 8 characters with atleast one Capital and one small alphabet characters,one special characters and with number");
+            return false;
+        }
+
+        fetch("http://localhost:3001/login", {
+
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(loginData),
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    navigate('/card');
+                } 
+                return response.json();
+            })
+            .then(data => {
+                if (data.message = "Wrong Crendentials") {
+                    toast.error("Wrong email or password");
+                }
+            })
+            .catch(error => toast.error(error));
 
     };
 
@@ -28,7 +59,7 @@ function Login() {
             <div className="form-section">
                 <form onSubmit={handleSubmit} className="register-form">
                     <div className="form-header">
-                        <div><h2 style={{ textAlign: "center" }}>Register</h2></div>
+                        <div><h2 style={{ textAlign: "center" }}>Login</h2></div>
                         <img src={require("../../../assets/login_profile_pic.png")} alt="Profile"
                             className="profile-pic" />
                     </div>
@@ -37,9 +68,8 @@ function Login() {
                         <div className="register-input-data">
                             <label>Email</label>
                             <input
-                                type="email"
                                 name="email"
-                                value={registerData.email}
+                                value={loginData.email}
                                 onChange={handleChange}
                                 placeholder="Enter email"
                                 required
@@ -47,7 +77,7 @@ function Login() {
                         </div>
                         <div className="register-input-data">
                             <label>Password</label>
-                            <input type="password" name="password" value={registerData.password} onChange={handleChange}
+                            <input name="password" value={loginData.password} onChange={handleChange}
                                 placeholder="Enter password"
                                 required
                             />
@@ -59,9 +89,9 @@ function Login() {
                     </div>
                 </form>
             </div>
-            {/* <ToastContainer /> */}
+            <ToastContainer />
         </>
     );
 }
 
-export default Register;
+export default Login;

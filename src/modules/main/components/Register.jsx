@@ -1,6 +1,7 @@
 import { useState } from "react";
+import validator from 'validator';
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, Link } from "react-router-dom";
-// import { toast, ToastContainer } from "react-toastify";
 
 function Register() {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ function Register() {
     });
 
     const handleChange = (e) => {
+
         if (e.target.type === "file") {
             setRegisterData({
                 ...registerData,
@@ -26,14 +28,45 @@ function Register() {
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(registerData);
+        if (!validator.isAlpha(registerData.username.trim())) {  // remove white space in username from both side 
+            toast.error("Name must letter only");
+            return false;
+        }
+        else if (!validator.isEmail(registerData.email)) {
+             toast.error("Email must have @ with domain and .");
+            return false;
+        }
+        else if (!validator.isStrongPassword(registerData.password)) {  // check letter only
+            toast.error("Password must be minimum 8 characters with atleast one Capital and one small alphabet characters,one special characters and with number");
+            return false;
+        }
+
+        fetch("http://localhost:3001/signup", {
+
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(registerData),
+        })
+            .then((response) => {
+                if(response.status === 201){
+                    toast.success("Created");
+                } 
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error=>toast.error(error,"User Not created"));
 
     };
 
     return (
         <>
             <div className="form-section">
-                <form onSubmit={handleSubmit} className="register-form">
+                <form className="register-form" method="post">
                     <div className="form-header">
                         <div><h2 style={{ textAlign: "center" }}>Register</h2></div>
                         <img src={require("../../../assets/login_profile_pic.png")} alt="Profile"
@@ -43,7 +76,6 @@ function Register() {
                         <div className="register-input-data">
                             <label>Username</label><br></br>
                             <input
-                                type="text"
                                 name="username"
                                 value={registerData.username}
                                 onChange={handleChange}
@@ -54,7 +86,6 @@ function Register() {
                         <div className="register-input-data">
                             <label>Email</label>
                             <input
-                                type="email"
                                 name="email"
                                 value={registerData.email}
                                 onChange={handleChange}
@@ -64,16 +95,16 @@ function Register() {
                         </div>
                         <div className="register-input-data">
                             <label>Password  </label>
-                            <input type="password" name="password" value={registerData.password} onChange={handleChange}
+                            <input name="password" value={registerData.password} onChange={handleChange}
                                 placeholder="Enter password"
                                 required
                             />
                         </div>
-                        <div className="register-input-data">
+                        {/* <div className="register-input-data">
                             <label>Profile Image</label>
                             <input type="file" name="profile_image" onChange={handleChange} />
-                        </div>
-                        <button type="submit" className="register-button">Register</button>
+                        </div> */}
+                        <button type="submit" className="register-button" onClick={handleSubmit}>Register</button>
 
                         <span className="form-link">
                             Already have an account? <Link to="/login">Login here</Link>
@@ -81,7 +112,7 @@ function Register() {
                     </div>
                 </form>
             </div>
-            {/* <ToastContainer /> */}
+            <ToastContainer />
         </>
     );
 }

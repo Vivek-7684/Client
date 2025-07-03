@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html {
@@ -606,8 +606,8 @@ tbody>tr:nth-child(even):hover {
 }
 
 .register-form>input:focus {
-    outline: none;
-    border-bottom: 1px solid black;
+    /* outline: none; */
+    /* border-bottom: 1px solid black; */
 }
 .register-button{
     padding: 0.5rem;

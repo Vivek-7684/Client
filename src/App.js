@@ -3,6 +3,7 @@ import Sidebar from "./modules/main/design-system/Sidebar";
 import Register from "./modules/main/components/Register";
 import Card from '../src/modules/main/components/Card';
 import Cart from '../src/modules/main/components/Cart';
+import Login from '../src/modules/main/components/Login';
 import Product from "./modules/main/components/Product";
 import Error from '../src/modules/main/components/Error';
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -59,13 +60,14 @@ function App() {
 
       <Routes>
         {/* Common Layout Routes */}
+        <Route path="/signup" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Header CART={cart} />}>
           <Route path="card/:category?" element={<>
             <Sidebar />
             <Card CART={cart} Add={addToCart} />
           </>} />
           <Route path="cart" element={<Cart CART={cart} Add={addToCart} Del={removeFromCart} />} />
-          <Route path="register" element={<Register />} />
           <Route path="product/:productId" element={<Product Add={addToCart} Del={removeFromCart} />} />
           <Route path="*" element={<Error />} />
         </Route>
