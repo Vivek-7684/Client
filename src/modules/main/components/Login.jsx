@@ -42,15 +42,15 @@ function Login() {
             .then((response) => {
                 if (response.status === 200) {
                     navigate('/card');
-                } 
+                }
                 return response.json();
             })
             .then(data => {
-                if (data.message = "Wrong Crendentials") {
-                    toast.error("Wrong email or password");
+                if (data.message !== "Logged In") {
+                    toast.error(data.message);
                 }
             })
-            .catch(error => toast.error(error));
+            .catch((error) => { console.log(error); toast.error(error) });
 
     };
 
@@ -69,7 +69,6 @@ function Login() {
                             <label>Email</label>
                             <input
                                 name="email"
-                                value={loginData.email}
                                 onChange={handleChange}
                                 placeholder="Enter email"
                                 required
@@ -77,14 +76,14 @@ function Login() {
                         </div>
                         <div className="register-input-data">
                             <label>Password</label>
-                            <input name="password" value={loginData.password} onChange={handleChange}
+                            <input name="password" onChange={handleChange}
                                 placeholder="Enter password"
                                 required
                             />
                         </div>
                         <button type="submit" className="register-button">Login</button>
                         <span className="form-link">
-                            No Account,Get Register? <Link to="/register">Sign Up</Link>
+                            No Account, Get Register? <Link to="/signup">Sign Up</Link>
                         </span>
                     </div>
                 </form>

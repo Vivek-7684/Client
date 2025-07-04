@@ -66,8 +66,6 @@ const Product = (props) => {
                         <div className="slider-button" id="slider2"
                             onClick={() => setImageIndex((imageIndex + 1) % item.image.length)}>{">"}</div>
                     </div>)}
-                {/* <button  }></button>
-                <button className="slider-button" ></button> */}
 
             </div>
 

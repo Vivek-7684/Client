@@ -9,8 +9,8 @@ function Register() {
     const [registerData, setRegisterData] = useState({
         username: "",
         email: "",
-        password: "",
-        profile_image: null,
+        password: ""
+        // profile_image: null,
     });
 
     const handleChange = (e) => {
@@ -30,13 +30,12 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(registerData);
-        if (!validator.isAlpha(registerData.username.trim())) {  // remove white space in username from both side 
+        if (!validator.isAlpha(registerData.username.split(' ').join(''))) {  // remove white space in username from both side 
             toast.error("Name must letter only");
             return false;
         }
         else if (!validator.isEmail(registerData.email)) {
-             toast.error("Email must have @ with domain and .");
+            toast.error("Email must have @ with domain and .");
             return false;
         }
         else if (!validator.isStrongPassword(registerData.password)) {  // check letter only
@@ -53,13 +52,18 @@ function Register() {
             body: JSON.stringify(registerData),
         })
             .then((response) => {
-                if(response.status === 201){
-                    toast.success("Created");
-                } 
+                if (response.status === 201) {
+                    toast.success("User Successfully Registered");
+                    setTimeout(()=>{navigate('/login')}, 2000);
+                }
                 return response.json();
             })
-            .then(data => console.log(data))
-            .catch(error=>toast.error(error,"User Not created"));
+            .then(data => {
+                if (data.message !== "Created") {
+                    toast.error(data.message);
+                }
+            })
+            .catch((error) => { console.log(error); toast.error(error) });
 
     };
 
@@ -75,9 +79,9 @@ function Register() {
                     <div className="register-Input-Section">
                         <div className="register-input-data">
                             <label>Username</label><br></br>
+                            <span className="errorMessage"></span>
                             <input
                                 name="username"
-                                value={registerData.username}
                                 onChange={handleChange}
                                 placeholder="Enter username"
                                 required
@@ -85,9 +89,9 @@ function Register() {
                         </div>
                         <div className="register-input-data">
                             <label>Email</label>
+                            <span className="errorMessage"></span>
                             <input
                                 name="email"
-                                value={registerData.email}
                                 onChange={handleChange}
                                 placeholder="Enter email"
                                 required
@@ -95,7 +99,9 @@ function Register() {
                         </div>
                         <div className="register-input-data">
                             <label>Password  </label>
-                            <input name="password" value={registerData.password} onChange={handleChange}
+                            <span className="errorMessage"></span>
+                            <input name="password"
+                                onChange={handleChange}
                                 placeholder="Enter password"
                                 required
                             />

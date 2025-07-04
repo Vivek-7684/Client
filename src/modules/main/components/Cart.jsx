@@ -30,28 +30,6 @@ const Cart = (props) => {
                         <th>Price</th>
                     </tr>
                 </thead>}
-                <tbody>
-                    {(props.CART.map((item) => (
-                        <tr key={item.id}>
-                            <td className="table-cart-item">
-                                <img src={require(`../../../assets/${item.image[0]}`)} id="table-cart-image" /><span>{item.title}</span>
-                            </td>
-
-                            <td >
-                                <span className="icon_circle"><FaMinus style={{ color: "red", cursor: "pointer" }} onClick={() => {
-                                    props.Del(item)
-                                }} /></span>
-                                <div style={{ fontSize: "20px", width: "100px",display:"inline" }}>{item.quantity}</div>
-                                <span className="icon_circle"><FaPlus style={{ color: "blue", cursor: "pointer" }} onClick={() => props.Add(item, 1)} /></span>
-
-                            </td>
-
-                            <td className="cart-item-price" ><span><FaIndianRupeeSign />{item.price[0]}</span></td>
-
-                            <td>{parseFloat(((item.quantity) * (+item.price[0])).toFixed(2))}</td>
-                        </tr>
-                    )))}
-                </tbody>
                 <tfoot>
                     {(props.CART.length > 0) && (<>
                         <tr><td colSpan={4}><hr /></td></tr>
@@ -77,6 +55,29 @@ const Cart = (props) => {
                         </td>
                     </tr>
                 </tfoot>
+                <tbody>
+                    {(props.CART.map((item) => (
+                        <tr key={item.id}>
+                            <td className="table-cart-item">
+                                <img src={require(`../../../assets/${item.image[0]}`)} id="table-cart-image" /><span>{item.title}</span>
+                            </td>
+
+                            <td >
+                                <span className="icon_circle"><FaMinus style={{ color: "red", cursor: "pointer" }} onClick={() => {
+                                    props.Del(item)
+                                }} /></span>
+                                <div style={{ fontSize: "20px", width: "100px", display: "inline" }}>{item.quantity}</div>
+                                <span className="icon_circle"><FaPlus style={{ color: "blue", cursor: "pointer" }} onClick={() => props.Add(item, 1)} /></span>
+
+                            </td>
+
+                            <td className="cart-item-price" ><span><FaIndianRupeeSign />{item.price[0]}</span></td>
+
+                            <td>{parseFloat(((item.quantity) * (+item.price[0])).toFixed(2))}</td>
+                        </tr>
+                    )))}
+                </tbody>
+
             </table>
         </div>
     )
