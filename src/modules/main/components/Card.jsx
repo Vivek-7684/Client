@@ -16,7 +16,7 @@ const Card = () => {
             <main id="main">
                 {filteredData.map((product) => {
                     return (
-                        <div className="product-card" key={product.id} onClick={() => navigate(`/Product/${product.id}`)}>
+                        <div className="product-card" key={product.id} onClick={() => navigate(`/home/Product/${product.id}`)}>
                             <div className="card-image">
                                 <img src={require(`../../../assets/${product.image[0]}`)} alt={product.title} />
                             </div>

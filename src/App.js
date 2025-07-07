@@ -61,8 +61,8 @@ function App() {
       <Routes>
         {/* Common Layout Routes */}
         <Route path="/signup" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Header CART={cart} />}>
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Header CART={cart} />}>
           <Route path="card/:category?" element={<>
             <Sidebar />
             <Card CART={cart} Add={addToCart} />

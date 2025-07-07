@@ -539,38 +539,40 @@ tbody>tr:nth-child(even):hover {
 .register-form {
     background-color: white;
     color: black;
-    box-shadow: 2px 2px 10px #DEE2E6;
+    box-shadow: 3px 3px 10px #bcc0c5e3;
     padding: 2rem;
-    border-radius: 3px;
+    border-radius: 1rem;
     margin-bottom: 3.5rem;
     display: flex;
+    gap: 0.3rem;
     /* flex-wrap: wrap; */
     justify-content: center;
     align-content: center;
-    width: 60vw;
-    overflow-y: auto;
+    width: fit-content;
+    height: 93vh;
     letter-spacing: 1px;
-     margin: auto;
-     margin-top: 3rem;
+    margin: auto;
+    margin-top: 0.5rem;
 }
 
-.form-header,.form-section {
-    flex:1 1 400px;
+.form-header,
+.form-section {
+    flex: 1 1 400px;
     padding: 1rem;
-    /* box-sizing: ; */
 }
 
 .form-header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    /* min-width:400px; */
+    background: white;
 }
 
 .profile-pic {
     margin: auto;
     min-width: 130px;
     height: auto;
+    background: white;
 }
 
 .form-section {
@@ -581,8 +583,7 @@ tbody>tr:nth-child(even):hover {
     /* padding: 1rem; */
     width: 100vw;
     height: 100vh;
-
-   
+    padding: 1rem;
     /* box-sizing: border-box; */
     /* min-width:400px; */
 }
@@ -590,7 +591,7 @@ tbody>tr:nth-child(even):hover {
 .register-Input-Section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
 }
 
 .register-input-data>label {
@@ -598,8 +599,8 @@ tbody>tr:nth-child(even):hover {
 }
 
 .register-input-data>input {
-    width: 90%;
-    padding: 0.5rem;
+    width: 100%;
+    padding: 0.8rem;
     font-size: 1rem;
     display: block;
     border-radius: 8px;
@@ -614,9 +615,12 @@ tbody>tr:nth-child(even):hover {
     outline: none;
     /* border-bottom: 1px solid black; */
 }
-.register-button{
-    padding: 0.5rem;
-     background-color: black;
+
+.register-button {
+    padding: 1rem;
+    background-color: black;
+    width: 70%;
+    margin: auto;
     color: white;
     border: none;
     font-weight: 500;
@@ -624,16 +628,29 @@ tbody>tr:nth-child(even):hover {
     border-radius: 3px;
     cursor: pointer;
 }
-.register-button:hover{
-    background-color:#ccc;
-   color: black;
-}
-.form-link > a {
-    color:#6C757D;
+
+.register-button:hover {
+    background-color: #ccc;
+    color: black;
 }
 
-.form-link > a:hover {
-    color:#ADB5BD;
+.form-link>a {
+    color: #6C757D;
+}
+
+.form-link>a:hover {
+    color: #ADB5BD;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 10px;
+    line-height:13px;
+    padding:0.5rem
+}
+
+.error-List{
+    list-style: none;
 }
 
 /* layout for mobiles */
@@ -680,6 +697,7 @@ tbody>tr:nth-child(even):hover {
         width: 100%;
         height: 100%;
         font-size: 1rem;
+        position: static;
     }
 
     .categories-section {

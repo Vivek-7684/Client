@@ -48,7 +48,7 @@ const Cart = (props) => {
                         </tr></>)}
                     <tr>
                         <td rowSpan={3}>
-                            <div className="Back_Products" onClick={() => navigate('/card')}>
+                            <div className="Back_Products" onClick={() => navigate('/home/card')}>
                                 <BsArrowLeft style={{ fontSize: '30px' }} />
                                 <span>Back</span>
                             </div>

@@ -17,7 +17,6 @@ const Header = (props) => {
                     <Link><img src={logo} id="logo" className="icons" alt="logo" /> <span>DealMart</span></Link>
                     <form className="search-bar-section">
                         <input name="search" placeholder="Search By Products and Brands" className="search-bar" />
-                        <button><img src={Search} className="icons" alt="Search" /></button>
                     </form>
                     <div className="navbar-icons">
                         <Link to="cart" >
