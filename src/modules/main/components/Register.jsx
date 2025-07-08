@@ -23,26 +23,29 @@ function Register() {
 
   const passwordSchema = new passwordValidator(); // set schema for validation
 
-  passwordSchema.is().min(4)
-    .is().max(12)
-    .has().uppercase(1)
-    .has().lowercase(1)
-    .has().digits(2)
+  passwordSchema
+    .is().min(4, 'minimum 4 character required')
+    .is().max(8, 'maximum 8 character password')
+    .has().uppercase(1, 'atleast one uppercase')
+    .has().lowercase(1, 'atleast one lowercase')
+    .has().digits(2, 'atleast two digits')
     .has().not().spaces(); // set rules
 
   const usernameSchema = yup.object().shape({
     username: yup
       .string()
-      .min(3, "Username at least 3 characters") // minimum 3 characters
-      .max(10, "Username at most 10 characters"), // maximum 10 characters
+      .min(3, "Name at least 3 characters") // minimum 3 characters
+      .max(15, "Name at most 15 characters"), // maximum 10 characters
   });
 
-  const emailSchema = yup.object().shape({
-    email: yup
-      .string()
-      //   .required("Email is required")
-      .email("Email must have @ with domain and (.)"),
-  });
+  // prevent white space with first input
+  const setClearSpace = (e) => {
+    if (e.target.value.trimStart() === '') {
+      e.target.value = '';
+      SetError({ name: "", message: "" });
+    }
+    // clear error with first input 
+  }
 
   const handleChange = (e) => {
     // validation checks with input data type and store
@@ -56,21 +59,27 @@ function Register() {
         .catch((err) => {
           SetError({ name: "username", message: err.message });
         });
+
+      setClearSpace(e);
     } else if (e.target.name === "email") {
-      emailSchema
-        .validate({ email: e.target.value })
-        .then(() => SetError({ name: "", message: "" }))
-        .catch((err) => SetError({ name: "email", message: err.message }));
+      if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
+      else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
+      else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
+      else { SetError({ name: "email", message: "" }) }
+
+      setClearSpace(e);
     } else if (
       e.target.name === "password" &&
-      !passwordSchema.validate(registerData.password)
+      !passwordSchema.validate(e.target.value)
     ) {
       SetError({
         name: "password",
-        message: passwordSchema.validate(registerData.password, {
+        message: passwordSchema.validate(e.target.value, {
           details: true,
         }),
       });
+
+      setClearSpace(e);
     } else {
       SetError("");
     }
@@ -99,25 +108,23 @@ function Register() {
           return false;
         });
     }
-    if (!registerData.email.trim()) {
+    if (registerData.username === "") {
+      toast.error("Name can't be empty");
+      return false;
+    }
+    else if (!registerData.email.trim()) {
       toast.error("email can't be empty");
       return false;
-      // } else if (registerData.email) {
-      //     emailSchema.validate({ email: registerData.email })
-      //     .catch((err)=>{
-      //         toast.error()
-      //     })
     } else if (registerData.password === "") {
-      toast.error("password can't be empty");
+      toast.error("Password can't be empty");
       return false;
     } else if (!validator.isEmail(registerData.email)) {
-      toast.error("Email must have @ with domain and (.)");
+      toast.error("Please Enter Valid Email ");
       return false;
     } else if (
       e.target.name === "password" &&
       !passwordSchema.validate(registerData.password)
     ) {
-      // check letter only
       toast.error("Enter Valid Password");
       return false;
     }
@@ -159,12 +166,13 @@ function Register() {
             </div>
 
             <div className="register-input-data">
-              <label>Username</label>
+              <label>
+                Name<span style={{ color: "red" }}>*</span></label>
               <br></br>
               <input
                 name="username"
                 onChange={handleChange}
-                placeholder="Enter username"
+                placeholder="Enter Name"
               />
               {error.name === "username" && (
                 <div className="errorMessage">{error.message}</div>

@@ -549,7 +549,7 @@ tbody>tr:nth-child(even):hover {
     justify-content: center;
     align-content: center;
     width: fit-content;
-    height: 93vh;
+    height:auto;
     letter-spacing: 1px;
     margin: auto;
     margin-top: 0.5rem;

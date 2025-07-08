@@ -34,27 +34,33 @@ function Login() {
     .not()
     .spaces(); // set rules
 
-  const emailSchema = yup.object().shape({
-    email: yup
-      .string()
-      .required("Email is required")
-      .email("Email must have @ with domain and ."),
-  });
+  // prevent white space with first input
+  const setClearSpace = (e) => {
+    if (e.target.value.trimStart() === '') {
+      e.target.value = '';
+      SetError({ name: "", message: "" });
+    }
+    // clear error with first input 
+  }
 
   const handleChange = (e) => {
     if (e.target.name === "email") {
-      emailSchema
-        .validate({ email: e.target.name })
-        .then(() => SetError({ name: "", message: "" }))
-        .catch((err) => SetError({ name: "email", message: err.message }));
+      if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
+      else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
+      else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
+      else { SetError({ name: "email", message: "" }) }
+
+      setClearSpace(e);
     } else if (
       e.target.name === "password" &&
-      !schema.validate(loginData.password)
+      !schema.validate(e.target.value)
     ) {
       SetError({
         name: "password",
-        message: schema.validate(loginData.password, { details: true }),
+        message: schema.validate(e.target.value, { details: true }),
       });
+
+      setClearSpace(e);
     } else {
       SetError("");
     }
@@ -94,7 +100,7 @@ function Login() {
       })
       .then((data) => {
         if (data.message !== "Logged In") {
-            throw new Error(data.message);
+          throw new Error(data.message);
         }
       })
       .catch((error) => {
