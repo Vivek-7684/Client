@@ -35,7 +35,10 @@ function Register() {
     username: yup
       .string()
       .min(3, "Name at least 3 characters") // minimum 3 characters
-      .max(15, "Name at most 15 characters"), // maximum 10 characters
+      .max(15, "Name at most 15 characters") // maximum 10 characters
+      .test('IsAlpha', 'Alphabet allowed Only', (value) => value ?
+        [...value].every(c => (c.charCodeAt(0) >= 65 && c.charCodeAt(0) <= 90) ||  // for capital letter
+          (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122)) : false)           // for small letter
   });
 
   // prevent white space with first input
