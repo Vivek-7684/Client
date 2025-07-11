@@ -16,13 +16,13 @@ const Sidebar = () => {
         if (checkedKeys.includes(e.target.name)) {
             setCheckedKeys(['']);
             // show all products
-            navigate('/home/card');
+            navigate('/');
         }
         // checked then unchecked all checkboxes
         else {
             setCheckedKeys([e.target.name]);
             // filter products
-            navigate(`/home/card/${e.target.name}`);
+            navigate(`/${e.target.name}`);
         }
 
     }

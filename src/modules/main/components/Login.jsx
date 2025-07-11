@@ -11,7 +11,7 @@ function Login() {
     email: "",
     password: "",
   });
-
+  
   const [error, SetError] = useState({
     name: "",
     message: "",
@@ -20,19 +20,12 @@ function Login() {
   const schema = new passwordValidator(); // set schema for validation
 
   schema
-    .is()
-    .min(4)
-    .is()
-    .max(12)
-    .has()
-    .uppercase(1)
-    .has()
-    .lowercase(1)
-    .has()
-    .digits(2)
-    .has()
-    .not()
-    .spaces(); // set rules
+    .is().min(4)
+    .is().max(12)
+    .has().uppercase(1)
+    .has().lowercase(1)
+    .has().digits(2)
+    .has().not().spaces(); // set rules
 
   // prevent white space with first input
   const setClearSpace = (e) => {
@@ -77,10 +70,10 @@ function Login() {
     if (!validator.isEmail(loginData.email)) {
       toast.error("Email must have @ with domain and .");
       return false;
-    } else if (!validator.isStrongPassword(loginData.password)) {
+    } else if (!schema.validate(loginData.password)) {
       // check letter only
       toast.error(
-        "Password must be minimum 8 characters with atleast one Capital and one small alphabet characters,one special characters and with number"
+        "Password InCorrect Format"
       );
       return false;
     }
@@ -94,7 +87,7 @@ function Login() {
     })
       .then((response) => {
         if (response.status === 200) {
-          navigate("/home/card");
+          navigate("/");
         }
         return response.json();
       })
@@ -112,17 +105,12 @@ function Login() {
     <>
       <div className="form-section">
         <form onSubmit={handleSubmit} className="register-form">
-          {/* <div className="form-header">
-                        
-                        <img src={require("../../../assets/login_profile_pic.png")} alt="Profile"
-                            className="profile-pic" />
-                    </div> */}
           <div className="register-Input-Section">
             <div>
               <h2 style={{ textAlign: "center" }}>Login</h2>
             </div>
             <div className="register-input-data">
-              <label>Email</label>
+              <label>Email<span style={{ color: "red" }}>*</span></label>
               <input
                 name="email"
                 onChange={handleChange}
@@ -133,7 +121,7 @@ function Login() {
               )}
             </div>
             <div className="register-input-data">
-              <label>Password</label>
+              <label>Password<span style={{ color: "red" }}>*</span></label>
               <input
                 name="password"
                 onChange={handleChange}

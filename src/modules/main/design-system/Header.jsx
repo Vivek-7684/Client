@@ -2,9 +2,9 @@ import { Link } from "react-router";
 import Footer from "./Footer";
 import { Outlet } from "react-router";
 import logo from "../../../assets/logo.png";
-import userPic from "../../../assets/profile_default.png";
+import LogOut from "../../../assets/LogOut.png";
 import Cart from "../../../assets/Cart.png";
-import About from "../../../assets/about.png";
+import Heart from "../../../assets/heart.png";
 import Search from "../../../assets/Search.png";
 import '../../../styles/global.css';
 
@@ -30,8 +30,8 @@ const Header = (props) => {
                             <span>Cart</span>
 
                         </Link>
-                        <Link to="about" ><img src={About} className="icons" alt="policy" />About</Link>
-                        <Link><img src={userPic} id="logo" className="icons" alt="profile_photo" />User</Link>
+                        <Link to="about" ><img src={Heart} style={{fontSize:"20px"}} className="icons" alt="policy" />Wishlist</Link>
+                        <Link><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
                     </div>
 
                 </nav>

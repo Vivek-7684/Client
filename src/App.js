@@ -14,8 +14,6 @@ function App() {
 
   const [cart, setCart] = useState([]);
 
-  const navigate = useNavigate();
-
   const addToCart = (items, quantity) => {
 
     // updated item with quantity if not in cart
@@ -61,9 +59,9 @@ function App() {
       <Routes>
         {/* Common Layout Routes */}
         <Route path="/signup" element={<Register />} />
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Header CART={cart} />}>
-          <Route path="card/:category?" element={<>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Header CART={cart} />}>
+          <Route path=":category?" element={<>
             <Sidebar />
             <Card CART={cart} Add={addToCart} />
           </>} />

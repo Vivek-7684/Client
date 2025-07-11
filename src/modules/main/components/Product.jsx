@@ -28,7 +28,7 @@ const Product = (props) => {
 
     // direct to cart with add to cart button
     const navigateToCart = () => {
-        navigate("/home/cart");
+        navigate("/cart");
     }
 
     return product_details.map((item) =>
@@ -70,7 +70,7 @@ const Product = (props) => {
             </div>
 
             <div className="product-details-section">
-                <div className="Back_Products" onClick={() => navigate('/home/card')}>
+                <div className="Back_Products" onClick={() => navigate('/')}>
                     <BsArrowLeft style={{ fontSize: '30px' }} />
                     <span>Back</span>
                 </div>

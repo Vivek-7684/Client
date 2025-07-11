@@ -143,7 +143,7 @@ function Register() {
         if (response.status === 201) {
           toast.success("User Successfully Registered");
           setTimeout(() => {
-            navigate("/");
+            navigate("/login");
           }, 2000);
         }
         return response.json();
@@ -229,7 +229,7 @@ function Register() {
 
             <hr />
             <span className="form-link">
-              Already have an account? <Link to="/">Login here</Link>
+              Already have an account? <Link to="/login">Login here</Link>
             </span>
           </div>
         </form>
