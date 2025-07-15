@@ -66,9 +66,9 @@ function App() {
             <Card CART={cart} Add={addToCart} />
           </>} />
           <Route path="cart" element={<Cart CART={cart} Add={addToCart} Del={removeFromCart} />} />
-          <Route path="product/:productId" element={<Product Add={addToCart} Del={removeFromCart} />} />
-          <Route path="*" element={<Error />} />
+           <Route path="product/?" element={<Product Add={addToCart} Del={removeFromCart} />} />
         </Route>
+         {/* <Route path="*" element={<Error />} /> */}
       </Routes>
     </div >
   );

@@ -1,14 +1,43 @@
 import { Link } from "react-router";
 import Footer from "./Footer";
 import { Outlet } from "react-router";
+import { useEffect, useState } from "react";
 import logo from "../../../assets/logo.png";
 import LogOut from "../../../assets/LogOut.png";
+import Login from "../../../assets/login.png";
+import Signup from "../../../assets/sign_up.png";
 import Cart from "../../../assets/Cart.png";
 import Heart from "../../../assets/heart.png";
-import Search from "../../../assets/Search.png";
 import '../../../styles/global.css';
 
 const Header = (props) => {
+
+    const [LoggedIn, setLoggedIn] = useState(false);
+
+    const LoggedOut = () => {
+        fetch("http://localhost:3001/logout", {
+            method: "POST",
+            credentials: 'include'
+        })
+            .then((response) => {
+                if (response.ok) {
+                    setLoggedIn(false);
+                }
+            })
+            .catch((err) => console.error(err));
+    }
+
+    useEffect(() => {
+        fetch("http://localhost:3001/checkLoggedin", {
+            method: "POST",
+            credentials: 'include'
+        })
+            .then((response) => {
+                if (response.ok) setLoggedIn(true);
+                else setLoggedIn(false);
+            })
+    }, [])
+
     return (
         <>
             <header>
@@ -18,7 +47,7 @@ const Header = (props) => {
                     <form className="search-bar-section">
                         <input name="search" placeholder="Search By Products and Brands" className="search-bar" />
                     </form>
-                    <div className="navbar-icons">
+                    {LoggedIn && <div className="navbar-icons">
                         <Link to="cart" >
                             <img src={Cart} className="icons" alt="cart" />
                             {/* show total product item in cart*/}
@@ -30,9 +59,16 @@ const Header = (props) => {
                             <span>Cart</span>
 
                         </Link>
-                        <Link to="about" ><img src={Heart} style={{fontSize:"20px"}} className="icons" alt="policy" />Wishlist</Link>
-                        <Link><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
-                    </div>
+                        <Link to="about" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />Wishlist</Link>
+                        <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
+                    </div>}
+
+                    {!LoggedIn &&
+                        <div className="navbar-icons">
+                            <Link to="login" ><img src={Login} style={{ fontSize: "20px" }} className="icons" alt="login" />LogIn</Link>
+                            <Link to="signup" ><img src={Signup} style={{ fontSize: "20px" }} className="icons" alt="login" />Signup</Link>
+                        </div>
+                    }
 
                 </nav>
 

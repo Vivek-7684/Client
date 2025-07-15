@@ -1,8 +1,9 @@
 import { BsArrowLeft } from "react-icons/bs";
 import { FaIndianRupeeSign } from "react-icons/fa6";
-import data from "../../../assets/mock.json";
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+// import data from "../../../assets/mock.json";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import { useParams } from "react-router-dom";
 
 const Product = (props) => {
@@ -11,12 +12,47 @@ const Product = (props) => {
 
     const [imageIndex, setImageIndex] = useState(0); // image index
 
+    const [productDetail, setProductDetail] = useState([]); // filtered product 
+
     let { productId } = useParams();// get object with key-value as product-id and number
 
-    const product_id_int = +productId; // convert string to int for compare
+    const location = useLocation();
+    console.log(location.search);
+    const queryParams = new URLSearchParams(location.search);
+    console.log(queryParams);
+    const product_id_int = queryParams.get("id");
+    console.log(product_id_int);
+    // const product_id_int = +productId; // convert string to int for compare
+
+    const convertRawToURL = (rawData) => {
+        const binaryData = new Uint8Array(rawData); // convert rawData to binary 
+        const blobData = new Blob([binaryData]); // convert binary  to blob
+        const image = URL.createObjectURL(blobData); // temporary url link
+        return image;
+    }
 
     //filter to get selected product
-    const product_details = data.filter((item) => item.id === product_id_int);
+    // const product_details = data.filter((item) => item.id === product_id_int);
+    useEffect(() => {
+        fetch(`http://localhost:3001/product/getSingle?id=${product_id_int}`, {
+            method: "GET",
+            credentials: 'include'
+        })
+            .then((response) => {
+                return response.json();
+                // if (response.redirect) console.log(response.redirect);
+                // else { return response.json() }
+            })
+            .then((data) => {
+                if (data.redirect) {
+                    navigate(data.redirect);
+                }
+
+                setProductDetail(data);
+            })
+            .catch((err) => toast.error(err.message));
+    }, []);
+    // console.log(productDetail);
 
     // show content line by line
     function sentenceLineBreak(content) {
@@ -31,14 +67,12 @@ const Product = (props) => {
         navigate("/cart");
     }
 
-    return product_details.map((item) =>
-
-
+    return productDetail.map((item) =>
         <div className="product-section" key={item.id}>
-            {/* Product imgages View */}
+            {/* Product images View */}
             <div className="product-image-section">
                 <div className="product-image">
-                    <img src={require(`../../../assets/${item.image[imageIndex]}`)} alt="product-image" />
+                    <img src={convertRawToURL(item.image.data)} alt="product-image" />
                 </div>
 
                 {/* thumbnail for product views  */}
@@ -76,7 +110,7 @@ const Product = (props) => {
                 </div>
                 <h2>{item.title}</h2>
                 <ol className="product-description">{sentenceLineBreak(item.content).map((item, index) => <li key={index}>{item}</li>)}</ol>
-                <b><FaIndianRupeeSign />{item.price[0]}</b>
+                <b><FaIndianRupeeSign />{item.min_price}</b>
 
                 <div>
                     <label htmlFor="qty">Qty.</label>
@@ -88,8 +122,9 @@ const Product = (props) => {
                 </button>
 
             </div>
-
+            <ToastContainer theme="colored" />
         </div>
+
     );
 
 }

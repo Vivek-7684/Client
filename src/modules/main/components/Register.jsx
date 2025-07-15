@@ -149,7 +149,6 @@ function Register() {
         return response.json();
       })
       .then((data) => {
-        console.log("A");
         if (data.message !== "Created") {
           throw new Error(data.message);
         }
