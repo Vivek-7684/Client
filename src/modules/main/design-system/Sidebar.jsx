@@ -20,6 +20,7 @@ const Sidebar = () => {
         }
         // checked then unchecked all checkboxes
         else {
+            // store checked keys in state
             setCheckedKeys([e.target.name]);
             // filter products
             navigate(`/${e.target.name}`);
@@ -28,8 +29,17 @@ const Sidebar = () => {
     }
 
     // set price value
-    const setInputOnSlider = (a) => {
-        setValue(a);
+    const setInputOnSlider = (inputRangeValue) => {
+
+        setValue(inputRangeValue); // set price value
+
+        if (checkedKeys.length > 0) { // filter products by price and category
+            navigate(`/${checkedKeys[0]}?price=${inputRangeValue}`);
+        }
+        else { // filter products by price
+            navigate(`/?price=${inputRangeValue}`);
+        }
+
     }
 
     return (
@@ -39,7 +49,13 @@ const Sidebar = () => {
                     <div className="menu-title">Categories</div>
                     <div className="categories-item">
                         <label htmlFor="Shoes">Shoes</label>
-                        <input id="Shoes" className="sidebar-checkboxes" type="checkbox" name="Shoes" checked={checkedKeys.includes("Shoes")} onChange={(e) => { setCheckbox(e); }} />
+                        <input
+                            id="Shoes"
+                            className="sidebar-checkboxes"
+                            type="checkbox"
+                            name="Shoes"
+                            checked={checkedKeys.includes("Shoes")}
+                            onChange={(e) => { setCheckbox(e); }} />
                     </div>
 
                     <div className="categories-item">
@@ -62,7 +78,7 @@ const Sidebar = () => {
                 <div className="price-section">
                     <div className="menu-title">Price</div>
                     <p>{value}</p>
-                    <input type="range" min="100" max="500" onInput={(e) => { setInputOnSlider(e.target.value) }} />
+                    <input type="range" min="100" max="100000" onInput={(e) => { setInputOnSlider(e.target.value) }} />
                 </div>
 
             </aside>

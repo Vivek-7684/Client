@@ -14,9 +14,12 @@ const Product = (props) => {
 
     const [productDetail, setProductDetail] = useState([]); // filtered product 
 
+    // storing function in navigate
+    const navigate = useNavigate();// navigate to other route
+
     let { productId } = useParams();// get object with key-value as product-id and number
 
-    const location = useLocation();
+    const location = useLocation(); // get url parts object
     console.log(location.search);
     const queryParams = new URLSearchParams(location.search);
     console.log(queryParams);
@@ -46,9 +49,9 @@ const Product = (props) => {
             .then((data) => {
                 if (data.redirect) {
                     navigate(data.redirect);
+                } else{
+                    setProductDetail(data);
                 }
-
-                setProductDetail(data);
             })
             .catch((err) => toast.error(err.message));
     }, []);
@@ -59,74 +62,74 @@ const Product = (props) => {
         return content.split(/\|/g);
     }
 
-    // storing function in navigate
-    const navigate = useNavigate();
-
     // direct to cart with add to cart button
     const navigateToCart = () => {
         navigate("/cart");
     }
 
-    return productDetail.map((item) =>
-        <div className="product-section" key={item.id}>
-            {/* Product images View */}
-            <div className="product-image-section">
-                <div className="product-image">
-                    <img src={convertRawToURL(item.image.data)} alt="product-image" />
-                </div>
+        return (
+            <>
+                {productDetail && productDetail.map((item) =>
+                    <div className="product-section" key={item.id}>
+                        {/* Product images View */}
+                        <div className="product-image-section">
+                            <div className="product-image">
+                                <img src={convertRawToURL(item.image.data)} alt="product-image" />
+                            </div>
 
-                {/* thumbnail for product views  */}
-                {/* show when more than one image */}
-                {(item.image.length > 1) &&
-                    (<div>
+                            {/* thumbnail for product views  */}
+                            {/* show when more than one image */}
+                            {/* {(item.image.length > 1) &&
+                                (<div>
 
-                        <div className="slider-button" id="slider1"
-                            onClick={() => setImageIndex((imageIndex - 1 + item.image.length) % item.image.length)}>{"<"}</div>
-                        {item.image.map((img, idx) => (
-                            <img
-                                src={require(`../../../assets/${img}`)}
-                                alt="thumbnail"
-                                onClick={() => setImageIndex(idx)}
-                                key={img}
-                                style={{
-                                    width: '60px',
-                                    height: '60px',
-                                    cursor: 'pointer',
-                                    border: idx === imageIndex ? '2px solid purple' : '1px solid #343A40 ',
-                                }}
-                                className="thumbnail-images"
-                            />
-                        ))}
-                        <div className="slider-button" id="slider2"
-                            onClick={() => setImageIndex((imageIndex + 1) % item.image.length)}>{">"}</div>
-                    </div>)}
+                                    <div className="slider-button" id="slider1"
+                                        onClick={() => setImageIndex((imageIndex - 1 + item.image.length) % item.image.length)}>{"<"}</div>
+                                    {item.image.map((img, idx) => (
+                                        <img
+                                            src={require(`../../../assets/${img}`)}
+                                            alt="thumbnail"
+                                            onClick={() => setImageIndex(idx)}
+                                            key={img}
+                                            style={{
+                                                width: '60px',
+                                                height: '60px',
+                                                cursor: 'pointer',
+                                                border: idx === imageIndex ? '2px solid purple' : '1px solid #343A40 ',
+                                            }}
+                                            className="thumbnail-images"
+                                        />
+                                    ))}
+                                    <div className="slider-button" id="slider2"
+                                        onClick={() => setImageIndex((imageIndex + 1) % item.image.length)}>{">"}</div>
+                                </div>)} */}
 
-            </div>
+                        </div>
 
-            <div className="product-details-section">
-                <div className="Back_Products" onClick={() => navigate('/')}>
-                    <BsArrowLeft style={{ fontSize: '30px' }} />
-                    <span>Back</span>
-                </div>
-                <h2>{item.title}</h2>
-                <ol className="product-description">{sentenceLineBreak(item.content).map((item, index) => <li key={index}>{item}</li>)}</ol>
-                <b><FaIndianRupeeSign />{item.min_price}</b>
+                        <div className="product-details-section">
+                            <div className="Back_Products" onClick={() => navigate('/')}>
+                                <BsArrowLeft style={{ fontSize: '30px' }} />
+                                <span>Back</span>
+                            </div>
+                            <h2>{item.title}</h2>
+                            <ol className="product-description">{sentenceLineBreak(item.content).map((item, index) => <li key={index}>{item}</li>)}</ol>
+                            <b><FaIndianRupeeSign />{item.min_price}</b>
 
-                <div>
-                    <label htmlFor="qty">Qty.</label>
-                    <input id="qty" type="number" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} />
-                </div>
+                            <div>
+                                <label htmlFor="qty">Qty.</label>
+                                <input id="qty" type="number" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} />
+                            </div>
 
-                <button id="cart-button" onClick={() => { props.Add(item, quantity); navigateToCart(); }}>
-                    Add to Cart
-                </button>
+                            <button id="cart-button" onClick={() => { props.Add(item, quantity); navigateToCart(); }}>
+                                Add to Cart
+                            </button>
 
-            </div>
-            <ToastContainer theme="colored" />
-        </div>
+                        </div>
+                        <ToastContainer theme="colored" />
+                    </div>
 
-    );
-
+                )}
+            </>
+        );
 }
 
 export default Product;

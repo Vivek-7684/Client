@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import Footer from "./Footer";
 import { Outlet } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import logo from "../../../assets/logo.png";
 import LogOut from "../../../assets/LogOut.png";
@@ -14,6 +15,8 @@ const Header = (props) => {
 
     const [LoggedIn, setLoggedIn] = useState(false);
 
+    const Navigate = useNavigate();
+
     const LoggedOut = () => {
         fetch("http://localhost:3001/logout", {
             method: "POST",
@@ -22,6 +25,12 @@ const Header = (props) => {
             .then((response) => {
                 if (response.ok) {
                     setLoggedIn(false);
+                }
+                return response.json();
+            })
+            .then((data)=>{
+                if (data.redirect) {
+                    Navigate(data.redirect);
                 }
             })
             .catch((err) => console.error(err));
@@ -74,7 +83,7 @@ const Header = (props) => {
 
             </header>
             <Outlet />
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 };

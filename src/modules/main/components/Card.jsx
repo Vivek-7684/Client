@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { FaIndianRupeeSign } from "react-icons/fa6";
@@ -9,6 +9,10 @@ const Card = () => {
     const { category } = useParams();
 
     const navigate = useNavigate();
+
+    const location = useLocation(); // get url parts object
+    const queryParams = new URLSearchParams(location.search); // get query params from url
+    const price = queryParams.get("price"); // get price from url
 
     const [productData, setProductData] = useState([]);// store product data
 
@@ -37,7 +41,24 @@ const Card = () => {
 
 
     // filter Product if category selected or show all product
-    const filteredData = category ? productData.filter((item) => item.categories === category) : productData;
+    let filteredData = [];
+    // price selected then filter product by price
+    if (price && !category) {
+        filteredData = productData.filter((item) => item.min_price <= Number(price));
+        console.log(filteredData);
+    }
+    // price selected then filter product by category
+    else if (category && !price) {
+        filteredData = category ? productData.filter((item) => item.categories === category) : productData;
+    }
+    // price selected then filter product by price and category
+    else if (category && price) {
+        // filter product by category and price
+        filteredData = productData.filter((item) => item.categories === category && item.min_price <= Number(price));
+    }
+    else {
+        filteredData = productData;
+    }
 
     return (
         <>
