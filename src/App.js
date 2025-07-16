@@ -50,7 +50,6 @@ function App() {
     ) :
       setCart(cart.filter((cartItem) => cartItem.id !== items.id));  // remove complete single item 
 
-    // console.log(cart.length);
   }
 
   return (

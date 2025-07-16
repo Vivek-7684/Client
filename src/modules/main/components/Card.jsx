@@ -15,7 +15,6 @@ const Card = () => {
     const price = queryParams.get("price"); // get price from url
 
     const searchItem = queryParams.get("searchItem"); // get search item from url
-    console.log(searchItem);
     const [productData, setProductData] = useState([]);// store product data
 
     const convertRawToURL = (rawData) => {
@@ -42,32 +41,14 @@ const Card = () => {
     }, []);
 
 
-    // filter Product if category selected or show all product
-    let filteredData = [];
-    // price selected then filter product by price
-    if (price && !category) {
-        filteredData = productData.filter((item) => item.min_price <= Number(price));
-        console.log(filteredData);
-    }
-    // price selected then filter product by category
-    else if (category && !price) {
-        filteredData = category ? productData.filter((item) => item.categories === category) : productData;
-    }
-    // price selected then filter product by price and category
-    else if (category && price) {
-        // filter product by category and price
-        filteredData = productData.filter((item) => item.categories === category && item.min_price <= Number(price));
-    }
-    else if (searchItem) {
-        // filter product by search item    
-        filteredData = productData.filter((item) => {
-            return item.title.toLowerCase().includes(searchItem.toLowerCase()) ||
-                item.categories.toLowerCase().includes(searchItem.toLowerCase());
-        })
-    }
-    else {
-        filteredData = productData;
-    }
+    let filteredData = productData.filter((item) => {
+        const selectedPrice = price ? item.min_price <= Number(price) : true; // set condition for price filter if selected else show all
+        const selectedCatgory = category ? item.categories === category : true; // set condition for category filter if selected
+        const selectedSearchItem = searchItem ? item.title.toLowerCase().includes(searchItem.toLowerCase()) ||
+            item.categories.toLowerCase().includes(searchItem.toLowerCase()) : true;  
+
+        return selectedPrice && selectedCatgory && selectedSearchItem // filter by price, category and search item or return all
+    })
 
     return (
         <>

@@ -17,14 +17,12 @@ const Product = (props) => {
     // storing function in navigate
     const navigate = useNavigate();// navigate to other route
 
-    let { productId } = useParams();// get object with key-value as product-id and number
-
     const location = useLocation(); // get url parts object
-    console.log(location.search);
+
     const queryParams = new URLSearchParams(location.search);
-    console.log(queryParams);
+
     const product_id_int = queryParams.get("id");
-    console.log(product_id_int);
+
     // const product_id_int = +productId; // convert string to int for compare
 
     const convertRawToURL = (rawData) => {
@@ -35,7 +33,7 @@ const Product = (props) => {
     }
 
     //filter to get selected product
-    // const product_details = data.filter((item) => item.id === product_id_int);
+    
     useEffect(() => {
         fetch(`http://localhost:3001/product/getSingle?id=${product_id_int}`, {
             method: "GET",
@@ -43,8 +41,7 @@ const Product = (props) => {
         })
             .then((response) => {
                 return response.json();
-                // if (response.redirect) console.log(response.redirect);
-                // else { return response.json() }
+        
             })
             .then((data) => {
                 if (data.redirect) {
@@ -55,7 +52,6 @@ const Product = (props) => {
             })
             .catch((err) => toast.error(err.message));
     }, []);
-    // console.log(productDetail);
 
     // show content line by line
     function sentenceLineBreak(content) {

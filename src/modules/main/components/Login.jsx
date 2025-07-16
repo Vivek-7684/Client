@@ -11,7 +11,7 @@ function Login() {
     email: "",
     password: "",
   });
-  
+
   const [error, SetError] = useState({
     name: "",
     message: "",
@@ -66,7 +66,6 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(loginData);
 
     if (!validator.isEmail(loginData.email)) {
       toast.error("Email must have @ with domain and .");
@@ -79,15 +78,15 @@ function Login() {
       return false;
     }
 
-        fetch("http://localhost:3001/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(loginData),
-        credentials: "include" // include cookies in request
+    fetch("http://localhost:3001/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loginData),
+      credentials: "include" // include cookies in request
     })
       .then((response) => {
         if (response.status === 200) {
-          navigate("/");
+          navigate("/", { replace: true }); // redirect to home page and prevent go back to login page
         }
 
         return response.json();
