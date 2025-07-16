@@ -43,6 +43,7 @@ header {
     gap: 10rem;
     z-index: 1;
     justify-content: space-between;
+
 }
 
 #logo {
@@ -56,9 +57,9 @@ header {
 }
 
 .search-bar-section {
-    justify-items: center;
-    display: flex;
     width: 30%;
+    align-items: center;
+    margin-left: 25rem;
 }
 
 .search-bar {
