@@ -15,6 +15,8 @@ const Header = (props) => {
 
     const [LoggedIn, setLoggedIn] = useState(false);
 
+    const [searchQuery, setSearchQuery] = useState("");
+
     const Navigate = useNavigate();
 
     const LoggedOut = () => {
@@ -28,7 +30,7 @@ const Header = (props) => {
                 }
                 return response.json();
             })
-            .then((data)=>{
+            .then((data) => {
                 if (data.redirect) {
                     Navigate(data.redirect);
                 }
@@ -54,7 +56,14 @@ const Header = (props) => {
 
                     <Link><img src={logo} id="logo" className="icons" alt="logo" /> <span>DealMart</span></Link>
                     <form className="search-bar-section">
-                        <input name="search" placeholder="Search By Products and Brands" className="search-bar" />
+                        <input name="search" placeholder="Search By Products and Brands"
+                            onChange={(e) => { setSearchQuery(e.target.value) }} 
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    Navigate(`/?searchItem=${searchQuery}`);
+                                }}}
+                            className="search-bar" />
                     </form>
                     {LoggedIn && <div className="navbar-icons">
                         <Link to="cart" >

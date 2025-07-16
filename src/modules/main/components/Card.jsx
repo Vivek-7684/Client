@@ -14,6 +14,8 @@ const Card = () => {
     const queryParams = new URLSearchParams(location.search); // get query params from url
     const price = queryParams.get("price"); // get price from url
 
+    const searchItem = queryParams.get("searchItem"); // get search item from url
+    console.log(searchItem);
     const [productData, setProductData] = useState([]);// store product data
 
     const convertRawToURL = (rawData) => {
@@ -55,6 +57,13 @@ const Card = () => {
     else if (category && price) {
         // filter product by category and price
         filteredData = productData.filter((item) => item.categories === category && item.min_price <= Number(price));
+    }
+    else if (searchItem) {
+        // filter product by search item    
+        filteredData = productData.filter((item) => {
+            return item.title.toLowerCase().includes(searchItem.toLowerCase()) ||
+                item.categories.toLowerCase().includes(searchItem.toLowerCase());
+        })
     }
     else {
         filteredData = productData;
