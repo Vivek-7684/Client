@@ -23,7 +23,8 @@ const Sidebar = () => {
             // store checked keys in state
             setCheckedKeys([e.target.name]);
             // filter products
-            navigate(`/${e.target.name}`);
+            value ? navigate(`/${e.target.name}?price=${value}`) : navigate(`/${e.target.name}`);
+
         }
 
     }
