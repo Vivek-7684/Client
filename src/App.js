@@ -12,45 +12,7 @@ import "../src/styles/global.css";
 
 function App() {
 
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (items, quantity) => {
-
-    // updated item with quantity if not in cart
-    const updatedProduct = { ...items, quantity: (+items.quantity) + (+quantity) - 1 };
-
-    // check item is already in cart  
-    cart.some((a) => a.id === items.id) ? (
-      setCart(cart.map((cartItem) => {
-        if (cartItem.id === items.id) {   // +1 add quantity of same item
-          cartItem.quantity = (+cartItem.quantity) + (+quantity);
-          return cartItem;
-        }
-        else {
-          return cartItem; // return old cart item data 
-        }
-      }))
-    ) :
-      setCart([...cart, updatedProduct]);
-
-  }
-
-  const removeFromCart = (items) => {
-    // check item quantity > 1
-    cart.some((currentItem) => (items.id === currentItem.id) && (currentItem.quantity > 1)) ? (
-      setCart(cart.map((cartItem) => {
-        if (cartItem.id === items.id) {   // -1 del quantity of same item
-          cartItem.quantity = cartItem.quantity - 1;
-          return cartItem;
-        }
-        else {
-          return cartItem; // return old cart item data 
-        }
-      }))
-    ) :
-      setCart(cart.filter((cartItem) => cartItem.id !== items.id));  // remove complete single item 
-
-  }
+  const [cartItem, setCartItem] = useState([]); //cart items
 
   return (
     <div className="container">
@@ -59,15 +21,15 @@ function App() {
         {/* Common Layout Routes */}
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Header CART={cart} />}>
+        <Route path="/" element={<Header Cart={cartItem} setCart={setCartItem}/>}>
           <Route path=":category?" element={<>
             <Sidebar />
-            <Card CART={cart} Add={addToCart} />
+            <Card />
           </>} />
-          <Route path="cart" element={<Cart CART={cart} Add={addToCart} Del={removeFromCart} />} />
-           <Route path="product/?" element={<Product Add={addToCart} Del={removeFromCart} />} />
+          <Route path="cart" element={<Cart Cart={cartItem} setCart={setCartItem} />} />
+          <Route path="product/?" element={<Product Cart={cartItem} setCart={setCartItem} />} />
         </Route>
-         {/* <Route path="*" element={<Error />} /> */}
+        {/* <Route path="*" element={<Error />} /> */}
       </Routes>
     </div >
   );

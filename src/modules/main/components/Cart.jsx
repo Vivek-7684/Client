@@ -4,20 +4,108 @@ import { FaPlus } from "react-icons/fa6";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import data from "../../../assets/mock.json";
 import { BsArrowLeft } from "react-icons/bs";
+import { toast, ToastContainer } from 'react-toastify';
+import { useEffect, useState } from "react";
 
 
 const Cart = (props) => {
+
+    const convertRawToURL = (rawData) => {
+        const binaryData = new Uint8Array(rawData); // convert rawData to binary 
+        const blobData = new Blob([binaryData]); // convert binary  to blob
+        const image = URL.createObjectURL(blobData); // temporary url link
+        return image;
+    }
 
     // storing function
     const navigate = useNavigate();
 
     const calculateSubtotal = () => {
-        return parseInt(props.CART.reduce((totalPriceSum, currentItem) => {
-            return totalPriceSum += currentItem.quantity * currentItem.price[0];
+        return parseInt(props.Cart.reduce((totalPriceSum, currentItem) => {
+            return totalPriceSum += currentItem.quantity * currentItem.min_price;
         }, 0))
     }
 
     const gst = Math.round((calculateSubtotal() * (18)) / (100));
+
+    const loadCart = () => {
+        fetch(`http://localhost:3001/cart/getProductsInCart`, {
+            method: "GET",
+            credentials: 'include'
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+
+                if (data.redirect) {
+                    navigate(data.redirect);
+                } else if (data.length > 0) {
+                    props.setCart(data);
+                }
+            })
+            .catch((err) => toast.error(err.message));
+    }
+
+    useEffect(() => {
+        loadCart();
+    }, []);
+
+    const addToCart = (productId, quantity) => {
+        return fetch("http://localhost:3001/cart/addProductToCart", {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                productId: productId,
+                quantity: quantity
+            })
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+
+                if (data.redirect) {
+                    navigate(data.redirect);
+                } else {
+                    loadCart(); // Refresh cart after update
+                }
+
+            })
+            .catch((err) => toast.error(err.message));
+
+    }
+
+    const removeFromCart = (productId, quantity) => {
+        return fetch("http://localhost:3001/cart/removeProductFromCart", {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                productId: productId,
+                quantity: quantity
+            })
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+
+                if (data.redirect) {
+                    navigate(data.redirect);
+                } else {
+                    loadCart(); // Refresh cart after update
+                }
+
+            })
+            .catch((err) => toast.error(err.message));
+
+    }
 
     return (
         <div className="cart-data">
@@ -31,7 +119,7 @@ const Cart = (props) => {
                     </tr>
                 </thead>}
                 <tfoot>
-                    {(props.CART.length > 0) && (<>
+                    {(props.Cart.length > 0) && (<>
                         <tr><td colSpan={4}><hr /></td></tr>
                         <tr>
                             <td colSpan={3}>
@@ -56,29 +144,32 @@ const Cart = (props) => {
                     </tr>
                 </tfoot>
                 <tbody>
-                    {(props.CART.map((item) => (
+                    {(props.Cart.map((item) => (
                         <tr key={item.id}>
                             <td className="table-cart-item">
-                                <img src={require(`../../../assets/${item.image[0]}`)} id="table-cart-image" /><span>{item.title}</span>
+                                <img src={convertRawToURL(item.Image.data)} id="table-cart-image" /><span>{item.title}</span>
                             </td>
 
-                            <td >
+                            <td style={{ width: "400px" }} >
                                 <span className="icon_circle"><FaMinus style={{ color: "red", cursor: "pointer" }} onClick={() => {
-                                    props.Del(item)
+                                    removeFromCart(item.id, 1)
                                 }} /></span>
                                 <div style={{ fontSize: "20px", width: "100px", display: "inline" }}>{item.quantity}</div>
-                                <span className="icon_circle"><FaPlus style={{ color: "blue", cursor: "pointer" }} onClick={() => props.Add(item, 1)} /></span>
+                                <span className="icon_circle"><FaPlus style={{ color: "blue", cursor: "pointer" }} onClick={() => {
+                                    addToCart(item.id, 1)
+                                }} /></span>
 
                             </td>
 
-                            <td className="cart-item-price" ><span><FaIndianRupeeSign />{item.price[0]}</span></td>
+                            <td className="cart-item-price" ><span><FaIndianRupeeSign />{item.min_price}</span></td>
 
-                            <td>{parseFloat(((item.quantity) * (+item.price[0])).toFixed(2))}</td>
+                            <td>{parseFloat(((item.quantity) * (+item.min_price)).toFixed(2))}</td>
                         </tr>
                     )))}
                 </tbody>
 
             </table>
+            <ToastContainer theme="colored" />
         </div>
     )
 

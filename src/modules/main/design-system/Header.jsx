@@ -11,12 +11,15 @@ import profilePic from "../../../assets/profileUser.png";
 import Cart from "../../../assets/Cart.png";
 import Heart from "../../../assets/heart.png";
 import '../../../styles/global.css';
+import { toast } from "react-toastify";
 
 const Header = (props) => {
-
+   
     const [LoggedIn, setLoggedIn] = useState(false);
 
     const [searchQuery, setSearchQuery] = useState("");
+
+    const [cartItems, setCartItems] = useState([]); // store cart items
 
     const [username, setUsername] = useState("");
 
@@ -38,8 +41,31 @@ const Header = (props) => {
                     Navigate(data.redirect);
                 }
             })
-            .catch((err) => console.error(err));
+            .catch((err) => toast.error(err.message));
     }
+    // 
+    const loadCart = () => {
+        fetch(`http://localhost:3001/cart/getProductsInCart`, {
+            method: "GET",
+            credentials: 'include'
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data.length > 0) {
+                    props.setCart(data);
+                }
+            })
+            .catch((err) => toast.error(err.message));
+    }
+
+    useEffect(() => {
+        loadCart();
+    }, []);
+
+    const data = localStorage.getItem("cartItems");
+    const cartItem = JSON.parse(data);
 
     useEffect(() => {
         fetch("http://localhost:3001/checkLoggedin", {
@@ -58,18 +84,18 @@ const Header = (props) => {
                     setUsername(data.username);
                 }
             })
-            .catch((err) => console.error(err));
+            .catch((err) => toast.error(err.message));
     }, [])
-    // console.log(username);
+
     return (
         <>
             <header>
                 <nav className="navbar">
 
                     <Link to="/" style={{ position: "fixed", left: "10" }}
-                    ><img src={logo} id="logo" style={{width:"23px",height:"23px"}} className="icons" alt="logo" />
-                     <span><b>DealMart</b></span>
-                     </Link>
+                    ><img src={logo} id="logo" style={{ width: "23px", height: "23px" }} className="icons" alt="logo" />
+                        <span><b>DealMart</b></span>
+                    </Link>
                     <form className="search-bar-section">
                         <input name="search" placeholder="Search By Products and Brands"
                             onChange={(e) => { setSearchQuery(e.target.value) }}
@@ -86,15 +112,16 @@ const Header = (props) => {
                             <img src={Cart} className="icons" alt="cart" />
                             {/* show total product item in cart*/}
                             <span id="cart-item-count">
-                                {(parseInt(props.CART.reduce((totalQuantity, _) => {
+                                {/* {(parseInt(cartItems.reduce((totalQuantity, _) => {
                                     return totalQuantity += 1;
-                                }, 0)))}
+                                }, 0)))} */}
+                                {props.Cart.length}
                             </span>
                             <span>Cart</span>
 
                         </Link>
                         <Link to="" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />Wishlist</Link>
-                        <Link to="" ><img src={profilePic} style={{ fontSize: "20px" }} className="icons" alt="User" />{username}</Link>
+                        <Link to="" ><img src={profilePic} style={{ fontSize: "20px", cursor: "none" }} className="icons" alt="User" />{username}</Link>
                         <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
                     </div>}
 
