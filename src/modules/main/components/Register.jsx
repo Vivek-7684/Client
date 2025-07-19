@@ -30,7 +30,7 @@ function Register() {
     .has().lowercase(1, 'atleast one lowercase')
     .has().digits(2, 'atleast two digits')
     .has().not().spaces(); // set rules
-
+    
   const usernameSchema = yup.object().shape({
     username: yup
       .string()
@@ -39,6 +39,7 @@ function Register() {
       .test('IsAlpha', 'Alphabet allowed Only', (value) => value ?
         [...value].every(c => (c.charCodeAt(0) >= 65 && c.charCodeAt(0) <= 90) ||  // for capital letter
           (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122)) : false)           // for small letter
+       .required() 
   });
 
   // prevent white space with first input
@@ -103,11 +104,15 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if(error.name) {
+      return false;
+    }
+
     if (registerData?.username) {
       usernameSchema
         .validate({ username: registerData.username })
         .catch((err) => {
-          toast.error(err.message);
+          // toast.error("Oops! That username doesn’t look right.");
           return false;
         });
     }
@@ -119,7 +124,7 @@ function Register() {
       toast.error("email can't be empty");
       return false;
     } else if (registerData.password === "") {
-      toast.error("Password can't be empty");
+      toast.error("Oops! Looks like your password is missing.");
       return false;
     } else if (!validator.isEmail(registerData.email)) {
       toast.error("Please Enter Valid Email ");
@@ -164,7 +169,7 @@ function Register() {
         <form className="register-form" method="post">
           <div className="register-Input-Section">
             <div>
-              <h2 style={{ textAlign: "center" }}>Register</h2>
+              <h2 style={{ textAlign: "center" }}>Create Account</h2>
             </div>
 
             <div className="register-input-data">
