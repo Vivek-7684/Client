@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { FaIndianRupeeSign } from "react-icons/fa6";
+import emptyCart from "../../../assets/emptyCart.png";
 import data from "../../../assets/mock.json";
 import { BsArrowLeft } from "react-icons/bs";
 import { toast, ToastContainer } from 'react-toastify';
@@ -37,11 +38,10 @@ const Cart = (props) => {
                 return response.json();
             })
             .then((data) => {
-
                 if (data.redirect) {
                     navigate(data.redirect);
-                } else if (data.length > 0) {
-                    props.setCart(data);
+                } else {
+                    props.setCart(data); // update cart to show latest updated cart items 
                 }
             })
             .catch((err) => toast.error(err.message));
@@ -108,69 +108,80 @@ const Cart = (props) => {
     }
 
     return (
-        <div className="cart-data">
-            <table >
-                {<thead>
-                    <tr>
-                        <th> Product</th>
-                        <th>Quantity</th>
-                        <th className="cart-item-price">Price(per Item)</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>}
-                <tfoot>
-                    {(props.Cart.length > 0) && (<>
-                        <tr><td colSpan={4}><hr /></td></tr>
-                        <tr>
-                            <td colSpan={3}>
-                                Subtotal
-                            </td>
-                            <td>
-                                ₹{calculateSubtotal()}
-                            </td>
-                        </tr>
-                        <tr><td colSpan={4}><hr /></td></tr>
-                        <tr><td colSpan={3}>GST (18%)</td><td>₹{gst}</td></tr><tr><td colSpan={4}><hr /></td></tr>
-                        <tr><td colSpan={3}>Shipping</td><td>₹{"50"}</td></tr><tr><td colSpan={4}><hr /></td></tr>
-                        <tr><td colSpan={3}><strong>Total</strong></td><td><strong>₹{Math.round(calculateSubtotal()) + gst + 50}</strong></td>
-                        </tr></>)}
-                    <tr>
-                        <td rowSpan={3}>
-                            <div className="Back_Products" onClick={() => navigate('/')}>
-                                <BsArrowLeft style={{ fontSize: '30px' }} />
-                                <span>Back</span>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
-                <tbody>
-                    {(props.Cart.map((item) => (
-                        <tr key={item.id}>
-                            <td className="table-cart-item">
-                                <img src={convertRawToURL(item.Image.data)} id="table-cart-image" /><span>{item.title}</span>
-                            </td>
+        <>
+            <div className="cart-data">
+                {(props.Cart.length > 0) ?
+                    <table >
+                        {<thead>
+                            <tr>
+                                <th> Product</th>
+                                <th>Quantity</th>
+                                <th className="cart-item-price">Price(per Item)</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>}
+                        <tfoot>
+                            {(props.Cart.length > 0) && (<>
+                                <tr><td colSpan={4}><hr /></td></tr>
+                                <tr>
+                                    <td colSpan={3}>
+                                        Subtotal
+                                    </td>
+                                    <td>
+                                        ₹{calculateSubtotal()}
+                                    </td>
+                                </tr>
+                                <tr><td colSpan={4}><hr /></td></tr>
+                                <tr><td colSpan={3}>GST (18%)</td><td>₹{gst}</td></tr><tr><td colSpan={4}><hr /></td></tr>
+                                <tr><td colSpan={3}>Shipping</td><td>₹{"50"}</td></tr><tr><td colSpan={4}><hr /></td></tr>
+                                <tr><td colSpan={3}><strong>Total</strong></td><td><strong>₹{Math.round(calculateSubtotal()) + gst + 50}</strong></td>
+                                </tr></>)}
+                            <tr>
+                                <td rowSpan={3}>
+                                    <div className="Back_Products" onClick={() => navigate('/')}>
+                                        <BsArrowLeft style={{ fontSize: '30px' }} />
+                                        <span>Back</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {(props.Cart.map((item) => (
+                                <tr key={item.id}>
+                                    <td className="table-cart-item">
+                                        <img src={convertRawToURL(item.Image.data)} id="table-cart-image" /><span>{item.title}</span>
+                                    </td>
 
-                            <td style={{ width: "400px" }} >
-                                <span className="icon_circle"><FaMinus style={{ color: "red", cursor: "pointer" }} onClick={() => {
-                                    removeFromCart(item.id, 1)
-                                }} /></span>
-                                <div style={{ fontSize: "20px", width: "100px", display: "inline" }}>{item.quantity}</div>
-                                <span className="icon_circle"><FaPlus style={{ color: "blue", cursor: "pointer" }} onClick={() => {
-                                    addToCart(item.id, 1)
-                                }} /></span>
+                                    <td style={{ width: "400px" }} >
+                                        <span className="icon_circle"><FaMinus style={{ color: "red", cursor: "pointer" }} onClick={() => {
+                                            removeFromCart(item.id, 1)
+                                        }} /></span>
+                                        <div style={{ fontSize: "20px", width: "100px", display: "inline" }}>{item.quantity}</div>
+                                        <span className="icon_circle"><FaPlus style={{ color: "blue", cursor: "pointer" }} onClick={() => {
+                                            addToCart(item.id, 1)
+                                        }} /></span>
 
-                            </td>
+                                    </td>
 
-                            <td className="cart-item-price" ><span><FaIndianRupeeSign />{item.min_price}</span></td>
+                                    <td className="cart-item-price" ><span><FaIndianRupeeSign />{item.min_price}</span></td>
 
-                            <td>{parseFloat(((item.quantity) * (+item.min_price)).toFixed(2))}</td>
-                        </tr>
-                    )))}
-                </tbody>
+                                    <td>{parseFloat(((item.quantity) * (+item.min_price)).toFixed(2))}</td>
+                                </tr>
+                            )))}
+                        </tbody>
 
-            </table>
-            <ToastContainer theme="colored" />
-        </div>
+                    </table> :
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <img src={emptyCart} alt="empty cart" style={{ width: "250px", height: "250px", marginTop: "7rem" }} />
+                        <h2 style={{ textAlign: "center" }}>Your Cart is Empty</h2>
+                        <p style={{ textAlign: "center" }}>Please add some products to your cart.</p>
+                        <Link to="/"><button style={{width:"100%",marginTop:"0.5rem"}} className="register-button"><span>Let's go Explore</span></button></Link>
+                    </div>}
+
+                <ToastContainer theme="colored" />
+            </div>
+        </>
+
     )
 
 }

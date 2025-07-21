@@ -14,10 +14,8 @@ import '../../../styles/global.css';
 import { toast } from "react-toastify";
 
 const Header = (props) => {
-   
+    
     const [LoggedIn, setLoggedIn] = useState(false);
-
-    const [searchQuery, setSearchQuery] = useState("");
 
     const [cartItems, setCartItems] = useState([]); // store cart items
 
@@ -53,9 +51,7 @@ const Header = (props) => {
                 return response.json();
             })
             .then((data) => {
-                if (data.length > 0) {
-                    props.setCart(data);
-                }
+                props.setCart(data); // Always update cart, even if empty
             })
             .catch((err) => toast.error(err.message));
     }
@@ -80,7 +76,7 @@ const Header = (props) => {
                 else { setLoggedIn(false) }
             })
             .then((data) => {
-                if (data.username) {
+                if (data?.username) {
                     setUsername(data.username);
                 }
             })
@@ -96,25 +92,26 @@ const Header = (props) => {
                     ><img src={logo} id="logo" style={{ width: "23px", height: "23px" }} className="icons" alt="logo" />
                         <span><b>DealMart</b></span>
                     </Link>
-                    <form className="search-bar-section">
-                        <input name="search" placeholder="Search By Products and Brands"
-                            onChange={(e) => { setSearchQuery(e.target.value) }}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                    Navigate(`/?searchItem=${searchQuery}`);
+                    <form className="search-bar-section" onSubmit={e => e.preventDefault()}>
+                        <input
+                            placeholder="Search By Products and Brands"
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                
+                                if (value.trim() === "") {
+                                    Navigate("/"); 
+                                } else {
+                                    Navigate(`/?searchItem=${encodeURIComponent(value)}`);
                                 }
                             }}
-                            className="search-bar" />
+                            className="search-bar"
+                        />
                     </form>
                     {LoggedIn && <div className="navbar-icons">
                         <Link to="cart" >
                             <img src={Cart} className="icons" alt="cart" />
                             {/* show total product item in cart*/}
                             <span id="cart-item-count">
-                                {/* {(parseInt(cartItems.reduce((totalQuantity, _) => {
-                                    return totalQuantity += 1;
-                                }, 0)))} */}
                                 {props.Cart.length}
                             </span>
                             <span>Cart</span>

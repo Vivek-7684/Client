@@ -68,13 +68,9 @@ function Login() {
     e.preventDefault();
 
     if (!validator.isEmail(loginData.email)) {
-      toast.error("Email must have @ with domain and .");
       return false;
     } else if (!schema.validate(loginData.password)) {
       // check letter only
-      toast.error(
-        "Password InCorrect Format"
-      );
       return false;
     }
 

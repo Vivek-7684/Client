@@ -21,6 +21,8 @@ function Register() {
     message: "",
   });
 
+  const successMessage = "Welcome! Your account has been created successfully. Start exploring amazing products now!";
+
   const passwordSchema = new passwordValidator(); // set schema for validation
 
   passwordSchema
@@ -30,110 +32,122 @@ function Register() {
     .has().lowercase(1, 'atleast one lowercase')
     .has().digits(2, 'atleast two digits')
     .has().not().spaces(); // set rules
-    
+
   const usernameSchema = yup.object().shape({
     username: yup
       .string()
       .min(3, "Name at least 3 characters") // minimum 3 characters
-      .max(15, "Name at most 15 characters") // maximum 10 characters
-      .test('IsAlpha', 'Alphabet allowed Only', (value) => value ?
-        [...value].every(c => (c.charCodeAt(0) >= 65 && c.charCodeAt(0) <= 90) ||  // for capital letter
-          (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122)) : false)           // for small letter
-       .required() 
+      .max(15, "Name at most 15 characters") // maximum 15 characters
+      .test(
+        'IsAlpha',
+        'Alphabet allowed Only',
+        (value) =>
+          value
+            ? [...value].every(
+              (c) =>
+                (c.charCodeAt(0) >= 65 && c.charCodeAt(0) <= 90) || // for capital letter
+                (c.charCodeAt(0) >= 97 && c.charCodeAt(0) <= 122) || // for small letter
+                c === ' ' // allow space
+            )
+            : false
+      )
+      .required()
   });
+
 
   // prevent white space with first input
   const setClearSpace = (e) => {
     if (e.target.value.trimStart() === '') {
       e.target.value = '';
-      SetError({ name: "", message: "" });
     }
-    // clear error with first input 
   }
 
   const handleChange = (e) => {
     // validation checks with input data type and store
+    setClearSpace(e);
+    // clear error when backspace input 
+    // if (e.target.value.trim() === '') {
+    //   SetError({ name: "", message: "" });
+    // } else {
 
-    if (e.target.name === "username") {
-      usernameSchema
-        .validate({ username: e.target.value })
-        .then(() => {
-          SetError({ name: "", message: "" });
-        }) // clear error
-        .catch((err) => {
-          SetError({ name: "username", message: err.message });
+      if (e.target.name === "username") {
+        usernameSchema
+          .validate({ username: e.target.value })
+          .then(() => {
+            SetError({ name: "", message: "" });
+          }) // clear error
+          .catch((err) => {
+            SetError({ name: "username", message: err.message });
+          });
+
+        // setClearSpace(e);
+      } else if (e.target.name === "email") {
+        if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
+        else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
+        else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
+        else { SetError({ name: "email", message: "" }) }
+
+        // setClearSpace(e);
+      } else if (
+        e.target.name === "password" &&
+        !passwordSchema.validate(e.target.value)
+      ) {
+        SetError({
+          name: "password",
+          message: passwordSchema.validate(e.target.value, {
+            details: true,
+          }),
         });
 
-      setClearSpace(e);
-    } else if (e.target.name === "email") {
-      if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
-      else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
-      else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
-      else { SetError({ name: "email", message: "" }) }
+        // setClearSpace(e);
+      } else {
+        SetError("");
+      }
 
-      setClearSpace(e);
-    } else if (
-      e.target.name === "password" &&
-      !passwordSchema.validate(e.target.value)
-    ) {
-      SetError({
-        name: "password",
-        message: passwordSchema.validate(e.target.value, {
-          details: true,
-        }),
-      });
-
-      setClearSpace(e);
-    } else {
-      SetError("");
-    }
-
-    if (e.target.type === "file") {
-      setRegisterData({
-        ...registerData,
-        [e.target.name]: e.target.files[0],
-      });
-    } else {
-      setRegisterData({
-        ...registerData,
-        [e.target.name]: e.target.value,
-      });
-    }
+      if (e.target.type === "file") {
+        setRegisterData({
+          ...registerData,
+          [e.target.name]: e.target.files[0],
+        });
+      } else {
+        setRegisterData({
+          ...registerData,
+          [e.target.name]: e.target.value,
+        });
+      }
+    // }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(error.name) {
+    if (error.name) {
       return false;
     }
 
     if (registerData?.username) {
       usernameSchema
         .validate({ username: registerData.username })
-        .catch((err) => {
-          // toast.error("Oops! That username doesn’t look right.");
+        .catch(() => {
           return false;
         });
     }
-    if (registerData.username === "") {
-      toast.error("Name can't be empty");
-      return false;
-    }
-    else if (!registerData.email.trim()) {
-      toast.error("email can't be empty");
+    // if (registerData.username === "") {
+    //   toast.error("Please enter your name to continue.");
+    //   return false;
+    // }
+    if (!registerData.email.trim()) {
+      toast.error("The email field cannot be left blank. Kindly provide a valid email address.");
       return false;
     } else if (registerData.password === "") {
-      toast.error("Oops! Looks like your password is missing.");
+      toast.error("Password field cannot be empty. Kindly enter your password.");
       return false;
     } else if (!validator.isEmail(registerData.email)) {
-      toast.error("Please Enter Valid Email ");
       return false;
     } else if (
       e.target.name === "password" &&
       !passwordSchema.validate(registerData.password)
     ) {
-      toast.error("Enter Valid Password");
       return false;
     }
 
@@ -146,15 +160,15 @@ function Register() {
     })
       .then((response) => {
         if (response.status === 201) {
-          toast.success("User Successfully Registered");
+          toast.success(successMessage);
           setTimeout(() => {
             navigate("/login");
-          }, 2000);
+          }, 2500);
         }
         return response.json();
       })
       .then((data) => {
-        if (data.message !== "Created") {
+        if (data.message !== successMessage) {
           throw new Error(data.message);
         }
       })

@@ -2,7 +2,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { FaIndianRupeeSign } from "react-icons/fa6";
-
+import noProductFound from "../../../assets/noProductFound.png";
 const Card = () => {
 
     // get category by dynamic segment
@@ -45,7 +45,7 @@ const Card = () => {
         const selectedPrice = price ? item.min_price <= Number(price) : true; // set condition for price filter if selected else show all
         const selectedCatgory = category ? item.categories === category : true; // set condition for category filter if selected
         const selectedSearchItem = searchItem ? item.title.toLowerCase().includes(searchItem.toLowerCase()) ||
-            item.categories.toLowerCase().includes(searchItem.toLowerCase()) : true;  
+            item.categories.toLowerCase().includes(searchItem.toLowerCase()) : true;
 
         return selectedPrice && selectedCatgory && selectedSearchItem // filter by price, category and search item or return all
     })
@@ -53,7 +53,7 @@ const Card = () => {
     return (
         <>
             <main id="main">
-                {filteredData.length > 0 && filteredData.map((product) => {
+                {filteredData.length > 0 ? filteredData.map((product) => {
                     return (
                         <div className="product-card" key={product.id} onClick={() => navigate(`/Product?id=${product.id}`)}>
                             <div className="card-image">
@@ -78,7 +78,13 @@ const Card = () => {
 
                             </div>
                         </div>)
-                })}
+                }):
+                (<div className="no-product-found">
+                    <img src={noProductFound} alt="noProductFound"style={{width:"250px",height:"250px",marginTop:"7rem"}}/>
+                    <h2>No Products Found</h2>
+                    <p>Try changing the filters or search term.</p>
+                    
+                </div>)}
             </main>
             <ToastContainer theme="colored" />
         </>
