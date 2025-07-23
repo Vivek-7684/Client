@@ -67,7 +67,17 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validator.isEmail(loginData.email)) {
+    if(loginData.email.trim() === '') {
+      toast.error("The email field cannot be left blank. Kindly provide a valid email address.");
+      return false;
+    }
+
+    else if(loginData.password.trim() === '') {
+      toast.error("Password field cannot be empty. Kindly enter your password.");
+      return false
+    }
+
+    else if (!validator.isEmail(loginData.email)) {
       return false;
     } else if (!schema.validate(loginData.password)) {
       // check letter only
@@ -82,13 +92,14 @@ function Login() {
     })
       .then((response) => {
         if (response.status === 200) {
+         
           navigate("/", { replace: true }); // redirect to home page and prevent go back to login page
         }
 
         return response.json();
       })
       .then((data) => {
-        if (data.message !== "Logged In") {
+        if (data.message !== "Welcome back! You’ve logged in Successfully.") {
           throw new Error(data.message);
         }
       })

@@ -92,7 +92,7 @@ const Product = (props) => {
                 if (data.redirect) {
                     navigate(data.redirect);
                 } else if (data.length > 0) {
-                   props.setCart(data);
+                    props.setCart(data);
                 }
             })
             .catch((err) => toast.error(err.message));
@@ -196,9 +196,12 @@ const Product = (props) => {
                             <input id="qty" type="number" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} />
                         </div>
 
-                        <button id="cart-button" onClick={() => {
+                        <button className="cart-button" onClick={() => {
                             addToCart(item.id, quantity).then(() => {//  when item added to cart then navigate
-                                navigateToCart();
+                                toast.success(`${item.title} added to cart successfully`);
+                                setTimeout(() => {
+                                    navigateToCart();
+                                }, 2000);
                                 loadCart();
                             });
                         }}>

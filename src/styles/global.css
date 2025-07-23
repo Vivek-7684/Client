@@ -237,9 +237,10 @@ input[type="range"]::-webkit-slider-thumb {
     word-wrap: break-word;
 }
 
-#price {
+.price {
     font-weight: 300;
     font-size: 22px;
+    /* font-size: 1rem; */
 }
 
 #max-price {
@@ -358,6 +359,79 @@ tbody>tr:nth-child(even):hover {
     box-shadow: 3px 3px 10px #ADB5BD;
 }
 
+/* -----------------------------------------------------Wishlist Section----------------------------------------------------------------- */
+.empty_wishlist_container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-content: center; */
+}
+
+.WishList-List{
+    margin:3rem;
+}
+.wishlist-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.wishlist-icon>img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+.wishlist-product-container {
+    margin-top: 10rem;
+    width: 900px;
+      margin:auto;
+    /* padding:1rem; */
+    margin:1rem;
+    display:flex;
+    flex-direction: row;
+    gap:3rem;
+
+}
+
+.wishList-product-Image > img{
+    width: 200px;
+    height: auto;
+    margin: auto;
+}
+
+.wishlist-heading{
+    font-size:20px;
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: bold;
+    padding:1rem;
+    letter-spacing: 1px;
+}
+
+.empty_wishlist {
+   display: flex;
+   flex-direction: column;
+   margin: 5rem;
+   justify-content: center;
+   align-content: center;
+}
+
+.empty_wishlist > img {
+    width: 30%;
+    height: auto;
+    margin:auto;
+}
+
+
+.wishlist-icons {
+     display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    gap: 1rem;
+    font-size: 7px;
+}
+
 /* -----------------------------------------------------Product Section----------------------------------------------------------------- */
 
 
@@ -474,7 +548,7 @@ tbody>tr:nth-child(even):hover {
 }
 
 
-#cart-button {
+.cart-button {
     background-color: black;
     color: #F8F9FA;
     padding: 0.5rem;
@@ -484,7 +558,7 @@ tbody>tr:nth-child(even):hover {
     box-shadow: 3px 3px 5px;
 }
 
-#cart-button:hover {
+.cart-button:hover {
     background-color: #F8F9FA;
     color: black;
 }
@@ -745,11 +819,6 @@ tbody>tr:nth-child(even):hover {
         padding: 5px;
     }
 
-    #price {
-        font-weight: 300;
-        font-size: 10px;
-    }
-
     #max-price {
         text-decoration: line-through;
         font-weight: normal;
@@ -769,13 +838,10 @@ tbody>tr:nth-child(even):hover {
         font-size: 1rem;
     }
 
-    #price {
-        font-size: 1rem;
-    }
-
     #max-price {
         font-size: 0.8rem;
     }
+
 
     /*  -----------------------------------------------------Footer Section ----------------------------------------------------------------*/
     #footer {

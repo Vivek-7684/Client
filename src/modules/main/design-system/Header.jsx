@@ -9,12 +9,12 @@ import Login from "../../../assets/login.png";
 import Signup from "../../../assets/sign_up.png";
 import profilePic from "../../../assets/profileUser.png";
 import Cart from "../../../assets/Cart.png";
-import Heart from "../../../assets/heart.png";
+import Heart from "../../../assets/heart_filled.png";
 import '../../../styles/global.css';
 import { toast } from "react-toastify";
 
 const Header = (props) => {
-    
+
     const [LoggedIn, setLoggedIn] = useState(false);
 
     const [cartItems, setCartItems] = useState([]); // store cart items
@@ -36,7 +36,11 @@ const Header = (props) => {
             })
             .then((data) => {
                 if (data.redirect) {
-                    Navigate(data.redirect);
+                    toast.success("You’ve logged out successfully. See you soon!");
+                    setTimeout(() => {
+                        Navigate(data.redirect);
+                    }, 2000);
+
                 }
             })
             .catch((err) => toast.error(err.message));
@@ -65,7 +69,7 @@ const Header = (props) => {
 
     useEffect(() => {
         fetch("http://localhost:3001/checkLoggedin", {
-            method: "POST",
+            method: "GET",
             credentials: 'include'
         })
             .then((response) => {
@@ -79,6 +83,7 @@ const Header = (props) => {
                 if (data?.username) {
                     setUsername(data.username);
                 }
+                if (data?.message) { toast.success(data.message) };
             })
             .catch((err) => toast.error(err.message));
     }, [])
@@ -97,9 +102,9 @@ const Header = (props) => {
                             placeholder="Search By Products and Brands"
                             onChange={(e) => {
                                 const value = e.target.value;
-                                
+
                                 if (value.trim() === "") {
-                                    Navigate("/"); 
+                                    Navigate("/");
                                 } else {
                                     Navigate(`/?searchItem=${encodeURIComponent(value)}`);
                                 }
@@ -117,7 +122,7 @@ const Header = (props) => {
                             <span>Cart</span>
 
                         </Link>
-                        <Link to="" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />Wishlist</Link>
+                        <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />Wishlist</Link>
                         <Link to="" ><img src={profilePic} style={{ fontSize: "20px", cursor: "none" }} className="icons" alt="User" />{username}</Link>
                         <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
                     </div>}
