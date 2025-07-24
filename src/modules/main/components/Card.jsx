@@ -5,6 +5,7 @@ import { FaIndianRupeeSign } from "react-icons/fa6";
 import noProductFound from "../../../assets/noProductFound.png";
 import heartFilled from "../../../assets/heart_filled.png";
 import heart from "../../../assets/heart.png";
+import "react-toastify/dist/ReactToastify.css";
 
 const Card = (props) => {
 
@@ -87,16 +88,6 @@ const Card = (props) => {
             .then((response) => {
                 return response.json();
             })
-            .then((data) => {
-
-                if (data.redirect) {
-                    navigate(data.redirect);
-                } else {
-                    LoadWishList(); // Refresh wishlist after update
-                }
-
-            })
-            .catch((err) => toast.error(err.message));
 
     }
 
@@ -120,7 +111,20 @@ const Card = (props) => {
 
                             {<div className="wishlist-icon"
                                 onClick={
-                                    () => { addProductsInWishList(product.id); }}>
+                                    () => {
+                                        addProductsInWishList(product.id)
+                                            .then((data) => {
+                                                if (data.redirect) {
+                                                    navigate(data.redirect);
+                                                } else {
+                                                    setTimeout(() => {
+                                                        LoadWishList(); // Refresh wishlist after update
+                                                    }, 2000);
+                                                    toast.success(`${product.title} is added in your wishlist for later.`);
+                                                }
+                                            })
+                                            .catch((err) => toast.error(err.message));
+                                    }}>
                                 <img
                                     src={(props.WishlistItem || []).some(item => item.id === product.id) ? heartFilled : heart}
                                     alt="wishlist-icon"
@@ -158,7 +162,7 @@ const Card = (props) => {
 
                     </div>)}
             </main>
-            <ToastContainer theme="colored" />
+            {/* <ToastContainer /> */}
         </>
     )
 }

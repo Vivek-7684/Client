@@ -1,4 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
+import { BsArrowLeft } from "react-icons/bs";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { convertRawImageToURL } from "../helpers/convertRawImageToURL";
 import { ToastContainer, toast } from "react-toastify";
@@ -55,19 +56,6 @@ const WishList = (props) => {
             .then((response) => {
                 return response.json();
             })
-            .then((data) => {
-
-                if (data.redirect) {
-                    navigate(data.redirect);
-                } else {
-                    setTimeout(() => {
-                        toast.success("Item Removed from Successfully!");
-                    }, 800);
-                    LoadWishList(); // Refresh wishlist after update
-                }
-
-            })
-            .catch((err) => toast.error(err.message));
 
     }
 
@@ -125,6 +113,10 @@ const WishList = (props) => {
     return (
         <>
             {Array.isArray(props.WishlistItem) && (props.WishlistItem.length > 0) ? (<div className="WishList-List">
+                <div className="Back_Products" style={{ marginTop: "2rem" }} onClick={() => navigate('/')}>
+                    <BsArrowLeft style={{ fontSize: '30px' }} />
+                    <span>Back</span>
+                </div>
                 <div className="wishlist-heading">
                     {props.WishlistItem?.length > 0 && <span>{`My Wishlist (${(props.WishlistItem || []).length})`}</span>}
                     <hr></hr>
@@ -141,7 +133,31 @@ const WishList = (props) => {
                                     <p style={{ color: "grey" }}>{item.content}</p>
                                     <span style={{ color: "green" }}>Price Now:-<b id="price"><FaIndianRupeeSign />{`${item.min_price}`}</b></span>{","}<br></br>
                                     <div className="wishlist-icons">
-                                        <span><img src={Delete} style={{ width: "28px", height: "28px", textSpacing: "2px" }} onClick={() => { addProductsInWishList(item.id) }} /></span>{"  "}
+                                        <span><img src={Delete} style={{ width: "28px", height: "28px", textSpacing: "2px" }} onClick={() => {
+                                            addProductsInWishList(item.id)
+                                                .then((data) => {
+                                                    if (data.redirect) {
+                                                        navigate(data.redirect);
+                                                    } else {
+                                                        setTimeout(() => {
+                                                            // toast.success(`${item.title} has been removed from your wishlist.`, {
+                                                            //     toastClassName: "toast_popUp",
+                                                            //     progressClassName:"toast_progress"
+                                                            // });
+
+
+
+                                                           toast.success("Inline Styling", {
+  progressStyle: { background: "#22c55e" }
+});
+
+
+                                                        }, 800);
+                                                        LoadWishList(); // Refresh wishlist after update
+                                                    }
+                                                })
+                                                .catch((err) => toast.error(err.message));
+                                        }} /></span>{"  "}
                                         {/* <span><img src={add_To_Cart} style={{ width: "22px", height: "22px", textSpacing: "2px",textSpacing:"10px" }} onClick={() => { addToCart(item.id, 1) }} />Add to Cart</span> */}
                                         <button className="cart-button" onClick={() => {
                                             addToCart(item.id, 1);
@@ -169,7 +185,7 @@ const WishList = (props) => {
                         </div>
                     </div>
                 )}
-            <ToastContainer theme="colored" />
+       
         </>
 
     );

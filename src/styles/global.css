@@ -402,7 +402,7 @@ tbody>tr:nth-child(even):hover {
 
 .wishlist-heading{
     font-size:20px;
-    margin-top: 1rem;
+    margin-top: 0.1rem;
     text-align: center;
     font-weight: bold;
     padding:1rem;
@@ -856,6 +856,139 @@ tbody>tr:nth-child(even):hover {
     }
 
 
+}
+/* --------------------------------------------------------------toast pop up----------------------------------------------------------------------------- */
+
+ .my-progress-bar {
+  background-color: #d72303; /* Tomato */
+}
+/*--------------------------------------------------------------profile view --------------------------------------------------*/
+.profile-overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.6);
+    top:0;
+    left:0;
+    z-index: 999;
+    display: flex;
+    justify-content:flex-end;
+    padding: 3rem;
+}
+.profile-view {
+    width: auto;
+    padding: 1.5rem;
+    height: fit-content;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background-color: white;
+    color:"black";
+    position:"float";
+    top:100px;
+    right:1rem;
+    /* background: rgba(255, 255, 255, 0.3); */
+    border-radius: 5px;
+}
+
+.profile-options {
+    color:black;
+}
+
+.edit-profile{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.cross-button{
+    position:absolute;
+    top:3rem;
+    right: 3rem;
+}
+.profile-form{
+    width: 100vw;
+    height: 100vh;
+    margin-bottom: 5rem;
+    overflow-y: scroll;
+}
+
+.profile-form-edit{
+    background-color: white;
+    color: black;
+    box-shadow: 3px 3px 10px #bcc0c5e3;
+    padding: 3rem;
+    border-radius: 1rem;
+    margin-bottom: 3.5rem;
+    display: flex;
+    gap: 0.3rem;
+    justify-content: center;
+    align-content: center;
+    width: fit-content;
+    height:auto;
+    letter-spacing: 1px;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 8rem;
+    margin-bottom: 8rem;
+}
+
+.profile-edit-button,.profile-save-button {
+    padding: 0.5rem;
+    background-color: black;
+    width: auto;
+    margin: auto;
+    color: white;
+    border: none;
+    font-weight: 500;
+    font-size: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 1rem;
+    overflow-y: hidden;
+}
+
+.profile-edit-button:hover,.profile-save-button:hover {
+    background-color: #ccc;
+    color: black;
+}
+
+
+/* Fieldset Styling */
+fieldset {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem 1rem;
+    background-color: #fafafa;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Legend Styling */
+legend {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    background: #fff; /* Makes text stand out */
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+/* Input Fields inside Fieldset */
+fieldset input {
+    flex: 1;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    transition: 0.3s;
+}
+
+fieldset input:focus {
+    border-color: #000;
 }
 
 

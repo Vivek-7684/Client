@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { useState } from "react";
 import passwordValidator from "password-validator";
 import validator from "validator";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
@@ -70,51 +70,51 @@ function Register() {
     //   SetError({ name: "", message: "" });
     // } else {
 
-      if (e.target.name === "username") {
-        usernameSchema
-          .validate({ username: e.target.value })
-          .then(() => {
-            SetError({ name: "", message: "" });
-          }) // clear error
-          .catch((err) => {
-            SetError({ name: "username", message: err.message });
-          });
-
-        // setClearSpace(e);
-      } else if (e.target.name === "email") {
-        if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
-        else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
-        else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
-        else { SetError({ name: "email", message: "" }) }
-
-        // setClearSpace(e);
-      } else if (
-        e.target.name === "password" &&
-        !passwordSchema.validate(e.target.value)
-      ) {
-        SetError({
-          name: "password",
-          message: passwordSchema.validate(e.target.value, {
-            details: true,
-          }),
+    if (e.target.name === "username") {
+      usernameSchema
+        .validate({ username: e.target.value })
+        .then(() => {
+          SetError({ name: "", message: "" });
+        }) // clear error
+        .catch((err) => {
+          SetError({ name: "username", message: err.message });
         });
 
-        // setClearSpace(e);
-      } else {
-        SetError("");
-      }
+      // setClearSpace(e);
+    } else if (e.target.name === "email") {
+      if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
+      else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
+      else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
+      else { SetError({ name: "email", message: "" }) }
 
-      if (e.target.type === "file") {
-        setRegisterData({
-          ...registerData,
-          [e.target.name]: e.target.files[0],
-        });
-      } else {
-        setRegisterData({
-          ...registerData,
-          [e.target.name]: e.target.value,
-        });
-      }
+      // setClearSpace(e);
+    } else if (
+      e.target.name === "password" &&
+      !passwordSchema.validate(e.target.value)
+    ) {
+      SetError({
+        name: "password",
+        message: passwordSchema.validate(e.target.value, {
+          details: true,
+        }),
+      });
+
+      // setClearSpace(e);
+    } else {
+      SetError("");
+    }
+
+    if (e.target.type === "file") {
+      setRegisterData({
+        ...registerData,
+        [e.target.name]: e.target.files[0],
+      });
+    } else {
+      setRegisterData({
+        ...registerData,
+        [e.target.name]: e.target.value,
+      });
+    }
     // }
   };
 
@@ -252,7 +252,7 @@ function Register() {
           </div>
         </form>
       </div>
-      <ToastContainer position="bottom-right" theme="colored" />
+      {/* <ToastContainer position="bottom-right" theme="colored" /> */}
     </>
   );
 }

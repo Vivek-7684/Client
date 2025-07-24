@@ -209,7 +209,7 @@ const Product = (props) => {
                         </button>
 
                     </div>
-                    <ToastContainer theme="colored" />
+                    {/* <ToastContainer theme="colored" /> */}
                 </div>
 
             )}

@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import Footer from "./Footer";
+import Account from "../components/Account";
 import { Outlet } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,15 +12,16 @@ import profilePic from "../../../assets/profileUser.png";
 import Cart from "../../../assets/Cart.png";
 import Heart from "../../../assets/heart_filled.png";
 import '../../../styles/global.css';
+import convertRawImageToURL from '../helpers/convertRawImageToURL';
 import { toast } from "react-toastify";
 
 const Header = (props) => {
 
     const [LoggedIn, setLoggedIn] = useState(false);
 
-    const [cartItems, setCartItems] = useState([]); // store cart items
-
     const [username, setUsername] = useState("");
+
+    const [userProfile, setUserProfile] = useState("");
 
     const Navigate = useNavigate();
 
@@ -45,7 +47,9 @@ const Header = (props) => {
             })
             .catch((err) => toast.error(err.message));
     }
-    // 
+
+
+
     const loadCart = () => {
         fetch(`http://localhost:3001/cart/getProductsInCart`, {
             method: "GET",
@@ -63,9 +67,6 @@ const Header = (props) => {
     useEffect(() => {
         loadCart();
     }, []);
-
-    const data = localStorage.getItem("cartItems");
-    const cartItem = JSON.parse(data);
 
     useEffect(() => {
         fetch("http://localhost:3001/checkLoggedin", {
@@ -88,11 +89,25 @@ const Header = (props) => {
             .catch((err) => toast.error(err.message));
     }, [])
 
+    useEffect(() => {
+        fetch("http://localhost:3001/profile/user-profile", {
+            method: "GET",
+            credentials: 'include'
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setUserProfile(data.image);
+            })
+    },[]);
+
     return (
         <>
+
             <header>
                 <nav className="navbar">
-
+                    {props.showProfile && <Account setShowProfile={props.setShowProfile} />}
                     <Link to="/" style={{ position: "fixed", left: "10" }}
                     ><img src={logo} id="logo" style={{ width: "23px", height: "23px" }} className="icons" alt="logo" />
                         <span><b>DealMart</b></span>
@@ -123,7 +138,7 @@ const Header = (props) => {
 
                         </Link>
                         <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />Wishlist</Link>
-                        <Link to="" ><img src={profilePic} style={{ fontSize: "20px", cursor: "none" }} className="icons" alt="User" />{username}</Link>
+                        <Link to="" onClick={() => { props.setShowProfile(!props.showProfile) }}><img src={`data:image/png;base64,${userProfile}`} alt="Profile"  style={{ fontSize: "20px", cursor: "none",borderRadius:"15px" }} className="icons" />{username}</Link>
                         <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
                     </div>}
 

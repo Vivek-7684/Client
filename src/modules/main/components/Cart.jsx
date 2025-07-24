@@ -178,7 +178,7 @@ const Cart = (props) => {
                         <Link to="/"><button style={{width:"100%",marginTop:"0.5rem"}} className="register-button"><span>Let's go Explore</span></button></Link>
                     </div>}
 
-                <ToastContainer theme="colored" />
+                {/* <ToastContainer theme="colored" /> */}
             </div>
         </>
 
