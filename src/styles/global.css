@@ -884,8 +884,8 @@ tbody>tr:nth-child(even):hover {
     align-items: center;
     gap: 6px;
     background-color: white;
-    color:"black";
-    position:"float";
+    color:black;
+    position:float;
     top:100px;
     right:1rem;
     /* background: rgba(255, 255, 255, 0.3); */
@@ -919,15 +919,14 @@ tbody>tr:nth-child(even):hover {
 .profile-form-edit{
     background-color: white;
     color: black;
-    box-shadow: 3px 3px 10px #bcc0c5e3;
-    padding: 3rem;
+    padding: 2rem;
     border-radius: 1rem;
     margin-bottom: 3.5rem;
     display: flex;
     gap: 0.3rem;
     justify-content: center;
     align-content: center;
-    width: fit-content;
+    width: 60%;
     height:auto;
     letter-spacing: 1px;
     flex-direction: column;
@@ -961,19 +960,16 @@ tbody>tr:nth-child(even):hover {
 fieldset {
     border: 2px solid #e0e0e0;
     border-radius: 8px;
-    padding: 1rem 1rem;
-    background-color: #fafafa;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.05);
+    padding: 0.5rem 0.7rem;
+    width: 100%;
 }
 
 /* Legend Styling */
 legend {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    background: #fff; /* Makes text stand out */
-    border-radius: 4px;
+    color: #6C757D;
+    background: #fff;
     margin-left: 10px;
+    padding: 1px;
 }
 
 /* Input Fields inside Fieldset */
@@ -981,14 +977,27 @@ fieldset input {
     flex: 1;
     padding: 5px;
     font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
     outline: none;
-    transition: 0.3s;
+    border: none;
+    font-size: 20px;
+    width: 100%;
 }
 
 fieldset input:focus {
     border-color: #000;
+}
+
+.profile-edit-input {
+    display: flex;
+    /* align-content: center;
+    justify-content: center; */
+    gap:10px;    
+}
+.edit-option-icons {
+    font-size: 3px;
+    margin-top: 1rem;
+    display: flex;
+    gap: 3rem;
 }
 
 

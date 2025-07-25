@@ -20,15 +20,16 @@ function App() {
   const [WishlistItem, setWishlistItem] = useState([]); // wishlist items
 
   const [showProfile, setShowProfile] = useState(false);
-  
+
   return (
     <div className="container">
-    
+
       <Routes>
         {/* Common Layout Routes */}
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Header Cart={cartItem} setCart={setCartItem} showProfile={showProfile} setShowProfile={setShowProfile} />}>
+        <Route path="/"
+          element={<Header Cart={cartItem} setCart={setCartItem} showProfile={showProfile} setShowProfile={setShowProfile} />}>
           <Route path=":category?" element={<>
             <Sidebar />
             <Card WishlistItem={WishlistItem} setWishlistItem={setWishlistItem} />
