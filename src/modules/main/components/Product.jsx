@@ -1,10 +1,10 @@
 import { BsArrowLeft } from "react-icons/bs";
 import { FaIndianRupeeSign } from "react-icons/fa6";
-// import data from "../../../assets/mock.json";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-// import { useParams } from "react-router-dom";
+import { convertRawImageToURL } from "../../../modules/main/helpers/convertRawImageToURL";
+import { toast } from 'react-toastify';
+
 
 const Product = (props) => {
 
@@ -28,13 +28,6 @@ const Product = (props) => {
     const product_id_int = queryParams.get("id");
 
     // const product_id_int = +productId; // convert string to int for compare
-
-    const convertRawToURL = (rawData) => {
-        const binaryData = new Uint8Array(rawData); // convert rawData to binary 
-        const blobData = new Blob([binaryData]); // convert binary  to blob
-        const image = URL.createObjectURL(blobData); // temporary url link
-        return image;
-    }
 
     //filter to get selected product
 
@@ -133,7 +126,7 @@ const Product = (props) => {
                     {/* Product images View */}
                     <div className="product-image-section">
                         <div className="product-image">
-                            <img src={convertRawToURL(showimage)} onLoad={(e) => {
+                            <img src={convertRawImageToURL(showimage)} onLoad={(e) => {
                                 URL.revokeObjectURL(e.target.src)
                             }} alt="product-image" />
                         </div>
@@ -151,7 +144,7 @@ const Product = (props) => {
                                     }>{"<"}</div>  {/* previous image */}
                                 {productImages.map((img, idx) => (
                                     <img
-                                        src={convertRawToURL(img.image.data)}
+                                        src={convertRawImageToURL(img.image.data)}
                                         alt="thumbnail"
                                         onClick={() => {
                                             setImageIndex(idx); // asynchronous line

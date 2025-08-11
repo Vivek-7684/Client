@@ -3,20 +3,13 @@ import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import emptyCart from "../../../assets/emptyCart.png";
-import data from "../../../assets/mock.json";
+import { convertRawImageToURL } from "../../../modules/main/helpers/convertRawImageToURL";
 import { BsArrowLeft } from "react-icons/bs";
-import { toast, ToastContainer } from 'react-toastify';
-import { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
+import { useEffect } from "react";
 
 
 const Cart = (props) => {
-
-    const convertRawToURL = (rawData) => {
-        const binaryData = new Uint8Array(rawData); // convert rawData to binary 
-        const blobData = new Blob([binaryData]); // convert binary  to blob
-        const image = URL.createObjectURL(blobData); // temporary url link
-        return image;
-    }
 
     // storing function
     const navigate = useNavigate();
@@ -149,7 +142,7 @@ const Cart = (props) => {
                             {(props.Cart.map((item) => (
                                 <tr key={item.id}>
                                     <td className="table-cart-item">
-                                        <img src={convertRawToURL(item.Image.data)} id="table-cart-image" /><span>{item.title}</span>
+                                        <img src={convertRawImageToURL(item.Image.data)} id="table-cart-image" /><span>{item.title}</span>
                                     </td>
 
                                     <td style={{ width: "400px" }} >

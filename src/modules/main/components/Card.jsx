@@ -1,6 +1,7 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { convertRawImageToURL } from "../../../modules/main/helpers/convertRawImageToURL";
+import { toast } from "react-toastify";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import noProductFound from "../../../assets/noProductFound.png";
 import heartFilled from "../../../assets/heart_filled.png";
@@ -22,13 +23,6 @@ const Card = (props) => {
     const [productData, setProductData] = useState([]);// store product data
 
     const [Wishlist, setWishlist] = useState(heart); // store wishlist data
-
-    const convertRawToURL = (rawData) => {
-        const binaryData = new Uint8Array(rawData); // convert rawData to binary 
-        const blobData = new Blob([binaryData]); // convert binary  to blob
-        const image = URL.createObjectURL(blobData); // temporary url link
-        return image;
-    }
 
     useEffect(() => {
         fetch("http://localhost:3001/product/getAll", {
@@ -133,7 +127,7 @@ const Card = (props) => {
                             </div>}
 
                             <div className="card-image" onClick={() => navigate(`/Product?id=${product.id}`)}>
-                                <img src={convertRawToURL(product.image.data)} onLoad={(e) => {
+                                <img src={convertRawImageToURL(product.image.data)} onLoad={(e) => {
                                     URL.revokeObjectURL(e.target.src);
                                 }} alt={product.title} />
 

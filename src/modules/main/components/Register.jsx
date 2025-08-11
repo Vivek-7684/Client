@@ -12,7 +12,6 @@ function Register() {
     username: "",
     email: "",
     password: "",
-    // profile_image: null,
   });
 
   // show real time error with type
@@ -233,10 +232,6 @@ function Register() {
               )}
             </div>
 
-            {/* <div className="register-input-data">
-                            <label>Profile Image</label>
-                            <input type="file" name="profile_image" onChange={handleChange} />
-                        </div> */}
             <button
               type="submit"
               className="register-button"
@@ -252,7 +247,6 @@ function Register() {
           </div>
         </form>
       </div>
-      {/* <ToastContainer position="bottom-right" theme="colored" /> */}
     </>
   );
 }

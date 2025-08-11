@@ -888,7 +888,6 @@ tbody>tr:nth-child(even):hover {
     position:float;
     top:100px;
     right:1rem;
-    /* background: rgba(255, 255, 255, 0.3); */
     border-radius: 5px;
 }
 
@@ -958,10 +957,18 @@ tbody>tr:nth-child(even):hover {
 
 /* Fieldset Styling */
 fieldset {
-    border: 2px solid #e0e0e0;
+    border: 1px solid #111111;
     border-radius: 8px;
-    padding: 0.5rem 0.7rem;
-    width: 100%;
+    padding: 0.5rem 0.3rem;
+    width: 50%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    text-indent: 12px;
+    padding-top: 16px;
+    padding-bottom: 20px;
+    background-color: transparent;
+    margin-bottom: 12px;
 }
 
 /* Legend Styling */
@@ -989,12 +996,10 @@ fieldset input:focus {
 
 .profile-edit-input {
     display: flex;
-    /* align-content: center;
-    justify-content: center; */
     gap:10px;    
 }
 .edit-option-icons {
-    font-size: 3px;
+    font-size: 13px;
     margin-top: 1rem;
     display: flex;
     gap: 3rem;

@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const account = (props) => {
-
+    console.log(props);
     return (
         <div className='profile-overlay'>
             <div className='profile-view'>
@@ -11,6 +11,9 @@ const account = (props) => {
                 <div>
                     <h3>My Account</h3>
                     <img src={`data:image/png;base64,${props.userProfile}`} alt="Profile" style={{ width: "fit-content", height: "70px" }} />
+                    <ul>
+                        {/* <li>{props</li> */}
+                    </ul>
                     <div >
                         <Link to="/profile" onClick={() => { props.setShowProfile(false) }}><span className='profile-options'>Profile</span></Link>
 
