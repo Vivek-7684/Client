@@ -39,7 +39,7 @@ const Header = (props) => {
             })
             .then((data) => {
                 if (data.redirect) {
-                    toast.success("You’ve logged out successfully. See you soon!");
+                    toast.success("You’ve logged out successfully.");
                     setTimeout(() => {
                         Navigate(data.redirect);
                     }, 2000);

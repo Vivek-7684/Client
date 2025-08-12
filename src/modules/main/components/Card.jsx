@@ -60,7 +60,7 @@ const Card = (props) => {
             })
             .then((data) => {
                 if (data.redirect) {
-                    navigate(data.redirect);
+                    return;
                 }
                 else if (data.message === "Your wishlist is empty for now. Explore products and add the ones you love.") {
                     props.setWishlistItem([]);
