@@ -28,7 +28,7 @@ const Card = (props) => {
 
     const [productData, setProductData] = useState([]);// store product data
 
-    const [Wishlist, setWishlist] = useState(heart); // store wishlist data
+    const [visible, setVisible] = useState(5);
 
     const [loading, setLoading] = useState(true);
 
@@ -117,7 +117,7 @@ const Card = (props) => {
                             <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
                         </>
                         : (filteredData.length > 0) ?
-                            filteredData.map((product) => {
+                            filteredData.slice(0, visible).map((product) => {
                                 return (
                                     <div className="product-card" key={product.id} >
 
@@ -171,10 +171,23 @@ const Card = (props) => {
                                 <img src={noProductFound} alt="noProductFound" style={{ width: "250px", height: "250px", marginTop: "7rem" }} />
                                 <h2>No Products Found</h2>
                                 <p>Try changing the filters or search term.</p>
-
                             </div>)}
+                    <button
+                        style={{
+                            display: "block",
+                            width: "100%",
+                            height: "fit-content",
+                            padding:"10px",
+                            margin: "20px 20px 20px 20px",
+                            backgroundColor: "#D3D3D3",
+                            opacity: 0.4,
+                            borderRadius: "10px",
+                            color: "#000000",
+                            border: "none",
+                        }}
 
-
+                        onClick={() => { setVisible((prev) => prev + 5); }}
+                    >Loadmore...</button>
                 </main>
             </SkeletonTheme>
         </>
