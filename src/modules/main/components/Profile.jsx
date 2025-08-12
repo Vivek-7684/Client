@@ -293,14 +293,15 @@ const Profile = () => {
     return (
         <div className="profile-form">
             <form className="profile-form-edit" onSubmit={(e) => e.preventDefault()}>
-                <div style={{ border: "none", cursor: "pointer" }} onClick={() => navigate("/")}>
+                <span style={{ border: "none", cursor: "pointer" }} onClick={() => navigate("/")}>
                     <img src={backtick} style={{ width: "15px", height: "15px" }} />
                     <span style={{
                         paddingLeft: "15px", font: "900", color: "#111111",
 
                         fontFamily: "Arial, sans-serif", fontSize: "17px", marginBottom: "32px", fontWeight: "500"
                     }}>Back</span>
-                </div>
+                </span>
+
                 <p style={{
                     font: "630 1.5rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111",
                     padding: "16px",
@@ -311,7 +312,6 @@ const Profile = () => {
                 <div style={{ font: "540 1.3rem / 1 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111", marginBottom: "1rem", marginTop: "1rem" }}>Bio</div>
 
                 {/* Profile Image */}
-
                 <div style={{ display: "flex", flexDirection: "column" }}>
 
                     <img
@@ -348,7 +348,6 @@ const Profile = () => {
                     </div>
 
                 </div>
-
 
                 {/* Username */}
                 <div>

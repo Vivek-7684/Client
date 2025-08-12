@@ -39,7 +39,6 @@ function App() {
           <Route path="product/?" element={<Product Cart={cartItem} setCart={setCartItem} />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-        {/* <Route path="*" element={<Error />} /> */}
       </Routes>
       <ToastContainer />
     </div >

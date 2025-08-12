@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { convertRawImageToURL } from "../../../modules/main/helpers/convertRawImageToURL";
 import { toast } from "react-toastify";
 import { FaIndianRupeeSign } from "react-icons/fa6";
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import noProductFound from "../../../assets/noProductFound.png";
 import heartFilled from "../../../assets/heart_filled.png";
 import heart from "../../../assets/heart.png";
 import "react-toastify/dist/ReactToastify.css";
+
 
 const Card = (props) => {
 
@@ -16,13 +19,18 @@ const Card = (props) => {
     const navigate = useNavigate();
 
     const location = useLocation(); // get url parts object
+
     const queryParams = new URLSearchParams(location.search); // get query params from url
+
     const price = queryParams.get("price"); // get price from url
 
     const searchItem = queryParams.get("searchItem"); // get search item from url
+
     const [productData, setProductData] = useState([]);// store product data
 
     const [Wishlist, setWishlist] = useState(heart); // store wishlist data
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetch("http://localhost:3001/product/getAll", {
@@ -34,6 +42,7 @@ const Card = (props) => {
             })
             .then((data) => {
                 setProductData(data);
+                setLoading(false);
             })
             .catch(() => {
                 toast.error("Failed to get Product Data");
@@ -85,7 +94,6 @@ const Card = (props) => {
 
     }
 
-
     let filteredData = productData.filter((item) => {
         const selectedPrice = price ? item.min_price <= Number(price) : true; // set condition for price filter if selected else show all
         const selectedCatgory = category ? item.categories === category : true; // set condition for category filter if selected
@@ -95,68 +103,80 @@ const Card = (props) => {
         return selectedPrice && selectedCatgory && selectedSearchItem // filter by price, category and search item or return all
     })
 
-
     return (
         <>
-            <main id="main">
-                {filteredData.length > 0 ? filteredData.map((product) => {
-                    return (
-                        <div className="product-card" key={product.id} >
+            <SkeletonTheme >
+                <main id="main">
+                    {loading ?
+                        <>
+                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
+                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
+                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
+                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
+                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
+                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
+                        </>
+                        : (filteredData.length > 0) ?
+                            filteredData.map((product) => {
+                                return (
+                                    <div className="product-card" key={product.id} >
 
-                            {<div className="wishlist-icon"
-                                onClick={
-                                    () => {
-                                        addProductsInWishList(product.id)
-                                            .then((data) => {
-                                                if (data.redirect) {
-                                                    navigate(data.redirect);
-                                                } else {
-                                                    setTimeout(() => {
-                                                        LoadWishList(); // Refresh wishlist after update
-                                                    }, 2000);
-                                                    toast.success(`${product.title} is added in your wishlist for later.`);
-                                                }
-                                            })
-                                            .catch((err) => toast.error(err.message));
-                                    }}>
-                                <img
-                                    src={(props.WishlistItem || []).some(item => item.id === product.id) ? heartFilled : heart}
-                                    alt="wishlist-icon"
-                                />
+                                        {<div className="wishlist-icon"
+                                            onClick={
+                                                () => {
+                                                    addProductsInWishList(product.id)
+                                                        .then((data) => {
+                                                            if (data.redirect) {
+                                                                navigate(data.redirect);
+                                                            } else {
+                                                                setTimeout(() => {
+                                                                    LoadWishList(); // Refresh wishlist after update
+                                                                }, 2000);
+                                                                toast.success(`${product.title} is added in your wishlist for later.`);
+                                                            }
+                                                        })
+                                                        .catch((err) => toast.error(err.message));
+                                                }}>
+                                            <img
+                                                src={(props.WishlistItem || []).some(item => item.id === product.id) ? heartFilled : heart}
+                                                alt="wishlist-icon"
+                                            />
 
-                            </div>}
+                                        </div>}
 
-                            <div className="card-image" onClick={() => navigate(`/Product?id=${product.id}`)}>
-                                <img src={convertRawImageToURL(product.image.data)} onLoad={(e) => {
-                                    URL.revokeObjectURL(e.target.src);
-                                }} alt={product.title} />
+                                        <div className="card-image" onClick={() => navigate(`/Product?id=${product.id}`)}>
+                                            <img src={convertRawImageToURL(product.image.data)} onLoad={(e) => {
+                                                URL.revokeObjectURL(e.target.src);
+                                            }} alt={product.title} />
 
-                            </div>
-                            <div className="product-body" onClick={() => navigate(`/Product?id=${product.id}`)}>
+                                        </div>
+                                        <div className="product-body" onClick={() => navigate(`/Product?id=${product.id}`)}>
 
-                                <div className="product-title">
-                                    <h2>{product.title}</h2>
-                                </div>
-                                <div className="product-content">
-                                    <p>{`${product.content.substring(0, 50)}`}</p>
-                                    <span id="readmore">...readmore</span>
-                                </div>
-                                <div className="product-price">
-                                    <span style={{ color: "green" }}>Price Now:-<b className="price"><FaIndianRupeeSign />{`${product.min_price}`}</b></span>{","}<br></br>
-                                    <span>Max Price:-<b id="max-price">{`${product.max_price}`}</b></span>
-                                </div>
+                                            <div className="product-title">
+                                                <h2>{product.title}</h2>
+                                            </div>
+                                            <div className="product-content">
+                                                <p>{`${product.content.substring(0, 50)}`}</p>
+                                                <span id="readmore">...readmore</span>
+                                            </div>
+                                            <div className="product-price">
+                                                <span style={{ color: "green" }}>Price Now:-<b className="price"><FaIndianRupeeSign />{`${product.min_price}`}</b></span>{","}<br></br>
+                                                <span>Max Price:-<b id="max-price">{`${product.max_price}`}</b></span>
+                                            </div>
 
-                            </div>
-                        </div>)
-                }) :
-                    (<div className="no-product-found">
-                        <img src={noProductFound} alt="noProductFound" style={{ width: "250px", height: "250px", marginTop: "7rem" }} />
-                        <h2>No Products Found</h2>
-                        <p>Try changing the filters or search term.</p>
+                                        </div>
+                                    </div>)
+                            }) :
+                            (<div className="no-product-found">
+                                <img src={noProductFound} alt="noProductFound" style={{ width: "250px", height: "250px", marginTop: "7rem" }} />
+                                <h2>No Products Found</h2>
+                                <p>Try changing the filters or search term.</p>
 
-                    </div>)}
-            </main>
-            {/* <ToastContainer /> */}
+                            </div>)}
+
+
+                </main>
+            </SkeletonTheme>
         </>
     )
 }

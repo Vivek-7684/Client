@@ -22,7 +22,6 @@ const Header = (props) => {
 
     const [userProfile, setUserProfile] = useState("");
 
-
     const [userData, setUserData] = useState();
 
     const Navigate = useNavigate();
@@ -108,7 +107,13 @@ const Header = (props) => {
 
             <header>
                 <nav className="navbar">
-                    {props.showProfile && <Account setShowProfile={props.setShowProfile} userProfile={userProfile} />}
+                    {props.showProfile &&
+                        <Account
+                            setShowProfile={props.setShowProfile}
+                            userProfile={userProfile}
+                            userData={userData}
+                    />}
+
                     <Link to="/" style={{ position: "fixed", left: "10" }}
                     ><img src={logo} id="logo" style={{ width: "23px", height: "23px" }} className="icons" alt="logo" />
                         <span><b>DealMart</b></span>
