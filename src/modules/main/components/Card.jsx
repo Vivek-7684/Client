@@ -180,9 +180,9 @@ const Card = (props) => {
                             padding:"10px",
                             margin: "20px 20px 20px 20px",
                             backgroundColor: "#D3D3D3",
-                            opacity: 0.4,
                             borderRadius: "10px",
                             color: "#000000",
+                            fontWeight:"600",
                             border: "none",
                         }}
 
