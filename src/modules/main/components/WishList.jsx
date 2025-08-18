@@ -147,9 +147,9 @@ const WishList = (props) => {
 
 
 
-                                                           toast.success("Inline Styling", {
-  progressStyle: { background: "#22c55e" }
-});
+                                                            toast.success("Inline Styling", {
+                                                                progressStyle: { background: "#22c55e" }
+                                                            });
 
 
                                                         }, 800);
@@ -185,7 +185,7 @@ const WishList = (props) => {
                         </div>
                     </div>
                 )}
-       
+
         </>
 
     );

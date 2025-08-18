@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { convertRawImageToURL } from "../../../modules/main/helpers/convertRawImageToURL";
 import { toast } from 'react-toastify';
 
-
 const Product = (props) => {
 
     const [quantity, setQuantity] = useState(1);// product quantity added by user

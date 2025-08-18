@@ -251,6 +251,7 @@ const Profile = () => {
             } else {
                 toast.error("Failed to upload image");
             }
+            
         } catch (err) {
             toast.error("Something went wrong");
         }
@@ -291,16 +292,17 @@ const Profile = () => {
 
 
     return (
-        <div className="profile-form">
-            <form className="profile-form-edit" onSubmit={(e) => e.preventDefault()}>
-                <span style={{ border: "none", cursor: "pointer" }} onClick={() => navigate("/")}>
-                    <img src={backtick} style={{ width: "15px", height: "15px" }} />
-                    <span style={{
-                        paddingLeft: "15px", font: "900", color: "#111111",
+        <div className="profile-form" style={{ position: "relative" }}>
+            <span style={{ border: "none", cursor: "pointer", position: "relative", top: "150",left:"280" }} onClick={() => navigate("/")}>
+                <img src={backtick} style={{ width: "15px", height: "15px" }} />
+                <span style={{
+                    paddingLeft: "15px", font: "900", color: "#111111",
 
-                        fontFamily: "Arial, sans-serif", fontSize: "17px", marginBottom: "32px", fontWeight: "500"
-                    }}>Back</span>
-                </span>
+                    fontFamily: "Arial, sans-serif", fontSize: "17px", marginBottom: "32px", fontWeight: "500"
+                }}>Back</span>
+            </span>
+            <form className="profile-form-edit" onSubmit={(e) => e.preventDefault()}>
+
 
                 <p style={{
                     font: "630 1.5rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111",

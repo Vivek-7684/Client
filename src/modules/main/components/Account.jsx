@@ -1,9 +1,10 @@
 import { X } from 'lucide-react';
 import AccountSettingIcon from '../../../assets/Account_Setting_icon.png';
+import Dashboard from '../../../assets/dashboard.png';
 import { Link } from 'react-router-dom';
 
 const account = (props) => {
-
+    console.log(props);
     return (
         <div className='profile-overlay'>
             <div className='profile-view'>
@@ -23,7 +24,7 @@ const account = (props) => {
                     <div style={{ textAlign: "center", marginBottom: "1rem" }}>
                         <div>
                             <Link to="/profile" onClick={() => { props.setShowProfile(false) }}
-                                style={{ display: "flex", alignContent: "center", justifyContent: "center", padding: "0.3rem", gap: "0.5rem" }}>
+                                style={{ display: "flex", alignContent: "center", justifyContent: "center", padding: "0.3rem", gap: "5rem" }}>
                                 <img src={AccountSettingIcon} style={{ height: "30px", borderRadius: "50%" }} />
                                 <span className='profile-options'>
                                     Account Settings
@@ -31,6 +32,22 @@ const account = (props) => {
                             </Link>
                         </div>
                     </div>
+
+
+                    {props.userData.user_role === 'admin' && (<>
+                        <hr></hr>
+                        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+                            <div>
+                                <Link to="/dashboard" onClick={() => { props.setShowProfile(false) }}
+                                    style={{ display: "flex", alignContent: "center", justifyContent: "center", padding: "0.3rem", gap: "7rem" }}>
+                                    <img src={Dashboard} style={{ height: "30px", borderRadius: "50%" }} />
+                                    <span className='profile-options'>
+                                        Dashboard
+                                    </span>
+                                </Link>
+                            </div>
+                        </div>
+                    </>)}
 
                 </div>
             </div>

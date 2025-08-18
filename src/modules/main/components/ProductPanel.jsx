@@ -1,0 +1,241 @@
+import { useEffect, useState } from "react";
+import { convertRawImageToURL } from "../helpers/convertRawImageToURL";
+import Delete from "../../../assets/Delete.png";
+import Pen from "../../../assets/pen.png";
+import { toast } from "react-toastify";
+
+const ProductPanel = () => {
+
+    const [products, setProducts] = useState([]);  // get product data
+
+    const [showAddProduct, setShowAddProduct] = useState(false); // show add product
+
+    const [mainImage, setMainImage] = useState(null); // main image preview
+
+    const [previewImages, setPreviewImages] = useState([]); // thumbnail preview
+
+    useEffect(() => {
+        fetch("http://localhost:3001/product/getAll", {
+            method: "GET",
+            credentials: 'include'
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setProducts(data);
+            })
+            .catch(() => {
+                toast.error("Failed to load products");
+            });
+    }, [])
+
+
+    return (
+        <div className="admin-dashboard" style={{ position: "absolute", left: "140", overflowX: "scroll", overflowY: "scroll" }}>
+
+            {showAddProduct && (
+                <div style={{
+                    position: "fixed",
+                    top: 10, left: 0,
+                    width: "100vw", height: "100vh",
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                    display: "flex", justifyContent: "center", alignItems: "center",
+                    zIndex: 1000,
+                    marginTop: "1rem"
+                }}>
+                    <div style={{
+                        background: "white",
+                        padding: "20px",
+                        borderRadius: "12px",
+                        width: "600px",
+                        maxHeight: "90vh",
+                        overflowY: "auto",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    }}>
+                        <h3 style={{ padding: "0.4rem" }}>Add Product</h3>
+                        <hr style={{ marginBottom: "15px" }} />
+
+                        {/* Title */}
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                            <label htmlFor="title" style={{ width: "120px", fontWeight: "500" }}>
+                                Title <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <input
+                                id="title"
+                                type="text"
+                                placeholder="Title"
+                                required
+                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
+                            />
+                        </div>
+
+                        {/* Category */}
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                            <label htmlFor="category" style={{ width: "120px", fontWeight: "500" }}>
+                                Category <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <input
+                                id="category"
+                                type="text"
+                                placeholder="Category"
+                                required
+                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
+                            />
+                        </div>
+
+                        {/* Description */}
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                            <label htmlFor="description" style={{ width: "120px", fontWeight: "500" }}>
+                                Description <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <textarea
+                                id="description"
+                                placeholder="Description"
+                                required
+                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", minHeight: "80px" }}
+                            />
+                        </div>
+
+                        {/* Max Price */}
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                            <label htmlFor="maxPrice" style={{ width: "120px", fontWeight: "500" }}>
+                                Max Price <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <input
+                                id="maxPrice"
+                                type="number"
+                                placeholder="Max Price"
+                                required
+                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
+                            />
+                        </div>
+
+                        {/* Min Price */}
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                            <label htmlFor="minPrice" style={{ width: "120px", fontWeight: "500" }}>
+                                Min Price <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <input
+                                id="minPrice"
+                                type="number"
+                                placeholder="Min Price"
+                                required
+                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
+                            />
+                        </div>
+
+                        {/* Main Image */}
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                            <label htmlFor="mainImage" style={{ width: "120px", fontWeight: "500" }}>
+                                Main Image <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <input
+                                id="mainImage"
+                                type="file"
+                                required
+                                onChange={(e) => setMainImage(URL.createObjectURL(e.target.files[0]))}
+                            />
+                        </div>
+
+                        {/* Show main image preview */}
+                        {mainImage && (
+                            <div style={{ marginLeft: "120px", marginBottom: "15px" }}>
+                                <img src={mainImage} alt="Main Preview" style={{ width: "100px", height: "100px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
+                            </div>
+                        )}
+
+                        {/* Preview Images */}
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                            <label htmlFor="previewImages" style={{ width: "120px", fontWeight: "500" }}>
+                                Preview Images
+                            </label>
+                            <input
+                                id="previewImages"
+                                type="file"
+                                multiple
+                                onChange={(e) => {
+                                    const files = Array.from(e.target.files);
+                                    setPreviewImages(files.map((file) => URL.createObjectURL(file)));
+                                }}
+                            />
+                        </div>
+
+                        {/* Show preview images */}
+                        {previewImages.length > 0 && (
+                            <div style={{ marginLeft: "120px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                                {previewImages.map((src, idx) => (
+                                    <img key={idx} src={src} alt="Preview" style={{ width: "75px", height: "75px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
+                                ))}
+                            </div>
+                        )}
+
+
+                        {/* Buttons */}
+                        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
+                            <button onClick={() => setShowAddProduct(false)} style={{ marginRight: "10px", padding: "5px 10px" }}>Cancel</button>
+                            <button style={{ background: "#e7e6e6ff", color: "black", padding: "5px 10px", border: "none", borderRadius: "5px" }}>Add</button>
+                        </div>
+                    </div>
+
+                </div>
+            )}
+
+
+            <h4>
+                <div className="product-heading" style={{ marginTop: "4rem" }}>
+                    {products?.length > 0 && <span>{`My Products (${(products || []).length})`}</span>}
+                    <button
+                        onClick={() => setShowAddProduct(true)}
+                        style={{
+                            color: "",
+                            padding: "0.5rem",
+                            borderRadius: "10px",
+                            marginBottom: "5px",
+                            border: "1px solid black",
+                            marginLeft: "30px",
+                            cursor: "pointer"
+                        }}>Add Product</button>
+                    <hr style={{ marginLeft: "10px", width: "1040px" }}></hr>
+                </div>
+            </h4 >
+
+            <table >
+                <thead>
+                    <tr>
+                        <th>Item No.</th>
+                        <th>Product Name</th>
+                        <th>Image</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Max Price</th>
+                        <th>Price Now</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody style={{ overflowY: "hidden" }}>
+                    {products.map((product, index) => (
+                        <tr>
+                            <td>{index + 1}</td>
+                            <td key={product.id}>{product.title}</td>
+                            <td ><img src={convertRawImageToURL(product.image.data)}
+                                style={{ width: "75px", height: "75px" }} /></td>
+                            <td >{product.categories}</td>
+                            <td >{product.content}</td>
+                            <td >{product.max_price}</td>
+                            <td >{product.min_price}</td>
+                            <td>
+                                <img src={Delete} style={{ width: "25px", height: "25px" }} />
+                                {"    "}
+                                <img src={Pen} style={{ width: "25px", height: "25px" }} />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div >
+    )
+
+}
+
+export default ProductPanel;

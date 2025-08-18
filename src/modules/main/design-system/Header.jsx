@@ -18,11 +18,11 @@ const Header = (props) => {
 
     const [LoggedIn, setLoggedIn] = useState(false);
 
-    const [username, setUsername] = useState("");
-
     const [userProfile, setUserProfile] = useState("");
 
     const [userData, setUserData] = useState();
+
+    console.log(userData);
 
     const Navigate = useNavigate();
 
@@ -80,9 +80,7 @@ const Header = (props) => {
                 else { setLoggedIn(false) }
             })
             .then((data) => {
-                if (data?.username) {
-                    setUsername(data.username);
-                }
+                
                 if (data?.message) { toast.success(data.message) };
             })
             .catch((err) => toast.error(err.message));
@@ -112,7 +110,7 @@ const Header = (props) => {
                             setShowProfile={props.setShowProfile}
                             userProfile={userProfile}
                             userData={userData}
-                    />}
+                        />}
 
                     <Link to="/" style={{ position: "fixed", left: "10" }}
                     ><img src={logo} id="logo" style={{ width: "23px", height: "23px" }} className="icons" alt="logo" />
@@ -145,7 +143,7 @@ const Header = (props) => {
                         </Link>
                         <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />Wishlist</Link>
                         <Link to="" onClick={() => { props.setShowProfile(!props.showProfile) }}>
-                            <img src={`data:image/png;base64,${userProfile}`} alt="Profile" style={{ fontSize: "20px", cursor: "none", borderRadius: "15px" }} className="icons" />{username}
+                            <img src={`data:image/png;base64,${userProfile}`} alt="Profile" style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons" />
                         </Link>
                         <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
                     </div>}

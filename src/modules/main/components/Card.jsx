@@ -172,22 +172,23 @@ const Card = (props) => {
                                 <h2>No Products Found</h2>
                                 <p>Try changing the filters or search term.</p>
                             </div>)}
-                    <button
+                    {!loading && <button
                         style={{
                             display: "block",
                             width: "100%",
                             height: "fit-content",
-                            padding:"10px",
+                            padding: "10px",
                             margin: "20px 20px 20px 20px",
-                            backgroundColor: "#D3D3D3",
+                            backgroundColor: "#f8f7f4",
                             borderRadius: "10px",
                             color: "#000000",
-                            fontWeight:"600",
+                            fontWeight: "600",
                             border: "none",
+                            cursor: "pointer"
                         }}
 
                         onClick={() => { setVisible((prev) => prev + 5); }}
-                    >Loadmore...</button>
+                    >Loadmore...</button>}
                 </main>
             </SkeletonTheme>
         </>
