@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { convertRawImageToURL } from "../helpers/convertRawImageToURL";
 import Delete from "../../../assets/Delete.png";
 import Pen from "../../../assets/pen.png";
+import backtick from "../../../assets/back-left.png";
 import { toast } from "react-toastify";
 
 const ProductPanel = () => {
@@ -34,6 +35,7 @@ const ProductPanel = () => {
     return (
         <div className="admin-dashboard" style={{ position: "absolute", left: "140", overflowX: "scroll", overflowY: "scroll" }}>
 
+            {/* add product view */}
             {showAddProduct && (
                 <div style={{
                     position: "fixed",
@@ -44,6 +46,16 @@ const ProductPanel = () => {
                     zIndex: 1000,
                     marginTop: "1rem"
                 }}>
+                    <span style={{
+                        border: "none", cursor: "pointer", position: "relative", top: "-234", left: "90", padding: "5px",
+                    }} onClick={() => setShowAddProduct(false)}>
+                        <img src={backtick} style={{ width: "15px", height: "15px" }} />
+                        <span style={{
+                            paddingLeft: "15px", font: "900", color: "#111111",
+
+                            fontFamily: "Arial, sans-serif", fontSize: "17px", marginBottom: "32px", fontWeight: "500"
+                        }}>Back</span>
+                    </span>
                     <div style={{
                         background: "white",
                         padding: "20px",
@@ -54,128 +66,139 @@ const ProductPanel = () => {
                         boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
                     }}>
                         <h3 style={{ padding: "0.4rem" }}>Add Product</h3>
+
                         <hr style={{ marginBottom: "15px" }} />
 
-                        {/* Title */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                            <label htmlFor="title" style={{ width: "120px", fontWeight: "500" }}>
-                                Title <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input
-                                id="title"
-                                type="text"
-                                placeholder="Title"
-                                required
-                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
-                            />
-                        </div>
+                        <form
+                            onSubmit={(e) => {
+                                // browser runs validation first; onSubmit fires only if valid
+                                e.preventDefault();
+                                // TODO: proceed with add product
+                            }}
+                        >
 
-                        {/* Category */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                            <label htmlFor="category" style={{ width: "120px", fontWeight: "500" }}>
-                                Category <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input
-                                id="category"
-                                type="text"
-                                placeholder="Category"
-                                required
-                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
-                            />
-                        </div>
-
-                        {/* Description */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                            <label htmlFor="description" style={{ width: "120px", fontWeight: "500" }}>
-                                Description <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <textarea
-                                id="description"
-                                placeholder="Description"
-                                required
-                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", minHeight: "80px" }}
-                            />
-                        </div>
-
-                        {/* Max Price */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                            <label htmlFor="maxPrice" style={{ width: "120px", fontWeight: "500" }}>
-                                Max Price <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input
-                                id="maxPrice"
-                                type="number"
-                                placeholder="Max Price"
-                                required
-                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
-                            />
-                        </div>
-
-                        {/* Min Price */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                            <label htmlFor="minPrice" style={{ width: "120px", fontWeight: "500" }}>
-                                Min Price <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input
-                                id="minPrice"
-                                type="number"
-                                placeholder="Min Price"
-                                required
-                                style={{ flex: 1, padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc" }}
-                            />
-                        </div>
-
-                        {/* Main Image */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                            <label htmlFor="mainImage" style={{ width: "120px", fontWeight: "500" }}>
-                                Main Image <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input
-                                id="mainImage"
-                                type="file"
-                                required
-                                onChange={(e) => setMainImage(URL.createObjectURL(e.target.files[0]))}
-                            />
-                        </div>
-
-                        {/* Show main image preview */}
-                        {mainImage && (
-                            <div style={{ marginLeft: "120px", marginBottom: "15px" }}>
-                                <img src={mainImage} alt="Main Preview" style={{ width: "100px", height: "100px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
+                            {/* Title */}
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                                <label htmlFor="title" style={{ width: "120px", fontWeight: "500" }}>
+                                    Title <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input
+                                    id="title"
+                                    type="text"
+                                    placeholder="Title"
+                                    required
+                                    style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }}
+                                />
                             </div>
-                        )}
 
-                        {/* Preview Images */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                            <label htmlFor="previewImages" style={{ width: "120px", fontWeight: "500" }}>
-                                Preview Images
-                            </label>
-                            <input
-                                id="previewImages"
-                                type="file"
-                                multiple
-                                onChange={(e) => {
-                                    const files = Array.from(e.target.files);
-                                    setPreviewImages(files.map((file) => URL.createObjectURL(file)));
-                                }}
-                            />
-                        </div>
-
-                        {/* Show preview images */}
-                        {previewImages.length > 0 && (
-                            <div style={{ marginLeft: "120px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                                {previewImages.map((src, idx) => (
-                                    <img key={idx} src={src} alt="Preview" style={{ width: "75px", height: "75px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
-                                ))}
+                            {/* Category */}
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                                <label htmlFor="category" style={{ width: "120px", fontWeight: "500" }}>
+                                    Category <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input
+                                    id="category"
+                                    type="text"
+                                    placeholder="Category"
+                                    required
+                                    style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }}
+                                />
                             </div>
-                        )}
+
+                            {/* Description */}
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                                <label htmlFor="description" style={{ width: "120px", fontWeight: "500" }}>
+                                    Description <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <textarea
+                                    id="description"
+                                    placeholder="Description"
+                                    required
+                                    style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", minHeight: "80px", width: "290px" }}
+                                />
+                            </div>
+
+                            {/* Max Price */}
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                                <label htmlFor="maxPrice" style={{ width: "120px", fontWeight: "500" }}>
+                                    Max Price <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input
+                                    id="maxPrice"
+                                    type="number"
+                                    placeholder="Max Price"
+                                    required
+                                    style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }}
+                                />
+                            </div>
+
+                            {/* Min Price */}
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                                <label htmlFor="minPrice" style={{ width: "120px", fontWeight: "500" }}>
+                                    Min Price <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input
+                                    id="minPrice"
+                                    type="number"
+                                    placeholder="Min Price"
+                                    required
+                                    style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }}
+                                />
+                            </div>
+
+                            {/* Main Image */}
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                                <label htmlFor="mainImage" style={{ width: "120px", fontWeight: "500" }}>
+                                    Main Image <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input
+                                    id="mainImage"
+                                    type="file"
+                                    required
+                                    onChange={(e) => setMainImage(URL.createObjectURL(e.target.files[0]))}
+                                />
+                            </div>
+
+                            {/* Show main image preview */}
+                            {mainImage && (
+                                <div style={{ marginLeft: "120px", marginBottom: "15px" }}>
+                                    <img src={mainImage} alt="Main Preview" style={{ width: "100px", height: "100px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
+                                </div>
+                            )}
+
+                            {/* Preview Images */}
+                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                                <label htmlFor="previewImages" style={{ width: "120px", fontWeight: "500" }}>
+                                    Preview Images
+                                </label>
+                                <input
+                                    id="previewImages"
+                                    type="file"
+                                    multiple
+                                    onChange={(e) => {
+                                        const files = Array.from(e.target.files);
+                                        setPreviewImages(files.map((file) => URL.createObjectURL(file)));
+                                    }}
+                                />
+                            </div>
+
+                            {/* Show preview images */}
+                            {previewImages.length > 0 && (
+                                <div style={{ marginLeft: "120px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                                    {previewImages.map((src, idx) => (
+                                        <img key={idx} src={src} alt="Preview" style={{ width: "75px", height: "75px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
+                                    ))}
+                                </div>
+                            )}
 
 
-                        {/* Buttons */}
-                        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
-                            <button onClick={() => setShowAddProduct(false)} style={{ marginRight: "10px", padding: "5px 10px" }}>Cancel</button>
-                            <button style={{ background: "#e7e6e6ff", color: "black", padding: "5px 10px", border: "none", borderRadius: "5px" }}>Add</button>
-                        </div>
+                            {/* Buttons */}
+                            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
+                                <button onClick={() => setShowAddProduct(false)} style={{ marginRight: "10px", padding: "5px 10px" }}>Cancel</button>
+                                <button style={{ background: "#e7e6e6ff", color: "black", padding: "5px 10px", border: "none", borderRadius: "5px" }}>Add</button>
+                            </div>
+
+                        </form>
                     </div>
 
                 </div>
@@ -199,7 +222,7 @@ const ProductPanel = () => {
                     <hr style={{ marginLeft: "10px", width: "1040px" }}></hr>
                 </div>
             </h4 >
-
+            {/* product view page */}
             <table >
                 <thead>
                     <tr>
