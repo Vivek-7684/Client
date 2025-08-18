@@ -22,8 +22,6 @@ const Header = (props) => {
 
     const [userData, setUserData] = useState();
 
-    console.log(userData);
-
     const Navigate = useNavigate();
 
     const LoggedOut = () => {

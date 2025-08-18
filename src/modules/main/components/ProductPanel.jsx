@@ -11,12 +11,18 @@ const ProductPanel = () => {
 
     const [showAddProduct, setShowAddProduct] = useState(false); // show add product
 
-    const [mainImage, setMainImage] = useState(null); // main image preview
+    const [mainImage, setMainImage] = useState(null);      // preview show
 
-    const [previewImages, setPreviewImages] = useState([]); // thumbnail preview
+    const [mainImageBase64, setMainImageBase64] = useState(null); // upload ke liye
 
-    useEffect(() => {
-        fetch("http://localhost:3001/product/getAll", {
+    const [previewImages, setPreviewImages] = useState([]); // preview show
+
+    const [previewBase64, setPreviewBase64] = useState([]); // upload ke liye
+
+
+    const getProduct = () => {
+
+        return fetch("http://localhost:3001/product/getAll", {
             method: "GET",
             credentials: 'include'
         })
@@ -24,11 +30,18 @@ const ProductPanel = () => {
                 return response.json();
             })
             .then((data) => {
+
+                console.log(data);
                 setProducts(data);
             })
             .catch(() => {
                 toast.error("Failed to load products");
             });
+
+    }
+
+    useEffect(() => {
+        getProduct();
     }, [])
 
 
@@ -71,11 +84,43 @@ const ProductPanel = () => {
 
                         <form
                             onSubmit={(e) => {
-                                // browser runs validation first; onSubmit fires only if valid
                                 e.preventDefault();
-                                // TODO: proceed with add product
+                                const form = e.target;
+
+                                const payload = {
+                                    title: form.title.value,
+                                    category: form.category.value,
+                                    description: form.description.value,
+                                    min_price: form.minPrice.value,
+                                    max_price: form.maxPrice.value,
+                                    image: mainImageBase64,         // base64 main image
+                                    previewImages: previewBase64,   // base64 preview images
+                                };
+
+                                fetch("http://localhost:3001/product/addProduct", {
+                                    method: "POST",
+                                    credentials: "include",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify(payload),
+                                })
+                                    .then((res) => {
+                                        if (!res.ok) {
+                                            res.json().then((err) => {
+                                                throw new Error(err.error || "Something Went Wrong");
+                                            })
+                                        }
+                                    })
+                                    .then(() => {
+                                        toast.success(`${payload.title} Product added!`);
+
+                                        setShowAddProduct(false); // hide pop view
+
+                                        getProduct();// load data after add product
+                                    })
+                                    .catch((err) => toast.error(err.message));
                             }}
                         >
+
 
                             {/* Title */}
                             <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
@@ -147,17 +192,25 @@ const ProductPanel = () => {
                             </div>
 
                             {/* Main Image */}
-                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                                <label htmlFor="mainImage" style={{ width: "120px", fontWeight: "500" }}>
-                                    Main Image <span style={{ color: "red" }}>*</span>
-                                </label>
-                                <input
-                                    id="mainImage"
-                                    type="file"
-                                    required
-                                    onChange={(e) => setMainImage(URL.createObjectURL(e.target.files[0]))}
-                                />
-                            </div>
+                            <input
+                                id="mainImage"
+                                type="file"
+                                required
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        // preview
+                                        setMainImage(URL.createObjectURL(file));
+
+                                        // base64
+                                        const reader = new FileReader();
+                                        reader.onloadend = () => {
+                                            setMainImageBase64(reader.result); // ye jaayega server ko
+                                        };
+                                        reader.readAsDataURL(file);
+                                    }
+                                }}
+                            />
 
                             {/* Show main image preview */}
                             {mainImage && (
@@ -167,20 +220,30 @@ const ProductPanel = () => {
                             )}
 
                             {/* Preview Images */}
-                            <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-                                <label htmlFor="previewImages" style={{ width: "120px", fontWeight: "500" }}>
-                                    Preview Images
-                                </label>
-                                <input
-                                    id="previewImages"
-                                    type="file"
-                                    multiple
-                                    onChange={(e) => {
-                                        const files = Array.from(e.target.files);
-                                        setPreviewImages(files.map((file) => URL.createObjectURL(file)));
-                                    }}
-                                />
-                            </div>
+                            <input
+                                id="previewImages"
+                                type="file"
+                                multiple
+                                onChange={(e) => {
+                                    const files = Array.from(e.target.files);
+
+                                    // preview
+                                    setPreviewImages(files.map((f) => URL.createObjectURL(f)));
+
+                                    // base64 for backend
+                                    Promise.all(
+                                        files.map(
+                                            (file) =>
+                                                new Promise((resolve) => {
+                                                    const reader = new FileReader();
+                                                    reader.onloadend = () => resolve(reader.result);
+                                                    reader.readAsDataURL(file);
+                                                })
+                                        )
+                                    ).then((base64Arr) => setPreviewBase64(base64Arr));
+                                }}
+                            />
+
 
                             {/* Show preview images */}
                             {previewImages.length > 0 && (
@@ -238,9 +301,9 @@ const ProductPanel = () => {
                 </thead>
                 <tbody style={{ overflowY: "hidden" }}>
                     {products.map((product, index) => (
-                        <tr>
+                        <tr key={product.id}>
                             <td>{index + 1}</td>
-                            <td key={product.id}>{product.title}</td>
+                            <td>{product.title}</td>
                             <td ><img src={convertRawImageToURL(product.image.data)}
                                 style={{ width: "75px", height: "75px" }} /></td>
                             <td >{product.categories}</td>
