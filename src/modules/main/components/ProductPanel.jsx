@@ -35,7 +35,7 @@ const ProductPanel = () => {
 
     const openEditProduct = (product) => {
         setEditingProduct(product);
-        setMainImage(convertRawImageToURL(product.image.data));
+        setMainImage(convertRawImageToURL(product.image?.data));
         setMainImageBase64(null); // New upload will replace
         setPreviewImages(product.previewImages || []);
         setPreviewBase64([]);
