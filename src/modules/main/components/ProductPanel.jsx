@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { convertRawImageToBase64  } from "../helpers/convertRawImageToBase64 ";
 import { convertRawImageToURL } from "../helpers/convertRawImageToURL";
 import Delete from "../../../assets/Delete.png";
 import Pen from "../../../assets/pen.png";
@@ -49,10 +50,11 @@ const ProductPanel = () => {
     const openEditProduct = (product) => {
 
         setEditingProduct(product);  // store edited product data
-        setMainImageBase64(convertRawImageToURL(product.image.data)); // New upload will replace
+        setMainImageBase64(convertRawImageToBase64(product.image.data)); // New upload will replace
 
+        // set preview Images
         loadPreviewImages(product.id).then((data) => {
-            setPreviewBase64(data.map((img) => convertRawImageToURL(img?.image?.data))); // preview image set
+            setPreviewBase64(data.map((img) => convertRawImageToBase64(img?.image?.data))); // preview image set
         })
         
         setShowAddProduct(true);    // add prdouct view
@@ -89,7 +91,7 @@ const ProductPanel = () => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault();// prevent deafult submit
 
         const form = e.target;
 
