@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { convertRawImageToURL } from "../helpers/convertRawImageToURL";
 import Delete from "../../../assets/Delete.png";
 import Pen from "../../../assets/pen.png";
@@ -6,41 +7,86 @@ import backtick from "../../../assets/back-left.png";
 import { toast } from "react-toastify";
 
 const ProductPanel = () => {
-    const [products, setProducts] = useState([]);
-    const [showAddProduct, setShowAddProduct] = useState(false);
+    const [products, setProducts] = useState([]); // products detail
+
+    const [showAddProduct, setShowAddProduct] = useState(false); // set product form
+
     const [editingProduct, setEditingProduct] = useState(null); // For edit
 
-    const [mainImage, setMainImage] = useState(null);
-    const [mainImageBase64, setMainImageBase64] = useState(null);
-    const [previewImages, setPreviewImages] = useState([]);
-    const [previewBase64, setPreviewBase64] = useState([]);
+    const [mainImageBase64, setMainImageBase64] = useState(null); // image for upload
 
+    const [previewBase64, setPreviewBase64] = useState([]); // preview images for upload
+
+    // navigate to link
+    const navigate = useNavigate();
+
+    // load product data
     const getProduct = () => {
-        fetch("http://localhost:3001/product/getAll", { method: "GET", credentials: "include" })
+        fetch("http://localhost:3001/product/getAll",
+            { method: "GET", credentials: "include" })
             .then((res) => res.json())
-            .then((data) => setProducts(data))
+            .then((data) => setProducts(data)) // set products data
             .catch(() => toast.error("Failed to load products"));
     };
 
+    // set product with page refresh
     useEffect(() => { getProduct(); }, []);
 
+    const loadPreviewImages = async (id) => {
+        return fetch(`http://localhost:3001/product/getProductImages/?id=${id}`,
+            { method: "GET", credentials: "include" })
+            .then((res) => res.json())
+
+    }
+
     const openAddProduct = () => {
-        setEditingProduct(null);
-        setMainImage(null);
-        setMainImageBase64(null);
-        setPreviewImages([]);
-        setPreviewBase64([]);
-        setShowAddProduct(true);
+        setEditingProduct(null); // clear edited data
+        setMainImageBase64(null); // clear main image for upload 
+        setPreviewBase64([]); // clear preview image
+        setShowAddProduct(true); // open form
     };
 
     const openEditProduct = (product) => {
-        setEditingProduct(product);
-        setMainImage(convertRawImageToURL(product.image?.data));
-        setMainImageBase64(null); // New upload will replace
-        setPreviewImages(product.previewImages || []);
-        setPreviewBase64([]);
-        setShowAddProduct(true);
+
+        setEditingProduct(product);  // store edited product data
+        setMainImageBase64(convertRawImageToURL(product.image.data)); // New upload will replace
+
+        loadPreviewImages(product.id).then((data) => {
+            setPreviewBase64(data.map((img) => convertRawImageToURL(img?.image?.data))); // preview image set
+        })
+        
+        setShowAddProduct(true);    // add prdouct view
     };
+
+    const handleImageChange = (e, type) => {
+
+        const files = [...e.target.files];
+
+        if (type === "main") {
+
+            const file = files[0]; //  single file get
+
+            // clear temp link for browser
+            if (mainImageBase64) {
+                URL.revokeObjectURL(file);
+            }
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => setMainImageBase64(reader.result); // base64 image for upload
+                reader.readAsDataURL(file);
+            }
+        } else if (type === "preview") {
+
+            Promise.all(files?.map(f => new Promise(res => {             // base 64 image for upload
+                const reader = new FileReader();
+                reader.onloadend = () => res(reader.result);
+                reader.readAsDataURL(f);
+            }))).then(arr => setPreviewBase64(arr));
+
+        }
+
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,7 +115,6 @@ const ProductPanel = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
         })
-
             .then((res) => {
                 if (!res.ok) throw new Error("Something Went Wrong");
                 return res.json();
@@ -77,9 +122,11 @@ const ProductPanel = () => {
 
             .then(() => {
                 toast.success(editingProduct ? `${payload.title} updated!` : `${payload.title} added!`);
-                setShowAddProduct(false);
-                getProduct();
+
+                setShowAddProduct(false); // hide form
+                getProduct();// get updated data
             })
+
             .catch((err) => toast.error(err.message));
     };
 
@@ -106,6 +153,7 @@ const ProductPanel = () => {
                     zIndex: 1000,
                     marginTop: "1rem"
                 }}>
+
                     <span style={{ border: "none", cursor: "pointer", position: "relative", top: "-234", left: "90", padding: "5px" }}
                         onClick={() => setShowAddProduct(false)}>
                         <img src={backtick} style={{ width: "15px", height: "15px" }} />
@@ -114,6 +162,7 @@ const ProductPanel = () => {
                             fontFamily: "Arial, sans-serif", fontSize: "17px", marginBottom: "32px", fontWeight: "500"
                         }}>Back</span>
                     </span>
+
                     <div style={{
                         background: "white",
                         padding: "20px",
@@ -157,31 +206,17 @@ const ProductPanel = () => {
                             </div>
 
                             {/* Main Image */}
-                            <input id="mainImage" type="file" onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                    setMainImage(URL.createObjectURL(file));
-                                    const reader = new FileReader();
-                                    reader.onloadend = () => setMainImageBase64(reader.result);
-                                    reader.readAsDataURL(file);
-                                }
-                            }} required />
-                            {mainImage && <div style={{ marginLeft: "120px", marginBottom: "15px" }}>
-                                <img src={mainImage} alt="Main Preview" style={{ width: "100px", height: "100px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
+                            <input id="mainImage" type="file" onChange={(e) => handleImageChange(e, "main")} />
+
+                            {mainImageBase64 && <div style={{ marginLeft: "120px", marginBottom: "15px" }}>
+                                <img src={mainImageBase64} alt="Main Preview" style={{ width: "100px", height: "100px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />
                             </div>}
 
                             {/* Preview Images */}
-                            <input id="previewImages" type="file" multiple onChange={(e) => {
-                                const files = Array.from(e.target.files);
-                                setPreviewImages(files.map(f => URL.createObjectURL(f)));
-                                Promise.all(files.map(f => new Promise(res => {
-                                    const reader = new FileReader();
-                                    reader.onloadend = () => res(reader.result);
-                                    reader.readAsDataURL(f);
-                                }))).then(arr => setPreviewBase64(arr));
-                            }} />
-                            {previewImages.length > 0 && <div style={{ marginLeft: "120px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                                {previewImages.map((src, idx) => <img key={idx} src={src} alt="Preview" style={{ width: "75px", height: "75px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />)}
+                            <input id="previewImages" type="file" multiple onChange={(e) => handleImageChange(e, "preview")} />
+
+                            {previewBase64.length > 0 && <div style={{ marginLeft: "120px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                                {previewBase64.map((src, idx) => <img key={idx} src={src} alt="Preview" style={{ width: "75px", height: "75px", objectFit: "cover", border: "1px solid #ccc", borderRadius: "6px" }} />)}
                             </div>}
 
                             {/* Buttons */}
@@ -222,10 +257,13 @@ const ProductPanel = () => {
                 </thead>
                 <tbody style={{ overflowY: "hidden" }}>
                     {products.map((product, index) => (
-                        <tr key={product.id}>
+                        <tr key={product.id} >
                             <td>{index + 1}</td>
                             <td>{product.title}</td>
-                            <td><img src={convertRawImageToURL(product?.image?.data)} style={{ width: "75px", height: "75px" }} /></td>
+                            <td><img src={convertRawImageToURL(product?.image?.data)}
+                                style={{ width: "75px", height: "75px", cursor: "pointer" }}
+                                onLoad={(e) => { URL.revokeObjectURL(e.target.src) }}
+                                onClick={() => navigate(`/Product?id=${product.id}`)} /></td>
                             <td>{product.categories}</td>
                             <td>{product.content}</td>
                             <td>{product.max_price}</td>
