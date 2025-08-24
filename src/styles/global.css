@@ -714,136 +714,7 @@ tbody>tr:nth-child(even):hover {
     list-style: none;
 }
 
-/* layout for mobiles */
-
-@media (max-width:420px) {
-
-    .container {
-        width: 100vw;
-        height: 100vh;
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "nav"
-            "sbr"
-            "main"
-            "ftr";
-        grid-template-rows: auto auto 1fr auto;
-
-    }
-
-    /*  -----------------------------------------------------Navbar Section ----------------------------------------------------------------*/
-    header {
-        padding: 0.4rem;
-        gap: 0.4rem;
-        width: 100%;
-    }
-
-    .mobile-dropdown {
-        display: block;
-        background-color: black;
-        padding: 10px;
-        border-radius: 8px;
-    }
-
-    .mobile-dropdown>li {
-        margin-right: 0.7rem;
-    }
-
-    #navbar {
-        display: none;
-    }
-
-    /*  -----------------------------------------------------Sidebar Section ----------------------------------------------------------------*/
-    aside {
-        width: 100%;
-        height: 100%;
-        font-size: 1rem;
-        position: static;
-    }
-
-    .categories-section {
-        display: flex;
-        flex-direction: row;
-        gap: 1.1rem;
-        justify-content: center;
-        align-content: center;
-    }
-
-    .categories-item {
-        display: flex;
-        padding: 1px;
-        margin: 1px;
-    }
-
-    .price-section {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-    }
-
-    /*  -----------------------------------------------------Main Section ----------------------------------------------------------------*/
-    #main {
-        height: 100vh;
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        overflow-y: scroll;
-    }
-
-    .product-card {
-        height: 100%;
-        width: 48%;
-        margin: 0.2rem;
-        padding: 0.2rem;
-        background-color: grey;
-        color: white;
-        overflow-y: scroll;
-    }
-
-    .product-body {
-        padding: 5px;
-    }
-
-    #max-price {
-        text-decoration: line-through;
-        font-weight: normal;
-        font-size: 10px;
-    }
-
-    .product-card {
-        width: 95%;
-        margin: 0.5rem auto;
-    }
-
-    .product-body {
-        padding: 0.5rem;
-    }
-
-    .product-title h2 {
-        font-size: 1rem;
-    }
-
-    #max-price {
-        font-size: 0.8rem;
-    }
-
-    /*  -----------------------------------------------------Footer Section ----------------------------------------------------------------*/
-    #footer {
-        width: 100%;
-        grid-area: ftr;
-        background-color: black;
-        color: white;
-        font-size: 0.8rem;
-        padding: 0.5rem;
-        position: sticky;
-        bottom: 0;
-    }
-
-
-}
-
-/* --------------------------------------------------------------toast pop up----------------------------------------------------------------------------- */
+/* --------------------------------------------------------------toast pop up-------------------------------------------------- */
 
 .my-progress-bar {
     background-color: #d72303;
@@ -1054,3 +925,7 @@ td {
 tr {
     width: 100%;
 }
+
+/*------------------------------------------------Product Panel------------------------------------------------------------*/
+
+

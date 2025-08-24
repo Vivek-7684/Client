@@ -4,7 +4,6 @@ import Dashboard from '../../../assets/dashboard.png';
 import { Link } from 'react-router-dom';
 
 const account = (props) => {
-    console.log(props);
     return (
         <div className='profile-overlay'>
             <div className='profile-view'>

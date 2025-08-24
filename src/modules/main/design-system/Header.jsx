@@ -96,6 +96,9 @@ const Header = (props) => {
                 setUserProfile(data.image);
                 setUserData(data);
             })
+            .catch((err)=>{
+                toast.error(err.message);
+            })
     }, []);
 
     return (
