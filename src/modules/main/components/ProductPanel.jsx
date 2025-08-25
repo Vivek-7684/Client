@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { convertRawImageToBase64  } from "../helpers/convertRawImageToBase64 ";
+import { convertRawImageToBase64 } from "../helpers/convertRawImageToBase64 ";
 import { convertRawImageToURL } from "../helpers/convertRawImageToURL";
 import Delete from "../../../assets/Delete.png";
 import Pen from "../../../assets/pen.png";
@@ -11,6 +11,10 @@ const ProductPanel = () => {
     const [products, setProducts] = useState([]); // products detail
 
     const [showAddProduct, setShowAddProduct] = useState(false); // set product form
+
+    const [deleteProduct, setdeleteProduct] = useState(false); // set delete  product form 
+
+    const [deletedProduct, setdeletedProduct] = useState({}); // delete product 
 
     const [editingProduct, setEditingProduct] = useState(null); // For edit
 
@@ -30,6 +34,7 @@ const ProductPanel = () => {
             .catch(() => toast.error("Failed to load products"));
     };
 
+    console.log()
     // set product with page refresh
     useEffect(() => { getProduct(); }, []);
 
@@ -37,7 +42,6 @@ const ProductPanel = () => {
         return fetch(`http://localhost:3001/product/getProductImages/?id=${id}`,
             { method: "GET", credentials: "include" })
             .then((res) => res.json())
-
     }
 
     const openAddProduct = () => {
@@ -56,10 +60,11 @@ const ProductPanel = () => {
         loadPreviewImages(product.id).then((data) => {
             setPreviewBase64(data.map((img) => convertRawImageToBase64(img?.image?.data))); // preview image set
         })
-        
+
         setShowAddProduct(true);    // add prdouct view
     };
 
+    // set preview and upload
     const handleImageChange = (e, type) => {
 
         const files = [...e.target.files];
@@ -78,6 +83,7 @@ const ProductPanel = () => {
                 reader.onloadend = () => setMainImageBase64(reader.result); // base64 image for upload
                 reader.readAsDataURL(file);
             }
+
         } else if (type === "preview") {
 
             Promise.all(files?.map(f => new Promise(res => {             // base 64 image for upload
@@ -124,7 +130,6 @@ const ProductPanel = () => {
 
             .then(() => {
                 toast.success(editingProduct ? `${payload.title} updated!` : `${payload.title} added!`);
-
                 setShowAddProduct(false); // hide form
                 getProduct();// get updated data
             })
@@ -132,19 +137,64 @@ const ProductPanel = () => {
             .catch((err) => toast.error(err.message));
     };
 
-    const handleDelete = (id) => {
-        fetch(`http://localhost:3001/products/${id}`, { method: "DELETE", credentials: "include" })
+    // delete product
+    const handleDelete = () => {
+        fetch(`http://localhost:3001/product/products/${deletedProduct.id}`, { method: "DELETE", credentials: "include" })
             .then((res) => {
                 if (!res.ok) throw new Error("Delete failed");
                 toast.success("Product deleted!");
                 getProduct();
+                setdeletedProduct({});
             })
             .catch((err) => toast.error(err.message));
     };
 
     return (
+
+        // form
         <div className="admin-dashboard" style={{ position: "absolute", left: "140", overflowX: "scroll", overflowY: "scroll" }}>
-            {/* Add/Edit Product Modal */}
+            {deleteProduct && <div style={{
+                position: "fixed",
+                top: 10, left: 0,
+                width: "100vw", height: "100vh",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                display: "flex", justifyContent: "center", alignItems: "center",
+                zIndex: 1000,
+                marginTop: "1rem"
+            }}>
+                <div style={{
+                    background: "white",
+                    padding: "20px",
+                    borderRadius: "12px",
+                    width: "400px",
+                    maxHeight: "90vh",
+                    zIndex: 1000,
+                    position: "fixed",
+                    top: 250, left: 500,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    textAlign: "center"
+                }}>
+                    <div>
+                        <img src={Delete} style={{ width: "25px", height: "25px", cursor: "pointer", marginBottom: "1rem" }} />
+                    </div>
+                    <h3>Delete Product</h3>
+
+                    <span>{deletedProduct.name}</span>
+
+                    <div style={{ display: "flex", flexDirection: "row", padding: "1rem" }}>
+                        <button
+                            onClick={() => { setdeleteProduct(false); handleDelete(); }}
+                            className="cart-button">Delete</button>
+                        <button
+                            onClick={() => { setdeleteProduct(false); setdeletedProduct({}); }}
+                            className="cancel-button">Cancel</button>
+                    </div>
+
+                </div>
+            </div>}
+
+
+
             {showAddProduct && (
                 <div style={{
                     position: "fixed",
@@ -156,12 +206,12 @@ const ProductPanel = () => {
                     marginTop: "1rem"
                 }}>
 
-                    <span style={{ border: "none", cursor: "pointer", position: "relative", top: "-234", left: "90", padding: "5px" }}
+                    <span style={{ border: "none", cursor: "pointer", position: "relative", top: "-210", left: "90", padding: "2px" }}
                         onClick={() => setShowAddProduct(false)}>
-                        <img src={backtick} style={{ width: "15px", height: "15px" }} />
+                        <img src={backtick} style={{ width: "12px", height: "12px" }} />
                         <span style={{
                             paddingLeft: "15px", color: "#111111",
-                            fontFamily: "Arial, sans-serif", fontSize: "17px", marginBottom: "32px", fontWeight: "500"
+                            fontFamily: "Arial, sans-serif", fontSize: "14px", marginBottom: "20px", fontWeight: "500"
                         }}>Back</span>
                     </span>
 
@@ -236,7 +286,7 @@ const ProductPanel = () => {
                 <div className="product-heading" style={{ marginTop: "4rem" }}>
                     {products?.length > 0 && <span>{`My Products (${(products || []).length})`}</span>}
                     <button onClick={openAddProduct} style={{
-                        color: "", padding: "0.5rem", borderRadius: "10px",
+                        padding: "0.5rem", borderRadius: "10px",
                         marginBottom: "5px", border: "1px solid black", marginLeft: "30px", cursor: "pointer"
                     }}>Add Product</button>
                     <hr style={{ marginLeft: "10px", width: "1040px" }}></hr>
@@ -271,8 +321,12 @@ const ProductPanel = () => {
                             <td>{product.max_price}</td>
                             <td>{product.min_price}</td>
                             <td>
-                                <img src={Delete} onClick={() => handleDelete(product.id)} style={{ width: "25px", height: "25px", cursor: "pointer" }} />
-                                <img src={Pen} onClick={() => openEditProduct(product)} style={{ width: "25px", height: "25px", marginLeft: "5px", cursor: "pointer" }} />
+                                <img src={Delete}
+                                    onClick={() => { setdeleteProduct(true); setdeletedProduct({ id: product.id, name: product.title }); }}
+                                    style={{ width: "25px", height: "25px", cursor: "pointer" }} />{" "}
+                                <img src={Pen}
+                                    onClick={() => openEditProduct(product)}
+                                    style={{ width: "25px", height: "25px", marginLeft: "5px", cursor: "pointer" }} />
                             </td>
                         </tr>
                     ))}

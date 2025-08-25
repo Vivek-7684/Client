@@ -386,7 +386,8 @@ tbody>tr:nth-child(even):hover {
     margin: auto;
 }
 
-.wishlist-heading,.product-heading {
+.wishlist-heading,
+.product-heading {
     font-size: 20px;
     margin-top: 0.1rem;
     text-align: center;
@@ -542,6 +543,7 @@ tbody>tr:nth-child(even):hover {
     width: 50%;
     border-color: #F8F9FA;
     box-shadow: 3px 3px 5px;
+    cursor: pointer;
 }
 
 .cart-button:hover {
@@ -908,18 +910,17 @@ thead th:last-child {
     border-top-right-radius: 10px;
 }
 
-th
- {
-    border: 1px solid #dee2e6;  
+th {
+    border: 1px solid #dee2e6;
 }
 
-th{
-    padding:0.3rem;
+th {
+    padding: 0.3rem;
 }
 
 td {
     text-align: center;
-    
+
 }
 
 tr {
@@ -929,3 +930,13 @@ tr {
 /*------------------------------------------------Product Panel------------------------------------------------------------*/
 
 
+.cancel-button {
+    background-color: rgb(248, 247, 244);
+    color: black;
+    padding: 0.3rem;
+    border-radius: 5px;
+    width: 50%;
+    border-color: #F8F9FA;
+    margin-left: 9px;
+    cursor: pointer;
+}

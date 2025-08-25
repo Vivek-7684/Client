@@ -3,7 +3,7 @@ import SidebarAdmin from "./SidebarAdmin";
 import ProductPanel from "./ProductPanel";
 
 function AdminDashboard() {
-    const [activePanel, setActivePanel] = useState("");
+    const [activePanel, setActivePanel] = useState("products");
 
     return (
         <div style={{ overflow: "hidden" }}>
