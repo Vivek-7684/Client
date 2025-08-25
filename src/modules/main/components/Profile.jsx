@@ -86,7 +86,7 @@ const Profile = () => {
                     profile_image: `data:image/png;base64,${data.image}` || ""
                 });
 
-                setProfileImage(`data:image/png;base64,${data.image}` || "");                                      // set OriginalUserData
+                setProfileImage(data.image ? `data:image/png;base64,${data.image}` : "");                                      // set OriginalUserData
 
             })
             .catch(() => toast.error("It's not your issue.Server Side Error"));
@@ -247,16 +247,16 @@ const Profile = () => {
                 toast.success("Profile Image updated successfully!");
                 setEditField(null);  // set edit off
                 setOriginalUser(user); // updated data store in original state
-                setProfileImage(`data:image/png;base64,${user.profile_image}` || "");
+                setProfileImage(user.profile_image);// set updated image
             } else {
                 toast.error("Failed to upload image");
             }
-            
+
         } catch (err) {
             toast.error("Something went wrong");
         }
     };
-
+    
     const savePassword = () => {
 
         const passwordData = {
@@ -293,7 +293,7 @@ const Profile = () => {
 
     return (
         <div className="profile-form" style={{ position: "relative" }}>
-            <span style={{ border: "none", cursor: "pointer", position: "relative", top: "150",left:"280" }} onClick={() => navigate("/")}>
+            <span style={{ border: "none", cursor: "pointer", position: "relative", top: "150", left: "280" }} onClick={() => navigate("/")}>
                 <img src={backtick} style={{ width: "15px", height: "15px" }} />
                 <span style={{
                     paddingLeft: "15px", font: "900", color: "#111111",
@@ -317,7 +317,7 @@ const Profile = () => {
                 <div style={{ display: "flex", flexDirection: "column" }}>
 
                     <img
-                        src={profileImage || defaultUserPic}
+                        src={profileImage ? profileImage : defaultUserPic}
                         alt="Profile Image"
                         style={{ width: "80px", height: "80px", borderRadius: "50%", marginBottom: "0.9rem" }}
                     />
@@ -327,7 +327,6 @@ const Profile = () => {
                             <img src={uploadImage} style={{ width: "30px", height: "30px", cursor: "pointer" }} />
                             <span>Upload</span>
                         </div>
-
                     </label>
 
                     <input

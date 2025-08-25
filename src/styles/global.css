@@ -538,7 +538,7 @@ tbody>tr:nth-child(even):hover {
 .cart-button {
     background-color: black;
     color: #F8F9FA;
-    padding: 0.5rem;
+    padding: 0.3rem;
     border-radius: 5px;
     width: 50%;
     border-color: #F8F9FA;
@@ -589,7 +589,7 @@ tbody>tr:nth-child(even):hover {
     align-content: center;
     justify-content: center;
     gap: 1rem;
-    font-size: 7px;
+    font-size: 10px;
 }
 
 .company-right {

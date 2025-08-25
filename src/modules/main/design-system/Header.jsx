@@ -78,7 +78,7 @@ const Header = (props) => {
                 else { setLoggedIn(false) }
             })
             .then((data) => {
-                
+
                 if (data?.message) { toast.success(data.message) };
             })
             .catch((err) => toast.error(err.message));
@@ -96,7 +96,7 @@ const Header = (props) => {
                 setUserProfile(data.image);
                 setUserData(data);
             })
-            .catch((err)=>{
+            .catch((err) => {
                 toast.error(err.message);
             })
     }, []);
@@ -119,7 +119,7 @@ const Header = (props) => {
                     </Link>
                     <form className="search-bar-section" onSubmit={e => e.preventDefault()}>
                         <input
-                            placeholder="Search By Products and Brands"
+                            placeholder="Search By Products Name"
                             onChange={(e) => {
                                 const value = e.target.value;
 
@@ -133,20 +133,20 @@ const Header = (props) => {
                         />
                     </form>
                     {LoggedIn && <div className="navbar-icons">
+                        <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" /></Link>
                         <Link to="cart" >
                             <img src={Cart} className="icons" alt="cart" />
                             {/* show total product item in cart*/}
                             <span id="cart-item-count">
                                 {props.Cart.length}
                             </span>
-                            <span>Cart</span>
 
                         </Link>
-                        <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />Wishlist</Link>
+                        <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" /></Link>
                         <Link to="" onClick={() => { props.setShowProfile(!props.showProfile) }}>
-                            <img src={`data:image/png;base64,${userProfile}`} alt="Profile" style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons" />
+                            <img src={userProfile ? `data:image/png;base64,${userProfile}`: profilePic} alt="Profile" style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons" />
                         </Link>
-                        <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" />LogOut</Link>
+
                     </div>}
 
                     {!LoggedIn &&

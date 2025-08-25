@@ -97,8 +97,7 @@ const Card = (props) => {
     let filteredData = productData.filter((item) => {
         const selectedPrice = price ? item.min_price <= Number(price) : true; // set condition for price filter if selected else show all
         const selectedCatgory = category ? item.categories === category : true; // set condition for category filter if selected
-        const selectedSearchItem = searchItem ? item.title.toLowerCase().includes(searchItem.toLowerCase()) ||
-            item.categories.toLowerCase().includes(searchItem.toLowerCase()) : true;
+        const selectedSearchItem = searchItem ? item.title.toLowerCase().includes(searchItem.toLowerCase()) : true;
 
         return selectedPrice && selectedCatgory && selectedSearchItem // filter by price, category and search item or return all
     })
@@ -129,10 +128,11 @@ const Card = (props) => {
                                                             if (data.redirect) {
                                                                 navigate(data.redirect);
                                                             } else {
+                                                                LoadWishList(); // Refresh wishlist after update
                                                                 setTimeout(() => {
-                                                                    LoadWishList(); // Refresh wishlist after update
-                                                                }, 2000);
-                                                                toast.success(`${product.title} is added in your wishlist for later.`);
+                                                                    toast.success(`${product.title} is added in your wishlist for later.`);
+                                                                }, 400);
+
                                                             }
                                                         })
                                                         .catch((err) => toast.error(err.message));

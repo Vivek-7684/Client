@@ -2,7 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { convertRawImageToURL } from "../helpers/convertRawImageToURL";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Delete from "../../../assets/Delete.png";
 import add_To_Cart from "../../../assets/add_to_cart.png";
 import empty_wishlist from "../../../assets/empty_wishlist.png";
@@ -133,26 +133,19 @@ const WishList = (props) => {
                                     <p style={{ color: "grey" }}>{item.content}</p>
                                     <span style={{ color: "green" }}>Price Now:-<b id="price"><FaIndianRupeeSign />{`${item.min_price}`}</b></span>{","}<br></br>
                                     <div className="wishlist-icons">
-                                        <span><img src={Delete} style={{ width: "28px", height: "28px", textSpacing: "2px" }} onClick={() => {
+                                        <span><img src={Delete} style={{ width: "25px", height: "25px", textSpacing: "2px",cursor:"pointer" }} onClick={() => {
                                             addProductsInWishList(item.id)
                                                 .then((data) => {
                                                     if (data.redirect) {
                                                         navigate(data.redirect);
                                                     } else {
                                                         setTimeout(() => {
-                                                            // toast.success(`${item.title} has been removed from your wishlist.`, {
-                                                            //     toastClassName: "toast_popUp",
-                                                            //     progressClassName:"toast_progress"
-                                                            // });
-
-
-
-                                                            toast.success("Inline Styling", {
-                                                                progressStyle: { background: "#22c55e" }
+                                                            toast.success(`${item.title} has been removed from your wishlist.`, {
+                                                                toastClassName: "toast_popUp",
+                                                                progressClassName:"toast_progress"
                                                             });
 
-
-                                                        }, 800);
+                                                        }, 400);
                                                         LoadWishList(); // Refresh wishlist after update
                                                     }
                                                 })

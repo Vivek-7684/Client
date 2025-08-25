@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import AccountSettingIcon from '../../../assets/Account_Setting_icon.png';
+import defaultUserPic from "../../../assets/profileUser.png";
 import Dashboard from '../../../assets/dashboard.png';
 import { Link } from 'react-router-dom';
 
@@ -11,7 +12,7 @@ const account = (props) => {
                 <div>
                     <h3 style={{ textAlign: "center", marginBottom: "1rem" }}>My Account</h3>
                     <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-                        <img src={`data:image/png;base64,${props.userProfile}`} alt="Profile"
+                        <img src={props.userProfile ? `data:image/png;base64,${props.userProfile}` : defaultUserPic} alt="Profile"
                             style={{ width: "fit-content", height: "70px", borderRadius: "50%" }} />
 
                         <ul style={{ listStyle: "none" }}>
