@@ -24,8 +24,6 @@ const PricingPanel = () => {
         getPricing();
     }, [])
 
-    console.log(pricing);
-
     return (
         
         <div className="admin-dashboard"
@@ -51,7 +49,7 @@ const PricingPanel = () => {
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
                         <span>₹{pricing.shipping_charges}</span>
-                        <span>₹{pricing.discount_off}</span>
+                        <span>{pricing.discount_off}%</span>
                     </div>
                 </div>
 

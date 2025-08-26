@@ -35,6 +35,12 @@ const Cart = (props) => {
     console.log(calculateSubtotal());
     // console.log(calculateSubtotal() * Number(pricing.discount_off));
 
+    const calculateDiscount = () => {
+        const subtotal = calculateSubtotal();
+        const discount = Number(subtotal * Number(pricing.discount_off)) / 100; // % discount
+        return discount; // discounted subtotal
+    }
+
     // calculate discounted Subtotal
     const calculateDiscountedSubTotal = () => {
         const subtotal = calculateSubtotal();
@@ -234,8 +240,8 @@ const Cart = (props) => {
                                     <h3>Order Summary</h3>
                                     <hr></hr>
 
-                                    <div style={{ display: "flex", gap: "10rem", padding: "1rem" }}>
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
+                                    <div style={{ display: "flex", gap: "5rem", padding: "1rem", width: "350px" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "2.2rem" }}>
                                             <span>Subtotal</span>
                                             <span>Discount off {pricing.discount_off}%</span>
                                             <span>Shipping Charges</span>
@@ -244,7 +250,7 @@ const Cart = (props) => {
 
                                         <div style={{ display: "flex", flexDirection: "column", gap: "2.3rem" }}>
                                             <span>₹{calculateSubtotal()}</span>
-                                            <span>₹{calculateDiscountedSubTotal()}</span>
+                                            <span><b>-</b>{`₹${calculateDiscount()}`}</span>
                                             <span>₹{pricing.shipping_charges}</span>
                                             <span>₹{gst}</span>
                                         </div>
@@ -252,9 +258,9 @@ const Cart = (props) => {
 
                                     <hr></hr>
 
-                                    <div style={{ display: "flex", gap: "13rem", padding: "1rem" }}>
-                                        <span>Total</span>
-                                        <span>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing.shipping_charges)}</span>
+                                    <div style={{ display: "flex", gap: "11rem", padding: "1rem" }}>
+                                        <h4>Total</h4>
+                                        <h4>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing.shipping_charges)}</h4>
                                     </div>
                                 </div>
                             </>
