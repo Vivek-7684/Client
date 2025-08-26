@@ -30,9 +30,15 @@ const WishList = (props) => {
                 else if (data.message === "Your wishlist is empty for now. Explore products and add the ones you love.") {
                     props.setWishlistItem([]);
                 }
+                // else if (data.message === "User not found") {
+                //     throw new Error(data.message);
+                // }
                 else {
-                    props.setWishlistItem(data);     // update wishlist to show latest updated wishlist items
+                    props.setWishlistItem(data);// update wishlist to show latest updated wishlist items
                 }
+            })
+            .catch((err) => {
+                toast.error(err.message);
             })
 
     }
@@ -133,7 +139,7 @@ const WishList = (props) => {
                                     <p style={{ color: "grey" }}>{item.content}</p>
                                     <span style={{ color: "green" }}>Price Now:-<b id="price"><FaIndianRupeeSign />{`${item.min_price}`}</b></span>{","}<br></br>
                                     <div className="wishlist-icons">
-                                        <span><img src={Delete} style={{ width: "25px", height: "25px", textSpacing: "2px",cursor:"pointer" }} onClick={() => {
+                                        <span><img src={Delete} style={{ width: "25px", height: "25px", textSpacing: "2px", cursor: "pointer" }} onClick={() => {
                                             addProductsInWishList(item.id)
                                                 .then((data) => {
                                                     if (data.redirect) {
@@ -142,7 +148,7 @@ const WishList = (props) => {
                                                         setTimeout(() => {
                                                             toast.success(`${item.title} has been removed from your wishlist.`, {
                                                                 toastClassName: "toast_popUp",
-                                                                progressClassName:"toast_progress"
+                                                                progressClassName: "toast_progress"
                                                             });
 
                                                         }, 400);

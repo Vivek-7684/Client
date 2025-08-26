@@ -12,7 +12,6 @@ import eye from "../../../assets/eye.png";
 import eyeHide from "../../../assets/eyeHide.png";
 
 const Profile = () => {
-    const navigate = useNavigate();
 
     const [user, setUser] = useState({    // store userData
         username: "",
@@ -40,6 +39,8 @@ const Profile = () => {
 
     const [showConfirmPassword, setShowConfirmPassword] = useState(false); // toogle state for passwword hide/show 
 
+    const navigate = useNavigate();
+
     // Username Validation Schema
     const usernameSchema = yup.object().shape({
         username: yup
@@ -66,7 +67,7 @@ const Profile = () => {
 
             .then((res) => res.json())
 
-            .then((data) => {                                                                     // set UserData
+            .then((data) => {                                          // set UserData
                 setUser((prev) => ({
                     ...prev, // keep oldPassword, newPassword, confirmPassword
                     username: data.username || "",
@@ -77,7 +78,7 @@ const Profile = () => {
                     profile_image: `data:image/png;base64,${data.image}` || ""
                 }));
 
-                setOriginalUser({                                                                 // set OriginalUserData
+                setOriginalUser({                                // set OriginalUserData
                     username: data.username || "",
                     email: data.email || "",
                     country: data.country || "",
@@ -87,7 +88,7 @@ const Profile = () => {
                 });
 
                 setProfileImage(data.image ? `data:image/png;base64,${data.image}` : "");                                      // set OriginalUserData
-
+                console.log(data);
             })
             .catch(() => toast.error("It's not your issue.Server Side Error"));
     }, []);
@@ -219,9 +220,15 @@ const Profile = () => {
             });
 
             if (res.ok) {
-                toast.success(`${field} updated successfully!`);
+                toast.success(`${field} updated successfully.Please Log In`);
                 setEditField(null); // set edit off
                 setOriginalUser(user); // set data for check changes done or not 
+                setTimeout(() => {
+                    if (field === "email") {
+                        navigate("/login");
+                    }
+                }, 400)
+
             } else {
                 toast.error("Failed to update profile");
             }
@@ -256,7 +263,7 @@ const Profile = () => {
             toast.error("Something went wrong");
         }
     };
-    
+
     const savePassword = () => {
 
         const passwordData = {

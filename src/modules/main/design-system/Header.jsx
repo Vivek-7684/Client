@@ -93,6 +93,10 @@ const Header = (props) => {
                 return response.json();
             })
             .then((data) => {
+                if (data?.message ) {
+                    console.log("user not found");
+                    throw new Error(data.message);
+                }
                 setUserProfile(data.image);
                 setUserData(data);
             })
@@ -144,7 +148,7 @@ const Header = (props) => {
                         </Link>
                         <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" /></Link>
                         <Link to="" onClick={() => { props.setShowProfile(!props.showProfile) }}>
-                            <img src={userProfile ? `data:image/png;base64,${userProfile}`: profilePic} alt="Profile" style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons" />
+                            <img src={userProfile ? `data:image/png;base64,${userProfile}` : profilePic} alt="Profile" style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons" />
                         </Link>
 
                     </div>}

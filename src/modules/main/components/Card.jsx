@@ -62,6 +62,9 @@ const Card = (props) => {
                 if (data.redirect) {
                     return;
                 }
+                else if (data.message === "User not found") {
+                    throw new Error(data.message);
+                }
                 else if (data.message === "Your wishlist is empty for now. Explore products and add the ones you love.") {
                     props.setWishlistItem([]);
                 }
@@ -69,7 +72,7 @@ const Card = (props) => {
                     props.setWishlistItem(data); // update wishlist to get latest updated wishlist items
                 }
             })
-            .catch(() => toast.error("Failed to load wishlist"));
+            .catch((err) => toast.error(err.message ? err.message : "Failed to load wishlist"));
 
     }
 
