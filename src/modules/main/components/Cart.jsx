@@ -16,16 +16,40 @@ const Cart = (props) => {
     // loading cart list
     const [loading, setLoading] = useState(true);
 
+    // pricing
+    const [pricing, setPricing] = useState({
+        shipping_charges: "",
+        discount_off: ""
+    })
+
     // storing function
     const navigate = useNavigate();
 
+    // calculate subtotal no. of item * price per item
     const calculateSubtotal = () => {
         return parseInt(props.Cart.reduce((totalPriceSum, currentItem) => {
             return totalPriceSum += currentItem.quantity * currentItem.min_price;
         }, 0))
     }
 
-    const gst = Math.round((calculateSubtotal() * (18)) / (100));
+    console.log(calculateSubtotal());
+    // console.log(calculateSubtotal() * Number(pricing.discount_off));
+
+    // calculate discounted Subtotal
+    const calculateDiscountedSubTotal = () => {
+        const subtotal = calculateSubtotal();
+        const discount = Number(subtotal * Number(pricing.discount_off)) / 100; // % discount
+        return subtotal - discount; // discounted subtotal
+    };
+
+
+    console.log(calculateDiscountedSubTotal());
+    // 18 % gst on discounted Subtotal + shipping Charges 
+    const gst = Math.round(((calculateDiscountedSubTotal() + Number(pricing.shipping_charges)) * (18) / (100)));
+
+    console.log(gst);
+    // const gst = Math.round((calculateSubtotal() * (18)) / (100));
+
 
     const loadCart = () => {
         fetch(`http://localhost:3001/cart/getProductsInCart`, {
@@ -49,6 +73,20 @@ const Cart = (props) => {
     useEffect(() => {
         loadCart();
     }, []);
+
+    const getPricing = () => {
+        fetch("http://localhost:3001/pricing/get", {
+            credentials: "include"
+        })
+            .then((response) => response.json())
+            .then((data) => setPricing(data[0]))
+            .catch((err) => toast.error(err.message))
+
+    }
+
+    useEffect(() => {
+        getPricing();
+    }, [])
 
     const addToCart = (productId, quantity) => {
         return fetch("http://localhost:3001/cart/addProductToCart", {
@@ -148,7 +186,7 @@ const Cart = (props) => {
                                             height: "600px",
                                         }}
                                     >
-                                        <div style={{ display: "flex", gap: "3rem", padding: "1.4rem",backgroundColor:"#dde3e8" }}>
+                                        <div style={{ display: "flex", gap: "3rem", padding: "1.4rem", backgroundColor: "#dde3e8" }}>
                                             <span style={{ width: "205px", textAlign: "center", fontWeight: "660" }}> Product</span>
                                             <span style={{ width: "100px", textAlign: "center", fontWeight: "650" }}>Quantity</span>
                                             <span style={{ width: "100px", textAlign: "center", fontWeight: "650" }}>Price(per item)</span>
@@ -197,24 +235,26 @@ const Cart = (props) => {
                                     <hr></hr>
 
                                     <div style={{ display: "flex", gap: "10rem", padding: "1rem" }}>
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
                                             <span>Subtotal</span>
+                                            <span>Discount off {pricing.discount_off}%</span>
+                                            <span>Shipping Charges</span>
                                             <span>GST(18%)</span>
-                                            <span>Shipping</span>
                                         </div>
 
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "2.3rem" }}>
                                             <span>₹{calculateSubtotal()}</span>
+                                            <span>₹{calculateDiscountedSubTotal()}</span>
+                                            <span>₹{pricing.shipping_charges}</span>
                                             <span>₹{gst}</span>
-                                            <span>₹{"50"}</span>
                                         </div>
                                     </div>
 
                                     <hr></hr>
 
-                                    <div style={{ display: "flex", gap: "12rem", padding: "1rem" }}>
+                                    <div style={{ display: "flex", gap: "13rem", padding: "1rem" }}>
                                         <span>Total</span>
-                                        <span>₹{Math.round(calculateSubtotal()) + gst + 50}</span>
+                                        <span>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing.shipping_charges)}</span>
                                     </div>
                                 </div>
                             </>

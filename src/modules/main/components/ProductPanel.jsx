@@ -34,7 +34,6 @@ const ProductPanel = () => {
             .catch(() => toast.error("Failed to load products"));
     };
 
-    console.log()
     // set product with page refresh
     useEffect(() => { getProduct(); }, []);
 
@@ -162,6 +161,8 @@ const ProductPanel = () => {
                 zIndex: 1000,
                 marginTop: "1rem"
             }}>
+
+                {/* delete product  */}
                 <div style={{
                     background: "white",
                     padding: "20px",
@@ -193,8 +194,7 @@ const ProductPanel = () => {
                 </div>
             </div>}
 
-
-
+            {/* add and edit product */}
             {showAddProduct && (
                 <div style={{
                     position: "fixed",

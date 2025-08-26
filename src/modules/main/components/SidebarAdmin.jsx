@@ -12,13 +12,29 @@ const SidebarAdmin = ({ setActive }) => {
                 position: "fixed"
 
             }}>
-            <div style={{ padding: "20px",marginTop:"50px" }}>
+            <div style={{ padding: "20px", marginTop: "50px" }}>
                 <h3>Admin Panel</h3>
                 <ul style={{ listStyle: "none", padding: 10 }}>
-                    <li><button onClick={() => setActive("products")}>📦 Products</button></li>
+                    <li>
+                        <button 
+                        style={{padding:"0.2rem"}}
+                        onClick={() => setActive("products")}>
+                            📦 Products
+                        </button>
+                    </li>
                 </ul>
             </div>
 
+            <div style={{ padding: "20px" }}>
+                <ul style={{ listStyle: "none", padding: 10 }}>
+                    <li >
+                        <button
+                            style={{ padding: "0.5rem" }}
+                            onClick={() => setActive("pricing")}
+                        >💵 Pricing</button>
+                    </li>
+                </ul>
+            </div>
         </div>
     );
 }
