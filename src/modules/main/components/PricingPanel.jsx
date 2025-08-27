@@ -6,18 +6,32 @@ import { toast } from "react-toastify";
 
 const PricingPanel = () => {
 
-    const [pricing, setPricing] = useState({
+    const [pricing, setPricing] = useState({          // pricing update
         shipping_charges: "",
         discount_off: ""
     });
 
 
+    const [showpricing, setShowPricing] = useState({
+        shipping_charges: "",
+        discount_off: ""
+    })
+
     const getPricing = () => {
         fetch("http://localhost:3001/pricing/get", {
             credentials: "include"
         })
-            .then((response) => response.json())
-            .then((data) => setPricing(data[0]))
+            .then((response) => { return response.json() })
+            .then((data) => {
+
+                if (data?.message === "get pricing data") {
+                    setPricing(data.result[0]);
+                    setShowPricing(data.result[0]);
+                }
+                else {
+                    throw new Error(data?.message);
+                }
+            })
             .catch((err) => toast.error(err.message))
     }
 
@@ -42,12 +56,16 @@ const PricingPanel = () => {
             })
             .then((data) => {
                 if (data?.message === "Pricing Updated" || data?.message === "Pricing Added") {
+                    getPricing();// update data
                     toast.success(data?.message);
                 } else {
                     throw new Error(data?.message);
                 }
             })
-            .catch((err) => toast.error(err.message))
+            .catch((err) => {
+                console.log(err);
+                toast.error(err.message);
+            })
     }
 
     return (
@@ -68,14 +86,14 @@ const PricingPanel = () => {
                 <hr></hr>
 
                 <div style={{ display: "flex", gap: "10rem", padding: "1rem" }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1.7rem" }}>
                         <span>Shipping Charges</span>
                         <span>Discount</span>
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-                        <span>₹{pricing.shipping_charges}</span>
-                        <span>{pricing.discount_off}%</span>
+                        <span>₹{showpricing.shipping_charges}</span>
+                        <span>{showpricing.discount_off}%</span>
                     </div>
                 </div>
 
@@ -98,17 +116,18 @@ const PricingPanel = () => {
                     {/* Shipping Charges */}
                     <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
                         <label htmlFor="shipping_charges" style={{ width: "80px", fontWeight: "500" }}>Shipping Charges <span style={{ color: "red" }}>*</span></label>
-                        <input id="shipping_charges" type="text" placeholder="Charges" required
+                        <input id="shipping_charges" type="text" placeholder="Charges"
                             value={pricing.shipping_charges}
                             onChange={(e) => { setPricing({ ...pricing, shipping_charges: e.target.value }) }}
-                            style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }} />
+                            style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }}
+                            required />
                     </div>
 
                     {/* Category */}
-                    <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                    <div style={{ display: "flex", alignItems: "center", marginBottom: "18px" }}>
                         <label htmlFor="discount_off" style={{ width: "80px", fontWeight: "500" }}>Discount </label>
                         <input id="discount_off" type="text" placeholder="Discount" required
-                            value={pricing.discount_off}
+                            value={pricing.discount_off }
                             onChange={(e) => { setPricing({ ...pricing, discount_off: e.target.value }) }}
                             style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }} />
                     </div>
