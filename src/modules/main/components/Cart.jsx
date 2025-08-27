@@ -212,8 +212,9 @@ const Cart = (props) => {
                                             <>
                                                 <div key={item.id} style={{ display: "flex", gap: "3rem" }}>
 
-                                                    <span className="" >
-                                                        <img src={convertRawImageToURL(item.Image.data)} id="table-cart-image" style={{ width: "110px", height: "105px" }} />
+                                                    <span onClick={() => navigate(`/Product?id=${item.id}`)} >
+                                                        <img src={convertRawImageToURL(item.Image.data)} id="table-cart-image"
+                                                            style={{ width: "110px", height: "105px", cursor: "pointer" }} />
                                                     </span>
 
                                                     <span style={{ width: "100px" }}>{item.title}</span>
