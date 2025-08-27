@@ -11,8 +11,7 @@ const PricingPanel = () => {
         discount_off: ""
     });
 
-
-    const [showpricing, setShowPricing] = useState({
+    const [showpricing, setShowPricing] = useState({  // show price
         shipping_charges: "",
         discount_off: ""
     })

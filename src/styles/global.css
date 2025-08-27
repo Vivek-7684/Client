@@ -427,27 +427,31 @@ tbody>tr:nth-child(even):hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 80vw;
+    width: 100vw;
     height: 80vh;
     padding: 5rem;
     gap: 2rem;
-    padding: 5rem;
     margin: 10px 10px 10px 10px;
 }
 
 .product-image-section {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 40%;
     height: auto;
 }
 
 .product-image>img {
-    width: 50%;
-    min-width: 300px;
+    width: 30%;
+    min-width: 200px;
     height: auto;
     box-shadow: 3px 3px 10px lightblue;
     position: relative;
+}
+
+.product-image>img:hover{
+    width: 473px;
+    margin-right: 1rem;
 }
 
 .thumbnail-container {
@@ -506,7 +510,7 @@ tbody>tr:nth-child(even):hover {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    overflow: break-word;
+    word-break: break-all;
 }
 
 .Back_Products {
@@ -541,7 +545,7 @@ tbody>tr:nth-child(even):hover {
     color: #F8F9FA;
     padding: 0.3rem;
     border-radius: 5px;
-    width: 50%;
+    width: 30%;
     border-color: #F8F9FA;
     box-shadow: 3px 3px 5px;
     cursor: pointer;
@@ -568,6 +572,8 @@ tbody>tr:nth-child(even):hover {
     color: #6C757D;
     margin-right: 1rem;
 }
+
+
 
 
 /* -----------------------------------------------Footer Section ---------------------------------------------*/

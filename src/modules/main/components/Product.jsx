@@ -2,6 +2,8 @@ import { BsArrowLeft } from "react-icons/bs";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
+import InnerImageZoom from 'react-inner-image-zoom';
+import 'react-inner-image-zoom/lib/styles.min.css';
 import { convertRawImageToURL } from "../../../modules/main/helpers/convertRawImageToURL";
 import { toast } from 'react-toastify';
 
@@ -125,9 +127,19 @@ const Product = (props) => {
                     {/* Product images View */}
                     <div className="product-image-section">
                         <div className="product-image">
-                            <img src={convertRawImageToURL(showimage)} onLoad={(e) => {
-                                URL.revokeObjectURL(e.target.src)
-                            }} alt="product-image" />
+
+                            <img
+                                src={convertRawImageToURL(showimage)}
+                                onLoad={(e) => {
+                                    URL.revokeObjectURL(e.target.src)
+                                }} alt="product-image" />
+
+                            {/* <InnerImageZoom
+                                src={convertRawImageToURL(showimage)} zoomScale={2} zoomType="hover"
+                                zoomSrc={convertRawImageToURL(showimage)}
+                                onLoad={(e) => {
+                                    URL.revokeObjectURL(e.target.src)
+                                }} alt="product-image" hasSpacer={false} /> */}
                         </div>
 
                         {/* thumbnail for product views  */}
