@@ -11,6 +11,7 @@ const PricingPanel = () => {
         discount_off: ""
     });
 
+
     const getPricing = () => {
         fetch("http://localhost:3001/pricing/get", {
             credentials: "include"
@@ -24,8 +25,33 @@ const PricingPanel = () => {
         getPricing();
     }, [])
 
+    const handleSubmit = () => {
+        fetch("http://localhost:3001/pricing/add", {
+            method: "post",
+            credentials: "include",
+            headers: {
+                "content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                charges: pricing.shipping_charges,
+                discount: pricing.discount_off
+            })
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data?.message === "Pricing Updated" || data?.message === "Pricing Added") {
+                    toast.success(data?.message);
+                } else {
+                    throw new Error(data?.message);
+                }
+            })
+            .catch((err) => toast.error(err.message))
+    }
+
     return (
-        
+
         <div className="admin-dashboard"
             style={
                 {
@@ -35,7 +61,7 @@ const PricingPanel = () => {
                     padding: '1rem',
                     width: "fit-Content"
                 }}>
-            
+
             {/* order summary */}
             <div className="order-summary" >
                 <h3>Pricing  Set</h3>
@@ -53,30 +79,48 @@ const PricingPanel = () => {
                     </div>
                 </div>
 
-                {/* <div style={{ display: "flex", gap: "12rem", padding: "1rem" }}>
-                    <span>Total</span>
-                    <span>₹{Math.round(calculateSubtotal()) + gst + 50}</span>
-                </div> */}
             </div>
 
-            {/* < table >
-                <thead>
-                    <tr>
-                       
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody style={{ overflowY: "hidden" }}>
-                    <tr>
-                       
-                        <td>
-                            <img src={Pen}
-                                style={{ width: "25px", height: "25px", marginLeft: "5px", cursor: "pointer" }} />
-                            <span>Edit</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table > */}
+
+            <div
+                style={{
+                    background: "white",
+                    padding: "20px",
+                    borderRadius: "12px",
+                    width: "fit-Content",
+                    maxHeight: "90vh",
+                    overflowY: "auto",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    marginTop: "1rem"
+                }}>
+
+                <form>
+                    {/* Shipping Charges */}
+                    <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                        <label htmlFor="shipping_charges" style={{ width: "80px", fontWeight: "500" }}>Shipping Charges <span style={{ color: "red" }}>*</span></label>
+                        <input id="shipping_charges" type="text" placeholder="Charges" required
+                            value={pricing.shipping_charges}
+                            onChange={(e) => { setPricing({ ...pricing, shipping_charges: e.target.value }) }}
+                            style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }} />
+                    </div>
+
+                    {/* Category */}
+                    <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+                        <label htmlFor="discount_off" style={{ width: "80px", fontWeight: "500" }}>Discount </label>
+                        <input id="discount_off" type="text" placeholder="Discount" required
+                            value={pricing.discount_off}
+                            onChange={(e) => { setPricing({ ...pricing, discount_off: e.target.value }) }}
+                            style={{ padding: "8px 10px", borderRadius: "6px", border: "1px solid #ccc", width: "290px" }} />
+                    </div>
+
+                </form>
+
+                <button className="cart-button" onClick={handleSubmit}
+                    style={{ padding: '0.3rem', width: '20%', border: "none" }}
+                >Update</button>
+
+            </div>
+
         </div>
     )
 }

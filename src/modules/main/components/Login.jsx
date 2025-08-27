@@ -92,7 +92,6 @@ function Login() {
     })
       .then((response) => {
         if (response.status === 200) {
-         
           navigate("/", { replace: true }); // redirect to home page and prevent go back to login page
         }
 
