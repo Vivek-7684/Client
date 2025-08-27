@@ -32,30 +32,37 @@ const Cart = (props) => {
         }, 0))
     }
 
-    console.log(calculateSubtotal());
     // console.log(calculateSubtotal() * Number(pricing.discount_off));
 
     const calculateDiscount = () => {
+        let discount;
         const subtotal = calculateSubtotal();
-        const discount = Number(subtotal * Number(pricing.discount_off)) / 100; // % discount
-        return discount; // discounted subtotal
+        if (Number(pricing?.discount_off) > 0) {
+            discount = Number(subtotal * Number(pricing?.discount_off)) / 100; // % discount
+        }
+        return discount ?? 0; // discounted subtotal
     }
 
     // calculate discounted Subtotal
     const calculateDiscountedSubTotal = () => {
+        let discount;
         const subtotal = calculateSubtotal();
-        const discount = Number(subtotal * Number(pricing.discount_off)) / 100; // % discount
-        return subtotal - discount; // discounted subtotal
+        if (Number(pricing?.discount_off) > 0) {
+            discount = Number(subtotal * Number(pricing?.discount_off)) / 100; // % discount
+        }
+
+        return subtotal - (discount ?? 0); // discounted subtotal
     };
 
 
-    console.log(calculateDiscountedSubTotal());
     // 18 % gst on discounted Subtotal + shipping Charges 
-    const gst = Math.round(((calculateDiscountedSubTotal() + Number(pricing.shipping_charges)) * (18) / (100)));
+    let gst = 0;
 
-    console.log(gst);
+    gst = Number(pricing?.shipping_charges) > 0 ?
+        Math.round(((calculateDiscountedSubTotal() + Number(pricing?.shipping_charges)) * (18) / (100))) :
+        Math.round(((calculateDiscountedSubTotal()) * (18) / (100)));
+
     // const gst = Math.round((calculateSubtotal() * (18)) / (100));
-
 
     const loadCart = () => {
         fetch(`http://localhost:3001/cart/getProductsInCart`, {
@@ -85,7 +92,7 @@ const Cart = (props) => {
             credentials: "include"
         })
             .then((response) => response.json())
-            .then((data) => setPricing(data[0]))
+            .then((data) => setPricing(data.result[0]))
             .catch((err) => toast.error(err.message))
 
     }
@@ -243,7 +250,7 @@ const Cart = (props) => {
                                     <div style={{ display: "flex", gap: "5rem", padding: "1rem", width: "350px" }}>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "2.2rem" }}>
                                             <span>Subtotal</span>
-                                            <span>Discount off {pricing.discount_off}%</span>
+                                            <span>Discount off {pricing?.discount_off}%</span>
                                             <span>Shipping Charges</span>
                                             <span>GST(18%)</span>
                                         </div>
@@ -251,7 +258,7 @@ const Cart = (props) => {
                                         <div style={{ display: "flex", flexDirection: "column", gap: "2.3rem" }}>
                                             <span>₹{calculateSubtotal()}</span>
                                             <span><b>-</b>{`₹${calculateDiscount()}`}</span>
-                                            <span>₹{pricing.shipping_charges}</span>
+                                            <span>₹{pricing?.shipping_charges}</span>
                                             <span>₹{gst}</span>
                                         </div>
                                     </div>
@@ -260,7 +267,7 @@ const Cart = (props) => {
 
                                     <div style={{ display: "flex", gap: "11rem", padding: "1rem" }}>
                                         <h4>Total</h4>
-                                        <h4>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing.shipping_charges)}</h4>
+                                        <h4>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing?.shipping_charges)}</h4>
                                     </div>
                                 </div>
                             </>
