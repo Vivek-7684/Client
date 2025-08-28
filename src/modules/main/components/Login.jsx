@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import validator from "validator";
 import passwordValidator from "password-validator";
 import { ToastContainer, toast } from "react-toastify";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -41,6 +42,7 @@ function Login() {
       if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
       else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
       else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
+      else if (e.target.value.includes(" ")) { SetError({ name: "email", message: "Email should not contain spaces" }); }
       else { SetError({ name: "email", message: "" }) }
 
       setClearSpace(e);
@@ -67,12 +69,12 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(loginData.email.trim() === '') {
+    if (loginData.email.trim() === '') {
       toast.error("The email field cannot be left blank. Kindly provide a valid email address.");
       return false;
     }
 
-    else if(loginData.password.trim() === '') {
+    else if (loginData.password.trim() === '') {
       toast.error("Password field cannot be empty. Kindly enter your password.");
       return false
     }

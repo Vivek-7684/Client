@@ -39,7 +39,8 @@ const Header = (props) => {
                 if (data.redirect) {
                     toast.success("You’ve logged out successfully.");
                     setTimeout(() => {
-                        Navigate(data.redirect);
+                        Navigate(data.redirect,
+                            { replace: true });
                     }, 2000);
 
                 }
@@ -93,7 +94,7 @@ const Header = (props) => {
                 return response.json();
             })
             .then((data) => {
-                if (data?.message ) {
+                if (data?.message) {
                     console.log("user not found");
                     throw new Error(data.message);
                 }

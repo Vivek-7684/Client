@@ -81,13 +81,21 @@ function Register() {
 
       // setClearSpace(e);
     } else if (e.target.name === "email") {
+
       if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
+
       else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
+
       else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
+
+      else if (e.target.value.includes(" ")) { SetError({ name: "email", message: "Email should not contain spaces" }); }
+
       else { SetError({ name: "email", message: "" }) }
 
       // setClearSpace(e);
-    } else if (
+    } 
+    
+    else if (
       e.target.name === "password" &&
       !passwordSchema.validate(e.target.value)
     ) {
