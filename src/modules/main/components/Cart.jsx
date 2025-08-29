@@ -22,6 +22,9 @@ const Cart = (props) => {
         discount_off: ""
     })
 
+    // coupon
+    const [coupon, setCoupon] = useState([]);
+
     // storing function
     const navigate = useNavigate();
 
@@ -100,6 +103,27 @@ const Cart = (props) => {
     useEffect(() => {
         getPricing();
     }, [])
+
+    const getCoupon = () => {
+
+        fetch("http://localhost:3001/coupon/getCoupon")
+
+            .then((response) => response.json())
+
+            .then((data) => {
+                setCoupon(data);
+            })
+
+            .catch((err) => toast.error(err.message))
+    }
+
+    useEffect(() => {
+        getCoupon();
+    }, []);
+
+    console.log(coupon);
+
+
 
     const addToCart = (productId, quantity) => {
         return fetch("http://localhost:3001/cart/addProductToCart", {
@@ -249,14 +273,14 @@ const Cart = (props) => {
                                     <hr></hr>
 
                                     <div style={{ display: "flex", gap: "5rem", padding: "1rem", width: "350px" }}>
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "2.2rem" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "1.3rem" }}>
                                             <span>Subtotal</span>
                                             <span>Discount off {pricing?.discount_off}%</span>
                                             <span>Shipping Charges</span>
                                             <span>GST(18%)</span>
                                         </div>
 
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "2.3rem" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "1.3rem" }}>
                                             <span>₹{calculateSubtotal()}</span>
                                             <span><b>-</b>{`₹${calculateDiscount()}`}</span>
                                             <span>₹{pricing?.shipping_charges}</span>
@@ -270,7 +294,52 @@ const Cart = (props) => {
                                         <h4>Total</h4>
                                         <h4>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing?.shipping_charges)}</h4>
                                     </div>
+
+                                    <hr></hr>
+
+                                    {/* coupon  */}
+                                    <div
+                                        style={{
+                                            marginLeft: "30px",
+                                            padding: "1rem",
+                                        }}>
+                                        <input
+                                            style={{ width: "100px", padding: "0.2rem" }}
+                                        />
+                                        <button
+                                            style={{
+                                                marginLeft: "15px",
+                                                backgroundColor: "black",
+                                                color: "#F8F9FA",
+                                                padding: "0.2rem",
+                                                borderRadius: "5px",
+                                                width: "35%",
+                                                borderColor: "#F8F9FA",
+                                                boxShadow: "3px 3px 5px",
+                                                cursor: "pointer"
+                                            }}>Apply Coupon</button>
+                                    </div>
+
+                                    <hr></hr>
+                                    {/* Coupon List */}
+
+                                    {
+                                        coupon.result.map((data) => {
+                                            return (
+                                                <div key={data.id} 
+                                                style={{display:"flex"}}
+                                                >
+                                                    <div>{data.couponName}</div>
+                                                    <div>{data.minPrice}</div>
+                                                     <div>{data.offer}</div>
+                                                </ div>
+                                            )
+                                        })
+                                    }
+
+
                                 </div>
+
                             </>
                             :
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
@@ -281,7 +350,7 @@ const Cart = (props) => {
                             </div>}
 
                 </div>
-            </SkeletonTheme>
+            </SkeletonTheme >
 
         </>
 

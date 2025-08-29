@@ -151,7 +151,7 @@ const PricingPanel = () => {
                         maxHeight: "90vh",
                         overflowY: "auto",
                         boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                        marginTop: "1rem"
+                        marginTop: "4.3rem"
                     }}>
 
                     <h3>Set Pricing </h3>
@@ -193,9 +193,9 @@ const PricingPanel = () => {
                 style={
                     {
                         position: "absolute",
-                        left: "460",
+                        left: "410",
                         top: "20",
-                        padding: '1rem',
+                        padding: '0.7rem',
                         width: "fit-Content"
                     }}>
                 <div
@@ -215,7 +215,7 @@ const PricingPanel = () => {
 
                     <form>
                         {/* Coupon Name */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "15px", marginTop: "13px" }}>
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "12px", marginTop: "13px" }}>
                             <label htmlFor="couponName" style={{ width: "80px", fontWeight: "500" }}>Name
                                 <span style={{ color: "red" }}>*</span></label>
                             <input id="couponName" placeholder="Coupon Name "
@@ -226,7 +226,7 @@ const PricingPanel = () => {
                         </div>
 
                         {/* Min Price */}
-                        <div style={{ display: "flex", alignItems: "center", marginBottom: "18px" }}>
+                        <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
                             <label htmlFor="minPrice" style={{ width: "80px", fontWeight: "500" }}>Min Price
                                 <span style={{ color: "red" }}>*</span>
                             </label>
