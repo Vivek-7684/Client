@@ -313,7 +313,8 @@ const ProductPanel = () => {
                             <td>{index + 1}</td>
                             <td>{product.title}</td>
                             <td><img src={convertRawImageToURL(product?.image?.data)}
-                                style={{ width: "75px", height: "75px", cursor: "pointer" }}
+                                style={{ width: "75px", height: "75px",
+                                     cursor: "pointer",  wordBreak: "break-all" }}
                                 onLoad={(e) => { URL.revokeObjectURL(e.target.src) }}
                                 onClick={() => navigate(`/Product?id=${product.id}`)} /></td>
                             <td>{product.categories}</td>
@@ -332,6 +333,8 @@ const ProductPanel = () => {
                     ))}
                 </tbody>
             </table>
+
+            
         </div>
     );
 };
