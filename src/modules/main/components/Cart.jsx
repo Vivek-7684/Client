@@ -25,6 +25,10 @@ const Cart = (props) => {
     // coupon
     const [coupon, setCoupon] = useState([]);
 
+    const [checkedCoupon, setCheckedCoupon] = useState({});
+
+    const [showCoupon, setShowCoupon] = useState(false);
+
     // storing function
     const navigate = useNavigate();
 
@@ -66,6 +70,15 @@ const Cart = (props) => {
         Math.round(((calculateDiscountedSubTotal()) * (18) / (100)));
 
     // const gst = Math.round((calculateSubtotal() * (18)) / (100));
+
+    // calculate discount if coupon set
+    const calculateDiscountCoupon = (price, minPrice, offer) => {
+
+        if (price < minPrice) {
+            return;
+        }
+        return (parseInt(Number(price) * (Number(offer) / 100)));
+    }
 
     const loadCart = () => {
         fetch(`http://localhost:3001/cart/getProductsInCart`, {
@@ -120,10 +133,6 @@ const Cart = (props) => {
     useEffect(() => {
         getCoupon();
     }, []);
-
-    console.log(coupon);
-
-
 
     const addToCart = (productId, quantity) => {
         return fetch("http://localhost:3001/cart/addProductToCart", {
@@ -288,17 +297,51 @@ const Cart = (props) => {
                                         </div>
                                     </div>
 
-                                    <hr></hr>
+                                    <div style={{ display: "flex", gap: "5rem", padding: "1rem", width: "350px" }}>
 
-                                    <div style={{ display: "flex", gap: "11rem", padding: "1rem" }}>
-                                        <h4>Total</h4>
-                                        <h4>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing?.shipping_charges)}</h4>
+                                        {/* show subtotal */}
+                                        {
+                                            Object.values(checkedCoupon).length > 0 ?
+                                                <div style={{ display: "flex", flexDirection: "column", padding: "0.2rem" }}>
+                                                    {/* coupon discount off */}
+
+                                                    <div style={{ display: "flex", gap: "11rem" }}>
+                                                        <span>Coupon Discount</span>{"   "}
+                                                        <span>₹{calculateDiscountCoupon((Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing?.shipping_charges)),
+                                                            checkedCoupon.minPrice,
+                                                            checkedCoupon.offer)}</span>
+                                                    </div>
+
+                                                    <div style={{ display: "flex", gap: "14rem", width: "fit-Content" }}>
+                                                        <h4>Total</h4>{"   "}
+                                                        <h4>
+                                                            ₹ {parseInt(
+                                                                Math.round(calculateDiscountedSubTotal()) +
+                                                                gst +
+                                                                Number(pricing?.shipping_charges) -
+                                                                calculateDiscountCoupon(
+                                                                    Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing?.shipping_charges),
+                                                                    checkedCoupon.minPrice,
+                                                                    checkedCoupon.offer
+                                                                )
+                                                            )}
+                                                        </h4>
+
+                                                    </div>
+
+                                                </div> :
+                                                <div style={{ display: "flex", gap: "11rem", padding: "1rem" }}>
+                                                    <h4>Total</h4>
+                                                    <h4>₹{Math.round(calculateDiscountedSubTotal()) + gst + Number(pricing?.shipping_charges)}</h4>
+                                                </div>
+                                        }
+
                                     </div>
 
                                     <hr></hr>
 
                                     {/* coupon  */}
-                                    <div
+                                    {/* <div
                                         style={{
                                             marginLeft: "30px",
                                             padding: "1rem",
@@ -318,25 +361,54 @@ const Cart = (props) => {
                                                 boxShadow: "3px 3px 5px",
                                                 cursor: "pointer"
                                             }}>Apply Coupon</button>
-                                    </div>
+                                    </div> */}
+
+                                    {checkedCoupon.dataId && <><h4 style={{ color: "green" }}>Coupon Applied:</h4><span style={{ color: "green" }}>{checkedCoupon.couponName}</span></>}
 
                                     <hr></hr>
                                     {/* Coupon List */}
 
-                                    {
-                                        coupon.result.map((data) => {
-                                            return (
-                                                <div key={data.id} 
-                                                style={{display:"flex"}}
-                                                >
-                                                    <div>{data.couponName}</div>
-                                                    <div>{data.minPrice}</div>
-                                                     <div>{data.offer}</div>
-                                                </ div>
-                                            )
-                                        })
-                                    }
+                                    {showCoupon ?
+                                        <div style={{ display: "flex", flexDirection: "column", }}>
+                                            <h3 style={{ textAlign: "center", textDecoration: "underline", color: "grey" }} onClick={() => setShowCoupon(false)}>Hide Coupon</h3>
+                                            {
+                                                coupon.result.map((data) => {
+                                                    return (
+                                                        <div style={{ display: "flex", gap: "6rem", padding: "0.3rem" }}>
 
+                                                            <span key={data.id}>
+                                                                <input id={data.couponName} type="checkBox" checked={checkedCoupon.dataId === data.id}
+                                                                    onChange={() => {
+                                                                        if (checkedCoupon.dataId === data.id) {
+                                                                            setCheckedCoupon({});
+                                                                        } else {
+                                                                            // store coupon
+                                                                            setCheckedCoupon({
+                                                                                dataId: data.id,
+                                                                                couponName: data.couponName,
+                                                                                minPrice: data.minPrice,
+                                                                                offer: data.offer
+                                                                            })
+                                                                        }
+                                                                    }} />{" "}
+                                                                <label htmlFor={data.couponName}>{data.couponName}</label>
+                                                            </ span>
+                                                            <div >
+                                                                <div>{data.minPrice}</div>
+                                                            </div>
+                                                            <div >
+                                                                <div>{data.offer}</div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    )
+                                                })
+                                            }
+                                        </div> :
+                                        <h4 style={{ textAlign: "center", textDecoration: "underline" }} onClick={() => setShowCoupon(true)}>
+                                            Show Coupons
+                                        </h4>}
 
                                 </div>
 
