@@ -40,6 +40,8 @@ function App() {
           <Route path="product/?" element={<Product Cart={cartItem} setCart={setCartItem} />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="profile" element={<Profile />} />
+
+          <Route path="Error" element={<Error />}></Route>
         </Route>
       </Routes>
       <ToastContainer />

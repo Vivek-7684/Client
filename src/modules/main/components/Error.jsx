@@ -1,12 +1,16 @@
+import Button from "@mui/material/Button";
+
 const Error = () => {
-    
+
     return (
-        <>
-            <span>404</span>
-            <h4>Page Not Found</h4>
-            <button>Go to Home Page</button>
-        </>
-    );
+        <div>
+            <h5>Hello</h5>
+            <Button variant="contained" size="large" sx={{ bgcolor: "grey", color: "white",m:"300" }}>
+                Submit
+            </Button>
+        </div>
+    )
+
 }
 
 export default Error;

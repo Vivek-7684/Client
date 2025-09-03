@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
-import Delete from "../../../assets/Delete.png";
-import Pen from "../../../assets/pen.png";
+import axios from 'axios';
+import DeleteOutlineTwoToneIcon from '@mui/icons-material/DeleteOutlineTwoTone';
+import {
+    TableContainer,
+    Table, TableHead,
+    TableCell, TableRow, TableBody,
+    Paper, Tooltip, Typography
+} from "@mui/material";
 import { toast } from "react-toastify";
 
 
@@ -21,6 +27,8 @@ const PricingPanel = () => {
         minPrice: "",
         offer: ""
     })
+
+    const [getCoupon, setgetCoupon] = useState([]);
 
     const [showcoupon, setshowCoupon] = useState({    // show coupon 
         couponName: "",
@@ -79,6 +87,40 @@ const PricingPanel = () => {
             })
     }
 
+    const couponAPI = axios.create({
+        baseURL: "http://localhost:3001/coupon",
+    })
+
+    const getCoupons = () => {
+        couponAPI.get('/getCoupon')
+            .then((res) => {
+                setgetCoupon(res.data.result);
+            })
+            .catch((err) => {
+                if (err.message) {
+                    toast.error(err.message);
+                }
+            })
+    }
+
+    useEffect(() => {
+        getCoupons();
+    }, [])
+
+    const deleteCoupon = (id) => {
+        couponAPI.get('/')
+            .then((res) => {
+                setgetCoupon(res.data.result);
+            })
+            .catch((err) => {
+                if (err.message) {
+                    toast.error(err.message);
+                }
+            })
+    }
+
+    console.log(getCoupon);
+
     const AddCoupon = () => {
         fetch("http://localhost:3001/coupon/addCoupon", {
             method: "post",
@@ -99,7 +141,7 @@ const PricingPanel = () => {
                 if (data?.status === 200) {
                     toast.success(data?.message);
                     // update coupon data
-
+                    getCoupons();
                 } else {
                     throw new Error(data?.message);
                 }
@@ -255,6 +297,52 @@ const PricingPanel = () => {
                     >Add</button>
 
                 </div>
+
+                <TableContainer component={Paper} sx={{
+                    p: 1,
+                    bgColor: "primary.main",
+                    boxShadow: "3",
+                    borderRadius: 3,
+                    width: 500,
+                    height: 500,
+                    position: "absolute",
+                    left: "450",
+                    top: "30"
+                }}>
+                    <Typography variant="h5" sx={{ p: 0.3, ml: 20 }} style={{ alignText: "center" }} stickyHeader><b>Coupons</b></Typography>
+                    <Table stickyHeader>
+                        <TableBody>
+                            {
+                                getCoupon.map((coupon) => {
+                                    return (
+                                        <>
+                                            <TableRow>
+                                                <TableCell>{coupon.couponName}</TableCell>
+                                                <TableCell>{coupon.minPrice}</TableCell>
+                                                <TableCell>{coupon.offer}</TableCell>
+                                                <TableCell>
+                                                    <Tooltip title="delete" arrow>
+                                                        <DeleteOutlineTwoToneIcon />
+                                                    </Tooltip>
+                                                </TableCell>
+                                            </TableRow>
+                                        </>
+                                    )
+                                })
+                            }
+                        </TableBody>
+
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Coupon Name</TableCell>
+                                <TableCell>Min Price</TableCell>
+                                <TableCell>Offer</TableCell>
+                                <TableCell>Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
+
+                    </Table>
+                </TableContainer>
 
             </div>
         </>
