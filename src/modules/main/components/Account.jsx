@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import AccountSettingIcon from '../../../assets/Account_Setting_icon.png';
 import defaultUserPic from "../../../assets/profileUser.png";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Dashboard from '../../../assets/dashboard.png';
 import { Link } from 'react-router-dom';
 
@@ -24,9 +25,9 @@ const account = (props) => {
                     <div style={{ textAlign: "center", marginBottom: "1rem" }}>
                         <div>
                             <Link to="/profile" onClick={() => { props.setShowProfile(false) }}
-                                style={{ display: "flex", alignContent: "center", justifyContent: "center", padding: "0.3rem", gap: "5rem" }}>
-                                <img src={AccountSettingIcon} style={{ height: "30px", borderRadius: "50%" }} />
-                                <span className='profile-options'>
+                                style={{ display: "flex", alignContent: "center", justifyContent: "center", padding: "0.2rem", gap: "1rem" }}>
+                                <AccountCircleIcon sx={{ color: "black", fontSize: "35" }} />
+                                <span className='profile-options' style={{ fontSize: "17" }}>
                                     Account Settings
                                 </span>
                             </Link>

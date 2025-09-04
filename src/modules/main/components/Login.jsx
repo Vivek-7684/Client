@@ -20,6 +20,8 @@ function Login() {
 
   const schema = new passwordValidator(); // set schema for validation
 
+  const smallLetterEmail = new passwordValidator();
+
   schema
     .is().min(4)
     .is().max(12)
@@ -27,6 +29,8 @@ function Login() {
     .has().lowercase(1)
     .has().digits(2)
     .has().not().spaces(); // set rules
+
+  smallLetterEmail.has().not().uppercase(); // only small case for email
 
   // prevent white space with first input
   const setClearSpace = (e) => {
@@ -38,11 +42,18 @@ function Login() {
   }
 
   const handleChange = (e) => {
+
     if (e.target.name === "email") {
       if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "@ and .missing" }); }
+
       else if (e.target.value.indexOf('@') === -1) { SetError({ name: "email", message: "@ missing" }) }
+
       else if (e.target.value.indexOf('.') === -1) { SetError({ name: "email", message: "(.) Dot missing" }) }
+
       else if (e.target.value.includes(" ")) { SetError({ name: "email", message: "Email should not contain spaces" }); }
+
+      else if (!smallLetterEmail.validate(e.target.value)) { SetError({ name: "email", message: "Email must be in small letters only" }); }
+      
       else { SetError({ name: "email", message: "" }) }
 
       setClearSpace(e);

@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import logo from "../../../assets/logo.png";
-import LogOut from "../../../assets/LogOut.png";
+import LogOut from "../../../assets/logout.png";
 import Login from "../../../assets/login.png";
 import Signup from "../../../assets/sign_up.png";
 import profilePic from "../../../assets/profileUser.png";
@@ -138,18 +138,25 @@ const Header = (props) => {
                         />
                     </form>
                     {LoggedIn && <div className="navbar-icons">
-                        <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" /></Link>
+                        <Link onClick={LoggedOut}><img src={LogOut} id="logo" className="icons" alt="LogOut" />
+                            <span style={{ fontSize: "10px", display: "block" }}>LogOut</span></Link>
                         <Link to="cart" >
                             <img src={Cart} className="icons" alt="cart" />
                             {/* show total product item in cart*/}
                             <span id="cart-item-count">
                                 {props.Cart.length}
                             </span>
-
+                            <span style={{ fontSize: "10px", display: "block" }}>Cart</span>
                         </Link>
-                        <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" /></Link>
+                        <Link to="/wishList" ><img src={Heart} style={{ fontSize: "20px" }} className="icons" alt="policy" />
+                            <span style={{ fontSize: "10px", display: "block" }}>Wishlist</span>
+                        </Link>
                         <Link to="" onClick={() => { props.setShowProfile(!props.showProfile) }}>
-                            <img src={userProfile ? `data:image/png;base64,${userProfile}` : profilePic} alt="Profile" style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons" />
+                            <img src={userProfile ? `data:image/png;base64,${userProfile}` : profilePic}
+                                alt="Profile"
+                                style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons"
+                            />
+                            <span style={{ fontSize: "10px", display: "block" }}>Profile</span>
                         </Link>
 
                     </div>}

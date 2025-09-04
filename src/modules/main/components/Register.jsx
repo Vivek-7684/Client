@@ -24,6 +24,8 @@ function Register() {
 
   const passwordSchema = new passwordValidator(); // set schema for validation
 
+  const smallLetterEmail = new passwordValidator(); // for email validation
+
   passwordSchema
     .is().min(4, 'minimum 4 character required')
     .is().max(8, 'maximum 8 character password')
@@ -31,6 +33,9 @@ function Register() {
     .has().lowercase(1, 'atleast one lowercase')
     .has().digits(2, 'atleast two digits')
     .has().not().spaces(); // set rules
+
+
+  smallLetterEmail.has().not().uppercase(); // only small case for email
 
   const usernameSchema = yup.object().shape({
     username: yup
@@ -90,11 +95,13 @@ function Register() {
 
       else if (e.target.value.includes(" ")) { SetError({ name: "email", message: "Email should not contain spaces" }); }
 
+      else if (!smallLetterEmail.validate(e.target.value)) { SetError({ name: "email", message: "Email must be in small letters only" }); }
+
       else { SetError({ name: "email", message: "" }) }
 
       // setClearSpace(e);
-    } 
-    
+    }
+
     else if (
       e.target.name === "password" &&
       !passwordSchema.validate(e.target.value)

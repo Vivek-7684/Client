@@ -3,6 +3,7 @@ import * as yup from "yup";
 import passwordValidator from "password-validator";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { FaEdit } from "react-icons/fa";
 import defaultUserPic from "../../../assets/profileUser.png";
 import EditPencil from "../../../assets/edit-pencil.png";
 import saveData from "../../../assets/save-data.png";
@@ -54,6 +55,8 @@ const Profile = () => {
     // password Validation Schema
     const passwordSchema = new passwordValidator(); // set schema for validation
 
+    const smallLetterEmail = new passwordValidator();
+
     passwordSchema
         .is().min(4, 'minimum 4 character required')
         .is().max(8, 'maximum 8 character password')
@@ -61,6 +64,8 @@ const Profile = () => {
         .has().lowercase(1, 'atleast one lowercase')
         .has().digits(2, 'atleast two digits')
         .has().not().spaces(); // set rules
+
+    smallLetterEmail.has().not().uppercase(); // only small case for email
 
     useEffect(() => {
         fetch("http://localhost:3001/profile/user-profile", { credentials: "include" })
@@ -116,8 +121,13 @@ const Profile = () => {
         // Email Validation
         else if (name === "email") {
             if (e.target.value.indexOf('@') === -1 && e.target.value.indexOf('.') === -1) { setError({ name: "email", message: "@ and .missing" }); }
+
             else if (e.target.value.indexOf('@') === -1) { setError({ name: "email", message: "@ missing" }) }
+
             else if (e.target.value.indexOf('.') === -1) { setError({ name: "email", message: "(.) Dot missing" }) }
+
+            else if (!smallLetterEmail.validate(e.target.value)) { setError({ name: "email", message: "Email must be in small letters only" }); }
+
             else { setError({ name: "", message: "" }) }
         }
         // password validation
@@ -220,7 +230,7 @@ const Profile = () => {
             });
 
             if (res.ok) {
-                toast.success(`${field} updated successfully.Please Log In`);
+                toast.success(`${field} updated successfully.`);
                 setEditField(null); // set edit off
                 setOriginalUser(user); // set data for check changes done or not 
                 setTimeout(() => {
@@ -366,7 +376,7 @@ const Profile = () => {
                             }}>Name</legend>
 
                             {editField === "username" ? (
-                                <input type="text" name="username" value={user.username} onChange={handleChange} style={{ font: "500 1rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111" }} />
+                                <input type="text" autoFocus name="username" value={user.username} onChange={handleChange} style={{ font: "500 1rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111" }} />
 
                             ) : (
                                 <p style={{ font: "500 1rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111" }}>{user.username || "N/A"}</p>
@@ -374,8 +384,8 @@ const Profile = () => {
 
                         </fieldset>
                         <div className="edit-option-icons">
-                            <div>
-                                <img src={EditPencil} onClick={() => setEditField("username")} style={{ width: "12px", height: "12px", cursor: "pointer" }} />
+                            <div style={{ cursor: "pointer" }} onClick={() => setEditField("username")}>
+                                <FaEdit size={18} />
                                 {" "}Edit
                             </div>
                             <div>
@@ -403,15 +413,15 @@ const Profile = () => {
 
                             }}>Email</legend>
                             {editField === "email" ? (
-                                <input type="email" name="email" value={user.email} onChange={handleChange} style={{ font: "500 1rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111" }} />
+                                <input type="email" autoFocus name="email" value={user.email} onChange={handleChange} style={{ font: "500 1rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111" }} />
                             ) : (
                                 <p style={{ font: "500 1rem / 1.5 'Helvetica Now Text Medium', Helvetica, Arial, sans-serif", color: "#111111" }}>{user.email || "N/A"}</p>
                             )}
 
                         </fieldset>
                         <div className="edit-option-icons">
-                            <div>
-                                <img src={EditPencil} onClick={() => setEditField("email")} style={{ width: "12px", height: "12px", cursor: "pointer" }} />
+                            <div style={{ cursor: "pointer" }} onClick={() => setEditField("email")}>
+                                <FaEdit size={18} />
                                 {" "}Edit
                             </div>
                             <div>
@@ -439,14 +449,14 @@ const Profile = () => {
 
                         }}>Country</legend>
                         {editField === "country" ? (
-                            <input type="text" name="country" value={user.country} onChange={handleChange} />
+                            <input type="text" autoFocus name="country" value={user.country} onChange={handleChange} />
                         ) : (
                             <p>{user.country || "N/A"}</p>
                         )}
                     </fieldset>
                     <div className="edit-option-icons">
-                        <div>
-                            <img src={EditPencil} onClick={() => setEditField("country")} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
+                        <div style={{ cursor: "pointer" }} onClick={() => setEditField("country")}>
+                            <FaEdit size={18} />
                             {" "}Edit
                         </div>
                         <div>
@@ -470,14 +480,14 @@ const Profile = () => {
 
                         }}>State</legend>
                         {editField === "state" ? (
-                            <input type="text" name="state" value={user.state} onChange={handleChange} />
+                            <input type="text" autoFocus name="state" value={user.state} onChange={handleChange} />
                         ) : (
                             <p>{user.state || "N/A"}</p>
                         )}
                     </fieldset>
                     <div className="edit-option-icons">
-                        <div>
-                            <img src={EditPencil} onClick={() => setEditField("state")} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
+                        <div onClick={() => setEditField("state")} style={{ cursor: "pointer" }}>
+                            <FaEdit size={18} />
                             {" "}Edit
                         </div>
                         <div>
@@ -501,14 +511,14 @@ const Profile = () => {
 
                         }}>City</legend>
                         {editField === "city" ? (
-                            <input type="text" name="city" value={user.city} onChange={handleChange} />
+                            <input type="text" autoFocus name="city" value={user.city} onChange={handleChange} />
                         ) : (
                             <p>{user.city || "N/A"}</p>
                         )}
                     </fieldset>
                     <div className="edit-option-icons">
-                        <div>
-                            <img src={EditPencil} onClick={() => setEditField("city")} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
+                        <div onClick={() => setEditField("city")} style={{ cursor: "pointer" }} >
+                            <FaEdit size={18} />
                             {" "}Edit
                         </div>
                         <div>
@@ -539,6 +549,7 @@ const Profile = () => {
                         <div style={{ position: "relative" }}>
                             <input
                                 type={showOldPassword ? "text" : "password"}
+                                autoFocus
                                 name="oldPassword"
                                 value={user.oldPassword}
                                 onChange={(e) => handleChange(e)}
@@ -590,6 +601,7 @@ const Profile = () => {
                             <input
                                 type={showNewPassword ? "text" : "password"}
                                 name="newPassword"
+                                autoFocus
                                 value={user.newPassword}
                                 onChange={(e) => handleChange(e)}
                             />
@@ -639,6 +651,7 @@ const Profile = () => {
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
+                                autoFocus
                                 value={user.confirmPassword}
                                 onChange={(e) => handleChange(e)}
                             />
@@ -673,8 +686,8 @@ const Profile = () => {
 
                     {/* Edit + Save Icons */}
                     <div className="edit-option-icons">
-                        <div>
-                            <img src={EditPencil} onClick={() => setEditField("newPassword")} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
+                        <div onClick={() => setEditField("newPassword")} style={{ cursor: "pointer" }}>
+                            <FaEdit size={18} />
                             {" "}Edit
                         </div>
                         <div>

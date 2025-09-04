@@ -5,7 +5,7 @@ import {
     TableContainer,
     Table, TableHead,
     TableCell, TableRow, TableBody,
-    Paper, Tooltip, Typography
+    Paper, Tooltip, Typography, Modal, Button
 } from "@mui/material";
 import { toast } from "react-toastify";
 
@@ -35,6 +35,10 @@ const PricingPanel = () => {
         minPrice: "",
         offer: ""
     })
+
+    const [open, setOpen] = useState(false); // open delete pop up
+
+    const [deleteCouponId, setdeleteCouponId] = useState(null);
 
     const getPricing = () => {
         fetch("http://localhost:3001/pricing/get", {
@@ -108,7 +112,7 @@ const PricingPanel = () => {
     }, [])
 
     const deleteCoupon = (id) => {
-        couponAPI.get('/')
+        couponAPI.delete(`/deleteCoupon/${id}`)
             .then((res) => {
                 setgetCoupon(res.data.result);
             })
@@ -322,7 +326,10 @@ const PricingPanel = () => {
                                                 <TableCell>{coupon.offer}</TableCell>
                                                 <TableCell>
                                                     <Tooltip title="delete" arrow>
-                                                        <DeleteOutlineTwoToneIcon />
+                                                        <DeleteOutlineTwoToneIcon onClick={() => {
+                                                            setdeleteCouponId(coupon.id);
+                                                            setOpen(true);
+                                                        }} />
                                                     </Tooltip>
                                                 </TableCell>
                                             </TableRow>
@@ -343,6 +350,14 @@ const PricingPanel = () => {
 
                     </Table>
                 </TableContainer>
+
+                {/* <Modal
+                    open={open} onClose={() => { setOpen(false) }}
+                    aria-labelledby="Delete"
+                >
+                    <Button onClick={() => deleteCoupon()}>Delete</Button>
+                    <Button>Cancel</Button>
+                </Modal> */}
 
             </div>
         </>
