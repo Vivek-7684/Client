@@ -111,12 +111,9 @@ const Card = (props) => {
                 <main id="main">
                     {loading ?
                         <>
-                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
-                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
-                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
-                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
-                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
-                            <Skeleton count={5} width={300} height={10} style={{ marginBottom: "10px" }} />
+                            <Skeleton count={5} width={300} height={30} style={{ marginBottom: "10px" }} />
+                            <h3>Loading...</h3>
+                            <Skeleton count={5} width={300} height={30} style={{ marginBottom: "10px" }} />
                         </>
                         : (filteredData.length > 0) ?
                             filteredData.slice(0, visible).map((product) => {
