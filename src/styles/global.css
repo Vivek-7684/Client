@@ -443,7 +443,7 @@ tbody>tr:nth-child(even):hover {
 
 .product-image>img {
     width: 30%;
-    min-width: 200px;
+    min-width: 400px;
     height: auto;
     box-shadow: 3px 3px 10px lightblue;
     position: relative;

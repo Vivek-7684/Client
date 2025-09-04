@@ -175,13 +175,13 @@ const Card = (props) => {
                                 <h2>No Products Found</h2>
                                 <p>Try changing the filters or search term.</p>
                             </div>)}
-                    {!loading && <button
+                    {!loading && filteredData.length > 0 && <button
                         style={{
                             display: "block",
-                            width: "100%",
+                            width: "40%",
                             height: "fit-content",
                             padding: "10px",
-                            margin: "20px 20px 20px 20px",
+                            margin: "80px 20px 20px 20px",
                             backgroundColor: "#f8f7f4",
                             borderRadius: "10px",
                             color: "#000000",

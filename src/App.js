@@ -22,6 +22,11 @@ function App() {
 
   const [showProfile, setShowProfile] = useState(false);
 
+  // profile image
+  const [userProfile, setUserProfile] = useState("");
+
+  // console.log(userProfile);
+
   return (
     <div className="container">
 
@@ -30,7 +35,16 @@ function App() {
         <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/"
-          element={<Header Cart={cartItem} Wishlist={WishlistItem} setCart={setCartItem} showProfile={showProfile} setShowProfile={setShowProfile} />}>
+          element={
+            <Header Cart={cartItem}
+              Wishlist={WishlistItem}
+              setCart={setCartItem}
+              showProfile={showProfile}
+              setShowProfile={setShowProfile}
+              userProfile={userProfile}
+              setUserProfile={setUserProfile} />}
+        >
+
           <Route path=":category?" element={<>
             <Sidebar />
             <Card WishlistItem={WishlistItem} setWishlistItem={setWishlistItem} />
@@ -39,7 +53,7 @@ function App() {
           <Route path="wishlist" element={<WishList WishlistItem={WishlistItem} setWishlistItem={setWishlistItem} setCart={setCartItem} />} />
           <Route path="product/?" element={<Product Cart={cartItem} setCart={setCartItem} />} />
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile" element={<Profile userProfile={userProfile} setUserProfile={setUserProfile} />} />
 
           <Route path="Error" element={<Error />}></Route>
         </Route>

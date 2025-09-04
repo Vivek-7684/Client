@@ -2,7 +2,6 @@ import { BsArrowLeft } from "react-icons/bs";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/styles.min.css';
 import { convertRawImageToURL } from "../../../modules/main/helpers/convertRawImageToURL";
 import { toast } from 'react-toastify';

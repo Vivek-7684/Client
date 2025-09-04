@@ -5,14 +5,13 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import defaultUserPic from "../../../assets/profileUser.png";
-import EditPencil from "../../../assets/edit-pencil.png";
 import saveData from "../../../assets/save-data.png";
 import backtick from "../../../assets/back-left.png";
 import uploadImage from "../../../assets/upload_image.png";
 import eye from "../../../assets/eye.png";
 import eyeHide from "../../../assets/eyeHide.png";
 
-const Profile = () => {
+const Profile = (props) => {
 
     const [user, setUser] = useState({    // store userData
         username: "",
@@ -92,7 +91,7 @@ const Profile = () => {
                     profile_image: `data:image/png;base64,${data.image}` || ""
                 });
 
-                setProfileImage(data.image ? `data:image/png;base64,${data.image}` : "");                                      // set OriginalUserData
+                props.setUserProfile(data.image ? `${data.image}` : "");                                      // set OriginalUserData
                 console.log(data);
             })
             .catch(() => toast.error("It's not your issue.Server Side Error"));
@@ -175,7 +174,9 @@ const Profile = () => {
 
             setUser((prev) => ({ ...prev, profile_image: imageData }));
 
-            setProfileImage(imageData);
+            props.setUserProfile(imageData.split(",")[1]);
+
+            console.log(imageData);
 
             setEditField("image");
         };
@@ -198,7 +199,7 @@ const Profile = () => {
             case "city":
                 return user.city !== originalUser.city;
             case "image":
-                return profileImage !== originalUser.profile_image;
+                return props.userProfile !== originalUser.profile_image;
             case "updatedPassword":
                 return user.oldPassword !== user.newPassword;
 
@@ -264,7 +265,9 @@ const Profile = () => {
                 toast.success("Profile Image updated successfully!");
                 setEditField(null);  // set edit off
                 setOriginalUser(user); // updated data store in original state
-                setProfileImage(user.profile_image);// set updated image
+
+                props.setUserProfile(user.profile_image.split(",")[1]);// set updated image
+
             } else {
                 toast.error("Failed to upload image");
             }
@@ -334,7 +337,8 @@ const Profile = () => {
                 <div style={{ display: "flex", flexDirection: "column" }}>
 
                     <img
-                        src={profileImage ? profileImage : defaultUserPic}
+                        src={props.userProfile ?
+                            `data:image/png;base64,${props.userProfile}` : defaultUserPic}
                         alt="Profile Image"
                         style={{ width: "80px", height: "80px", borderRadius: "50%", marginBottom: "0.9rem" }}
                     />

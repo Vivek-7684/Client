@@ -18,8 +18,6 @@ const Header = (props) => {
 
     const [LoggedIn, setLoggedIn] = useState(false);
 
-    const [userProfile, setUserProfile] = useState("");
-
     const [userData, setUserData] = useState();
 
     const Navigate = useNavigate();
@@ -94,17 +92,25 @@ const Header = (props) => {
                 return response.json();
             })
             .then((data) => {
+
                 if (data?.message) {
                     console.log("user not found");
                     throw new Error(data.message);
                 }
-                setUserProfile(data.image);
+
+                props.setUserProfile(data.image);
+
                 setUserData(data);
             })
             .catch((err) => {
                 toast.error(err.message);
             })
     }, []);
+
+    useEffect(() => {
+        console.log("Header image updated", props.userProfile);
+    }, [props.userProfile]);
+
 
     return (
         <>
@@ -114,7 +120,7 @@ const Header = (props) => {
                     {props.showProfile &&
                         <Account
                             setShowProfile={props.setShowProfile}
-                            userProfile={userProfile}
+                            userProfile={props.userProfile}
                             userData={userData}
                         />}
 
@@ -152,7 +158,7 @@ const Header = (props) => {
                             <span style={{ fontSize: "10px", display: "block" }}>Wishlist</span>
                         </Link>
                         <Link to="" onClick={() => { props.setShowProfile(!props.showProfile) }}>
-                            <img src={userProfile ? `data:image/png;base64,${userProfile}` : profilePic}
+                            <img src={props.userProfile ? `data:image/png;base64,${props.userProfile}` : profilePic}
                                 alt="Profile"
                                 style={{ width: "30px", height: "30px", cursor: "pointer", borderRadius: "15px" }} className="icons"
                             />
