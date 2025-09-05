@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import defaultUserPic from "../../../assets/profileUser.png";
-import saveData from "../../../assets/save-data.png";
 import backtick from "../../../assets/back-left.png";
 import uploadImage from "../../../assets/upload_image.png";
 import eye from "../../../assets/eye.png";
@@ -199,7 +198,7 @@ const Profile = (props) => {
             case "city":
                 return user.city !== originalUser.city;
             case "image":
-                return props.userProfile !== originalUser.profile_image;
+                return originalUser.profile_image !== `data:image/png;base64,${props.userProfile}`;
             case "updatedPassword":
                 return user.oldPassword !== user.newPassword;
 
@@ -207,109 +206,90 @@ const Profile = (props) => {
 
     };
 
-    const saveChanges = async (field) => {
-
-        if (!isDataEdited(field)) {
-            toast.info("No changes made");
-            return;
-        }
-
-        if (error.name) {
-            return;
-        }
-
-        let bodyData = {};
-
-        bodyData = { [field]: user[field] };
-
+    const handleSubmit = async () => {
         try {
-            const res = await fetch("http://localhost:3001/profile/edit-profile", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify(bodyData)
-            });
+            const updatedFields = []; // <-- yaha store karenge konsa field update hua
 
-            if (res.ok) {
-                toast.success(`${field} updated successfully.`);
-                setEditField(null); // set edit off
-                setOriginalUser(user); // set data for check changes done or not 
-                setTimeout(() => {
-                    if (field === "email") {
-                        navigate("/login");
-                    }
-                }, 400)
+            // 🔹 Profile fields (username, email, country, state, city)
+            if (isDataEdited("username") || isDataEdited("email") || isDataEdited("country") || isDataEdited("state") || isDataEdited("city")) {
 
-            } else {
-                toast.error("Failed to update profile");
-            }
-        } catch (err) {
-            toast.error("Something went wrong");
-        }
-    };
+                const bodyData = {
+                    username: user.username,
+                    email: user.email,
+                    country: user.country,
+                    state: user.state,
+                    city: user.city,
+                };
 
-    const saveImage = async () => {
-        if (!isDataEdited("image")) {
-            toast.info("No changes made");
-            return;
-        }
-        try {
-            const res = await fetch("http://localhost:3001/profile/upload-profile-image", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ profile_image: user.profile_image })
-            });
+                const res = await fetch("http://localhost:3001/profile/edit-profile", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(bodyData),
+                });
 
-            if (res.ok) {
-                toast.success("Profile Image updated successfully!");
-                setEditField(null);  // set edit off
-                setOriginalUser(user); // updated data store in original state
-
-                props.setUserProfile(user.profile_image.split(",")[1]);// set updated image
-
-            } else {
-                toast.error("Failed to upload image");
-            }
-
-        } catch (err) {
-            toast.error("Something went wrong");
-        }
-    };
-
-    const savePassword = () => {
-
-        const passwordData = {
-            oldPassword: user.oldPassword,
-            newPassword: user.newPassword,
-            confirmPassword: user.confirmPassword
-        }
-
-        fetch("http://localhost:3001/profile/update-password", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(passwordData)
-        })
-            .then(async (res) => {
-                if (res.status === 200) {
-                    toast.success("Password updated successfully!");
-                    setUser(prev => ({ ...prev, oldPassword: "", newPassword: "", confirmPassword: "" }));  // clear password fields
-                    setEditField(null);
-                    return;
+                if (res.ok) {
+                    if (isDataEdited("username")) updatedFields.push("Name");
+                    if (isDataEdited("email")) updatedFields.push("Email");
+                    if (isDataEdited("country")) updatedFields.push("Country");
+                    if (isDataEdited("state")) updatedFields.push("State");
+                    if (isDataEdited("city")) updatedFields.push("City");
                 }
-                return await res.json();
-            })
-            .then((data) => {
+            }
 
-                toast.error(data.message);
-            })
-            .catch((err) => { console.log(err.message) });
+            // 🔹 Profile Image
+            if (isDataEdited("image")) {
+                const res = await fetch("http://localhost:3001/profile/upload-profile-image", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ profile_image: user.profile_image }),
+                });
 
+                if (res.ok) updatedFields.push("Profile Image");
+            }
 
+            // 🔹 Password
+            if (isDataEdited("updatedPassword")) {
+                const passwordData = {
+                    oldPassword: user.oldPassword,
+                    newPassword: user.newPassword,
+                    confirmPassword: user.confirmPassword,
+                };
 
+                fetch("http://localhost:3001/profile/update-password", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(passwordData),
+                })
+                    .then(async (res) => {
+                        if (res.status === 200) {
+                            toast.success("Password updated successfully!");
+                            setUser(prev => ({ ...prev, oldPassword: "", newPassword: "", confirmPassword: "" }));  // clear password fields
+                            setEditField(null);
+                            return;
+                        }
+                        return await res.json();
+                    })
+                    .then((data) => {
+
+                        toast.error(data.message);
+                    })
+                    .catch((err) => { console.log(err.message) });
+            }
+
+            // ✅ Final Toast (ek hi baar show hoga)
+            if (updatedFields.length > 0) {
+                toast.success(`Profile updated: ${updatedFields.join(", ")}`);
+
+                setOriginalUser({ ...user });// update after edit
+            }
+
+        } catch (err) {
+            toast.error("Something went wrong");
+        }
     };
-
 
     return (
         <div className="profile-form" style={{ position: "relative" }}>
@@ -358,17 +338,6 @@ const Profile = (props) => {
                         style={{ display: "none" }}
                     />
 
-                    <div>
-                        {editField === "image" && isDataEdited("image") && (
-                            <span onClick={saveImage} style={{ width: "12px", height: "12px", cursor: "pointer" }}>
-                                <img src={saveData} style={{ width: "12px", height: "12px", cursor: "pointer" }} />
-                                {" "}<span>Save</span>
-                            </span>
-
-                        )}
-
-                    </div>
-
                 </div>
 
                 {/* Username */}
@@ -391,16 +360,6 @@ const Profile = (props) => {
                             <div style={{ cursor: "pointer" }} onClick={() => setEditField("username")}>
                                 <FaEdit size={18} />
                                 {" "}Edit
-                            </div>
-                            <div>
-                                {editField === "username" && isDataEdited("username") && (
-                                    <span>
-                                        <img src={saveData} onClick={() => saveChanges("username")} style={{ width: "12px", height: "12px", cursor: "pointer" }} />
-                                        {" "}<span>Save</span>
-                                    </span>
-
-                                )}
-
                             </div>
                         </div>
                     </div>
@@ -427,14 +386,6 @@ const Profile = (props) => {
                             <div style={{ cursor: "pointer" }} onClick={() => setEditField("email")}>
                                 <FaEdit size={18} />
                                 {" "}Edit
-                            </div>
-                            <div>
-                                {editField === "email" && isDataEdited("email") && (
-                                    <span>
-                                        <img src={saveData} onClick={() => saveChanges("email")} style={{ width: "12px", height: "12px", cursor: "pointer" }} />
-                                        {" "}<span>Save</span>
-                                    </span>
-                                )}
                             </div>
                         </div>
                     </div>
@@ -463,14 +414,6 @@ const Profile = (props) => {
                             <FaEdit size={18} />
                             {" "}Edit
                         </div>
-                        <div>
-                            {editField === "country" && isDataEdited("country") && (
-                                <span>
-                                    <img src={saveData} onClick={() => saveChanges("country")} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
-                                    {" "}<span>Save</span>
-                                </span>
-                            )}
-                        </div>
                     </div>
                 </div>
 
@@ -494,14 +437,6 @@ const Profile = (props) => {
                             <FaEdit size={18} />
                             {" "}Edit
                         </div>
-                        <div>
-                            {editField === "state" && isDataEdited("state") && (
-                                <span>
-                                    <img src={saveData} onClick={() => saveChanges("state")} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
-                                    {" "}<span>Save</span>
-                                </span>
-                            )}
-                        </div>
                     </div>
                 </div>
 
@@ -524,14 +459,6 @@ const Profile = (props) => {
                         <div onClick={() => setEditField("city")} style={{ cursor: "pointer" }} >
                             <FaEdit size={18} />
                             {" "}Edit
-                        </div>
-                        <div>
-                            {editField === "city" && isDataEdited("city") && (
-                                <span>
-                                    <img src={saveData} onClick={() => saveChanges("city")} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
-                                    {" "}<span>Save</span>
-                                </span>
-                            )}
                         </div>
                     </div>
                 </div>
@@ -694,20 +621,22 @@ const Profile = (props) => {
                             <FaEdit size={18} />
                             {" "}Edit
                         </div>
-                        <div>
-                            {isDataEdited('updatedPassword') &&
-                                user.oldPassword &&
-                                user.newPassword &&
-                                user.confirmPassword &&
-                                (
-                                    <span>
-                                        <img src={saveData} onClick={(e) => savePassword(e)} style={{ width: "15px", height: "15px", cursor: "pointer" }} />
-                                        {" "}<span>Save</span>
-                                    </span>
-                                )}
-                        </div>
                     </div>
                 </div>
+
+                {(
+                    isDataEdited("username") ||
+                    isDataEdited("email") ||
+                    isDataEdited("country") ||
+                    isDataEdited("state") ||
+                    isDataEdited("city") ||
+                    isDataEdited("image") ||
+                    isDataEdited("updatedPassword")
+                ) && (
+                        <button type="button" onClick={handleSubmit}>
+                            Save Changes
+                        </button>
+                    )}
 
             </form>
         </div>
