@@ -279,7 +279,7 @@ const Profile = (props) => {
                     .catch((err) => { console.log(err.message) });
             }
 
-            // ✅ Final Toast (ek hi baar show hoga)
+            // Toast
             if (updatedFields.length > 0) {
                 toast.success(`Profile updated: ${updatedFields.join(", ")}`);
 
@@ -633,7 +633,19 @@ const Profile = (props) => {
                     isDataEdited("image") ||
                     isDataEdited("updatedPassword")
                 ) && (
-                        <button type="button" onClick={handleSubmit}>
+                        <button type="button" onClick={handleSubmit} style={{
+                            display: "block",
+                            width: "120px",
+                            height: "30px",
+                            padding: "5px",
+                            margin: "20px 20px 20px 150px",
+                            backgroundColor: "#f3f3f3ff",
+                            borderRadius: "10px",
+                            color: "#000000",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor: "pointer"
+                        }}>
                             Save Changes
                         </button>
                     )}
