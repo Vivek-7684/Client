@@ -133,12 +133,6 @@ const Product = (props) => {
                                     URL.revokeObjectURL(e.target.src)
                                 }} alt="product-image" />
 
-                            {/* <InnerImageZoom
-                                src={convertRawImageToURL(showimage)} zoomScale={2} zoomType="hover"
-                                zoomSrc={convertRawImageToURL(showimage)}
-                                onLoad={(e) => {
-                                    URL.revokeObjectURL(e.target.src)
-                                }} alt="product-image" hasSpacer={false} /> */}
                         </div>
 
                         {/* thumbnail for product views  */}
@@ -163,9 +157,6 @@ const Product = (props) => {
                                         }
                                         key={idx}
                                         style={{
-                                            width: '60px',
-                                            height: '60px',
-                                            cursor: 'pointer',
                                             border: idx === imageIndex ? '2px solid purple' : '1px solid #343A40 ',
                                         }}
                                         className="thumbnail-images"
@@ -194,25 +185,24 @@ const Product = (props) => {
                         <ol className="product-description">{sentenceLineBreak(item.content).map((item, index) => <li key={index}>{item}</li>)}</ol>
                         <b><FaIndianRupeeSign />{item.min_price}</b>
 
-                        <div>
+                        <div className="cart-quanity">
                             <label htmlFor="qty">Qty.</label>
                             <input id="qty" type="number" min="1" value={quantity} onChange={e => setQuantity(e.target.value)} />
                         </div>
 
-                        <button className="cart-button" onClick={() => {
-                            addToCart(item.id, quantity).then(() => {//  when item added to cart then navigate
-                                toast.success(`${item.title} added to cart successfully`);
-                                setTimeout(() => {
-                                    navigateToCart();
-                                }, 2000);
-                                loadCart();
-                            });
-                        }}>
-                            Add to Cart
-                        </button>
+                            <button className="cart-button" style={{ alignContent:"center"}}onClick={() => {
+                                addToCart(item.id, quantity).then(() => {//  when item added to cart then navigate
+                                    toast.success(`${item.title} added to cart successfully`);
+                                    setTimeout(() => {
+                                        navigateToCart();
+                                    }, 2000);
+                                    loadCart();
+                                });
+                            }}>
+                                Add to Cart
+                            </button>
 
                     </div>
-                    {/* <ToastContainer theme="colored" /> */}
                 </div>
 
             )}
