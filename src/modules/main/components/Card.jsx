@@ -126,11 +126,10 @@ const Card = (props) => {
 
                             <style>
                                 {`
-                                    /* Animate only the path, not the text */
+                                    /* Animate only the path */
                                     .CircularProgressbar-path {
                                         animation: spin 2s linear infinite;
                                         transform-origin: center;
-                                        transform-box: fill-box;
                                     }
 
                                     @keyframes spin {
@@ -199,20 +198,7 @@ const Card = (props) => {
                             <p>Try changing the filters or search term.</p>
                         </div>)}
 
-                {!loading && filteredData.length > 0 && <button
-                    style={{
-                        display: "block",
-                        width: "40%",
-                        height: "fit-content",
-                        padding: "10px",
-                        margin: "80px 20px 20px 20px",
-                        backgroundColor: "#f8f7f4",
-                        borderRadius: "10px",
-                        color: "#000000",
-                        fontWeight: "600",
-                        border: "none",
-                        cursor: "pointer"
-                    }}
+                {!loading && filteredData.length > 0 && <button className="lodermore_button"
 
                     onClick={() => { setVisible((prev) => prev + 5); }}
                 >Loadmore...</button>}
