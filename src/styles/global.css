@@ -1016,11 +1016,15 @@ tr {
         padding: 0.1rem;
     }
 
+    input[type="range"] {
+        width: 80%;
+    }
+
     /* Main */
     #main {
+        display: flex;
         padding: 1rem;
         margin-top: 25rem;
-        justify-content: none;
     }
 
     .product-card {
