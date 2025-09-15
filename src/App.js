@@ -55,7 +55,7 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="profile" element={<Profile userProfile={userProfile} setUserProfile={setUserProfile} />} />
 
-          <Route path="Error" element={<Error />}></Route>
+          <Route path="*" element={<Error />}></Route>
         </Route>
       </Routes>
       <ToastContainer />
